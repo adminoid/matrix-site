@@ -11,6 +11,14 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
-    "nuxt": "^3.7.4"
+    "nuxt": "^3.7.4",
+    "pug": "^3.0.2",
+    "pug-loader": "^2.4.0",
+    "sass": "^1.68.0",
+    "sass-loader": "^13.3.2",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.2"
   }
 }
