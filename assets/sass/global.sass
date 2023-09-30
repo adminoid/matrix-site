@@ -1,9 +1,24 @@
 @import "node_modules/bootstrap/scss/functions"
+
+@import "fonts"
+
+$font-family-sans-serif: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default
+$font-family-monospace: 'Inter', SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default
+
+$font-family-base: $font-family-sans-serif
+
+body
+  font-family: $font-family-base
+
 @import "node_modules/bootstrap/scss/variables"
 
-$custom-colors: ("royalpurple": $purple)
+$gradient: linear-gradient(180deg, #F95ACC 0%, rgba(113, 61, 255, 0) 100%), rgba(255, 255, 255, 0.02)
 
+$custom-colors: ("cpink": #F95ACC)
 $theme-colors: map-merge($theme-colors, $custom-colors)
+
+$btn-border-radius: 80px
+$btn-close-bg: $gradient
 
 @import "node_modules/bootstrap/scss/mixins"
 @import "node_modules/bootstrap/scss/variables-dark"
@@ -11,3 +26,5 @@ $theme-colors: map-merge($theme-colors, $custom-colors)
 @import "node_modules/bootstrap/scss/root"
 @import "node_modules/bootstrap/scss/grid"
 @import "node_modules/bootstrap/scss/containers"
+
+@import "node_modules/bootstrap/scss/buttons"
