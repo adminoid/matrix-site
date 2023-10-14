@@ -1,30 +1,119 @@
-@import "node_modules/bootstrap/scss/functions"
-
+// fonts
 @import "fonts"
-
 $font-family-sans-serif: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default
-$font-family-monospace: 'Inter', SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default
-
+$font-family-monospace: 'DX-Rigraf', SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default
 $font-family-base: $font-family-sans-serif
+$font-family-monospace: $font-family-monospace
 
-body
-  font-family: $font-family-base
-
+// Configuration
+@import "node_modules/bootstrap/scss/functions"
 @import "node_modules/bootstrap/scss/variables"
-
-$gradient: linear-gradient(180deg, #F95ACC 0%, rgba(113, 61, 255, 0) 100%), rgba(255, 255, 255, 0.02)
-
-$custom-colors: ("cpink": #F95ACC)
-$theme-colors: map-merge($theme-colors, $custom-colors)
-
-$btn-border-radius: 80px
-$btn-close-bg: $gradient
-
-@import "node_modules/bootstrap/scss/mixins"
 @import "node_modules/bootstrap/scss/variables-dark"
 @import "node_modules/bootstrap/scss/maps"
+@import "node_modules/bootstrap/scss/mixins"
+@import "node_modules/bootstrap/scss/utilities"
 @import "node_modules/bootstrap/scss/root"
-@import "node_modules/bootstrap/scss/grid"
-@import "node_modules/bootstrap/scss/containers"
 
+@import "node_modules/bootstrap/scss/reboot"
+
+// Global layout
+body
+  font-family: $font-family-base
+  background-color: #040119
+#__nuxt
+  display: flex
+  min-height: 100vh
+  flex-direction: column
+  background: radial-gradient(100.06% 120.49% at 50% -20.49%, rgba(255, 255, 255, 0.9) 0%, rgba(113, 61, 255, 0.9) 32.82%, rgba(0, 0, 0, 0) 78.46%)
+header
+  height: 70px
+main
+  flex: 1
+footer
+  height: 100px
+
+// Predefined variables
+
+// Gradient
+$gradient: linear-gradient(180deg, rgba($white, 0), rgba($white, 1), rgba($white, 0.02))
+
+// Navbar
+$navbar-dark-brand-color: $white
+$navbar-brand-font-size: 1.5rem
+$nav-link-font-size: 1rem
+$nav-link-font-weight: 300
+//$navbar-dark-color: $white
+//$nav-link-color: $white
+//$navbar-dark-active-color: $white
+//$navbar-hover-color: $white
+.navbar-brand
+  font-weight: 600
+
+// Buttons
+$btn-padding-y: 0.5rem
+$btn-padding-x: 1.5rem
+$btn-border-radius: 5rem
+$btn-line-height: 1.5rem
+$btn-font-size: 1rem
+$btn-border-width: 1px
+
+.btn-cpink__arch
+  background: linear-gradient(180deg, #F95ACC 0%, rgba(113, 61, 255, 0) 100%), rgba(255, 255, 255, 0.02)
+  border: 2px solid rgba(255, 255, 255, 0.2) !important
+  color: $white !important
+  box-shadow: 0 0 1rem -0.25rem #713DFF
+  backdrop-filter: blur(0.75rem)
+  &:hover
+    color: $white !important
+//var(--bs-btn-border-width) solid var(--bs-btn-border-color)
+
+.btn-cpink
+  //background-attachment
+  //background-clip
+  background-color: rgba(255, 255, 255, 0.02) !important
+  background-image: linear-gradient(180deg, rgba(249, 90, 204, 1) 0%, rgba(113, 61, 255, 0) 100%)
+  //background-origin
+  //background-position
+  background-repeat: no-repeat !important
+  //background-size
+
+  box-shadow: 0 0 1rem -0.25rem #713DFF
+  backdrop-filter: blur(0.75rem)
+  border-color: rgba(255, 255, 255, 0.2) !important
+
+// Layout & components
+@import "node_modules/bootstrap/scss/type"
+@import "node_modules/bootstrap/scss/images"
+@import "node_modules/bootstrap/scss/containers"
+@import "node_modules/bootstrap/scss/grid"
+@import "node_modules/bootstrap/scss/tables"
+@import "node_modules/bootstrap/scss/forms"
 @import "node_modules/bootstrap/scss/buttons"
+@import "node_modules/bootstrap/scss/transitions"
+@import "node_modules/bootstrap/scss/dropdown"
+@import "node_modules/bootstrap/scss/button-group"
+@import "node_modules/bootstrap/scss/nav"
+@import "node_modules/bootstrap/scss/navbar"
+@import "node_modules/bootstrap/scss/card"
+@import "node_modules/bootstrap/scss/accordion"
+@import "node_modules/bootstrap/scss/breadcrumb"
+@import "node_modules/bootstrap/scss/pagination"
+@import "node_modules/bootstrap/scss/badge"
+@import "node_modules/bootstrap/scss/alert"
+@import "node_modules/bootstrap/scss/progress"
+@import "node_modules/bootstrap/scss/list-group"
+@import "node_modules/bootstrap/scss/close"
+@import "node_modules/bootstrap/scss/toasts"
+@import "node_modules/bootstrap/scss/modal"
+@import "node_modules/bootstrap/scss/tooltip"
+@import "node_modules/bootstrap/scss/popover"
+@import "node_modules/bootstrap/scss/carousel"
+@import "node_modules/bootstrap/scss/spinners"
+@import "node_modules/bootstrap/scss/offcanvas"
+@import "node_modules/bootstrap/scss/placeholders"
+
+// Helpers
+@import "node_modules/bootstrap/scss/helpers"
+
+// Utilities
+@import "node_modules/bootstrap/scss/utilities/api"

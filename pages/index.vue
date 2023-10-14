@@ -1,15 +1,25 @@
 <template lang="pug">
-.container
+header
+  element-navbar
+
+main
+  .container
   .row
-    .col 1
     .col
-      button.btn.btn-cpink.bg-gradient(type="button") Enter App
-    .col Enter App
+    .col.bg-gradient
+    .col
+
+footer Footer
 </template>
 
+<script setup>
+useHead({
+  bodyAttrs: {
+    'data-bs-theme': 'dark',
+  },
+});
+</script>
+
 <style lang="sass" scoped>
-.btn
-  font-family: Inter
-  font-weight: 400
-  font-size: 26px
+
 </style>
