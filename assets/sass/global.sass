@@ -55,19 +55,26 @@ $btn-padding-x: 1.5rem
 $btn-border-radius: 5rem
 $btn-line-height: 1.5rem
 $btn-font-size: 1rem
-$btn-border-width: 1px
+//$border-width: 0
 
-.btn-cpink__arch
-  background: linear-gradient(180deg, #F95ACC 0%, rgba(113, 61, 255, 0) 100%), rgba(255, 255, 255, 0.02)
-  border: 2px solid rgba(255, 255, 255, 0.2) !important
-  color: $white !important
-  box-shadow: 0 0 1rem -0.25rem #713DFF
-  backdrop-filter: blur(0.75rem)
-  &:hover
-    color: $white !important
-//var(--bs-btn-border-width) solid var(--bs-btn-border-color)
+//--bs-btn-border-width: var(--bs-border-width);
+
+//$btn-border-width: 0.0625rem
+
+//.btn-cpink__arch
+//  background: linear-gradient(180deg, #F95ACC 0%, rgba(113, 61, 255, 0) 100%), rgba(255, 255, 255, 0.02)
+//  border: 2px solid rgba(255, 255, 255, 0.2) !important
+//  color: $white !important
+//  box-shadow: 0 0 1rem -0.25rem #713DFF
+//  backdrop-filter: blur(0.75rem)
+//  &:hover
+//    color: $white !important
+////var(--bs-btn-border-width) solid var(--bs-btn-border-color)
 
 .btn-cpink
+  box-shadow: 1px 1px 2px rgba(255, 255, 255, 0.2)
+  //border: 2px solid rgba(255, 255, 255, 0.2) !important
+  backdrop-filter: blur(0.75rem)
   //background-attachment
   //background-clip
   background-color: rgba(255, 255, 255, 0.02) !important
@@ -76,10 +83,8 @@ $btn-border-width: 1px
   //background-position
   background-repeat: no-repeat !important
   //background-size
-
-  box-shadow: 0 0 1rem -0.25rem #713DFF
-  backdrop-filter: blur(0.75rem)
-  border-color: rgba(255, 255, 255, 0.2) !important
+  filter: drop-shadow(0 0 2px #713DFF)
+  border: none !important
 
 // Layout & components
 @import "node_modules/bootstrap/scss/type"

@@ -6,7 +6,8 @@ main
   .container
   .row
     .col
-    .col.bg-gradient
+    .col
+      button.btn.btn-cpink(type="button") Enter App
     .col
 
 footer Footer
