@@ -7,7 +7,7 @@ main
   .row
     .col
     .col
-      button.btn.btn-cpink(type="button") Enter App
+      button.btn.btn-outline-primary(type="button") Enter App
     .col
 
 footer Footer
