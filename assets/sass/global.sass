@@ -59,43 +59,23 @@ $btn-border-width: 1px
 
 //$border-width: 0
 
-//--bs-btn-border-width: var(--bs-border-width);
-
-//$btn-border-width: 0.0625rem
-
-//.btn-cpink__arch
-//  background: linear-gradient(180deg, #F95ACC 0%, rgba(113, 61, 255, 0) 100%), rgba(255, 255, 255, 0.02)
-//  border: 2px solid rgba(255, 255, 255, 0.2) !important
-//  color: $white !important
-//  box-shadow: 0 0 1rem -0.25rem #713DFF
-//  backdrop-filter: blur(0.75rem)
-//  &:hover
-//    color: $white !important
-////var(--bs-btn-border-width) solid var(--bs-btn-border-color)
 
 .btn
   --bs-btn-border-color: rgba(255, 255, 255, 0.2) !important
 
 .btn-cpink
-  //box-shadow: 1px 1px 2px rgba(255, 255, 255, 0.2)
   box-shadow: 0 0 1rem -0.25rem #713DFF
-  //border: 2px solid rgba(255, 255, 255, 0.2) !important
   backdrop-filter: blur(0.75rem)
-  //background-attachment
-  //background-clip
+  background-image: linear-gradient(rgb(249, 90, 204) 0%, rgba(113, 61, 255, 0) 100%)
   background-color: rgba(255, 255, 255, 0.02) !important
-  background-image: linear-gradient(180deg, rgba(249, 90, 204, 1) 0%, rgba(113, 61, 255, 0) 100%)
-  //background-origin
-  //background-position
-  background-repeat: no-repeat !important
-  //background-size
-  //filter: drop-shadow(0 0 2px #713DFF)
-  //border: none !important
-  //border: 2px solid rgba(255, 255, 255, 0.2) !important
+  background-origin: border-box
+  background-repeat: repeat-x !important
   border-color: rgba(255, 255, 255, 0.2)
   border-style: solid
-  &:hover,&:active
-    background-image: linear-gradient(rgba(249, 90, 204, 1) 0%, rgba(113, 61, 255, 0) 100%)
+  //border-width: 1px !important
+  height: 100%
+  //&:hover,&:active
+  //  background-image: linear-gradient(rgba(249, 90, 204, 1) 0%, rgba(113, 61, 255, 0) 100%)
 
 // Layout & components
 @import "node_modules/bootstrap/scss/type"

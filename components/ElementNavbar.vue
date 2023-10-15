@@ -39,7 +39,8 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
         div
           img(src="~/assets/img/icons/arrow-bear.svg")
 
-      button.btn.btn-cpink(type="button") Enter App
+      div
+        button.btn.btn-cpink(type="button") Enter App
 </template>
 
 <script setup>
