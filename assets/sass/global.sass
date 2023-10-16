@@ -40,14 +40,29 @@ $gradient: linear-gradient(180deg, rgba($white, 0), rgba($white, 1), rgba($white
 // Navbar
 $navbar-dark-brand-color: $white
 $navbar-brand-font-size: 1.5rem
+//$navbar-dark-active-color: red
 $nav-link-font-size: 1rem
 $nav-link-font-weight: 300
-//$navbar-dark-color: $white
+//$navbar-dark-active-color: green
 //$nav-link-color: $white
 //$navbar-dark-active-color: $white
 //$navbar-hover-color: $white
 .navbar-brand
   font-weight: 600
+
+.nav-link
+  --bs-nav-link-color: $white
+  --bs-navbar-active-color: $white
+  &.active
+    font-weight: 500
+  &:hover,&.active
+    text-decoration: underline
+
+//--bs-navbar-active-weight: $white
+
+  //--bs-navbar-color: black
+  //--bs-nav-link-color: black
+  //--bs-link-hover-color-rgb: red
 
 // Buttons
 $btn-padding-y: 0.5rem

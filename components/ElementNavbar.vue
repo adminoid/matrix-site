@@ -32,12 +32,29 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
             li
               a.dropdown-item(href='#') Something else here
 
-      .graph
+      .graph.text-white
         div
           img(src="@/assets/img/icons/graph.svg")
         div 3.735
         div
           img(src="~/assets/img/icons/arrow-bear.svg")
+
+      ul.navbar-nav.me-auto.mb-2.mb-lg-0.text-white
+        li.nav-item.dropdown
+          a.nav-link.dropdown-toggle(
+            href='#',
+            role='button',
+            data-bs-toggle='dropdown',
+            aria-expanded='false'
+            @click="openDd1"
+          )
+            img.me-2(src="~/assets/img/icons/lang.svg")
+            | English
+          ul.dropdown-menu(v-if="ddOpen1")
+            li
+              a.dropdown-item(href='#') Russian
+            li
+              a.dropdown-item(href='#') English
 
       div
         button.btn.btn-cpink(type="button") Enter App
@@ -54,6 +71,7 @@ const openDd1 = () => {
 .dropdown-menu
   display: block
 .graph
+  --bs-btn-color: white
   display: flex
   justify-content: space-between
   padding: 0.125rem 0.5rem

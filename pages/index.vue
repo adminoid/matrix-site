@@ -7,7 +7,6 @@ main
   .row
     .col
     .col
-      button.btn.btn-primary(type="button") Enter App
     .col
 
 footer Footer
