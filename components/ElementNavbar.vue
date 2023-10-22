@@ -3,29 +3,27 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
   .container-fluid
     a.navbar-brand(href='#')
       .font-monospace DAO DREAM
-    button.navbar-toggler(type='button', aria-expanded='false', aria-label='Toggle navigation')
+    button.navbar-toggler(type='button', aria-expanded='false')
       span.navbar-toggler-icon
     .collapse.navbar-collapse
       ul.navbar-nav.me-auto.mb-2.mb-lg-0
         li.nav-item
-          a.nav-link.active(aria-current='page', href='#') About
+          a.nav-link.active(href='#') About
         li.nav-item
           a.nav-link(href='#') Documents
         li.nav-item
           a.nav-link(href='#') Audit
         li.nav-item.dropdown(
-          @mouseenter="toggleDd1"
-          @mouseleave="toggleDd1"
+          @mouseenter="ddInstructionsToggle"
+          @mouseleave="ddInstructionsToggle"
         )
           a.nav-link.dropdown-toggle(
             href='#',
-            role='button',
-
           )
             | Instructions
           ul.dropdown-menu(
-            v-if="isOpenDd1"
-            v-on-click-outside="toggleDd1"
+            v-if="isDdInstructionsOpen"
+            v-on-click-outside="ddInstructionsToggle"
           )
             li
               a.dropdown-item(href='#') Action
@@ -48,15 +46,14 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
           a.nav-link.dropdown-toggle(
             href='#',
             role='button',
-            data-bs-toggle='dropdown',
-            aria-expanded='false'
-            @click.prevent="ddLangOpen()"
+            @click.prevent="DdLangToggle"
+            ref="ddLangOutsideIgnoreEl"
           )
             img.me-2(src="~/assets/img/icons/lang.svg")
             | English
           ul.dropdown-menu(
             v-if="isDdLangOpen"
-            v-on-click-outside="ddLangToggle"
+            v-on-click-outside="onClickOutsideHandler"
           )
             li
               a.dropdown-item(href='#') Russian
@@ -70,19 +67,24 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
 <script setup>
 import { vOnClickOutside } from '@vueuse/components'
 
-const isOpenDd1 = ref(false)
-const toggleDd1 = () => {
-  isOpenDd1.value = !isOpenDd1.value
+const isDdInstructionsOpen = ref(false)
+const ddInstructionsToggle = () => {
+  isDdInstructionsOpen.value = !isDdInstructionsOpen.value
 }
 
+const ddLangOutsideIgnoreEl = ref()
+const onClickOutsideHandler = [
+  () => {
+    isDdLangOpen.value = false
+  },
+  { ignore: [ddLangOutsideIgnoreEl] }
+]
+
 const isDdLangOpen = ref(false)
-const ddLangToggle = () => {
-  console.info('ddLangToggle...')
-  if (!isDdLangOpen.value) isDdLangOpen.value = !isDdLangOpen.value
+const DdLangToggle = () => {
+  isDdLangOpen.value = !isDdLangOpen.value
 }
-const ddLangOpen = () => {
-  if (!isDdLangOpen) isDdLangOpen.value = true
-}
+
 </script>
 
 <style lang="sass" scoped>
