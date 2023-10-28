@@ -1,6 +1,7 @@
 <template lang="pug">
-header
-  element-navbar
+.container
+  header
+    element-navbar
 
 main
   .container
