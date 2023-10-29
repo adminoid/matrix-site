@@ -3,7 +3,7 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
   .container-fluid
     a.navbar-brand(href='#')
       .font-monospace DAO DREAM
-    button.navbar-toggler(type='button', aria-expanded='false')
+    button.navbar-toggler(type='button')
       span.navbar-toggler-icon
     .collapse.navbar-collapse
       ul.navbar-nav.me-auto.mb-2.mb-lg-0
@@ -34,31 +34,33 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
             li
               a.dropdown-item(href='#') Something else here
 
-      .graph.text-white
-        div
-          img(src="@/assets/img/icons/graph.svg")
-        div 3.735
-        div
-          img(src="~/assets/img/icons/arrow-bear.svg")
+      .nav-custom.me-auto
 
-      ul.navbar-nav.me-auto.mb-2.mb-lg-0.text-white
-        li.nav-item.dropdown
-          a.nav-link.dropdown-toggle(
-            href='#',
-            role='button',
-            @click.prevent="DdLangToggle"
-            ref="ddLangOutsideIgnoreEl"
-          )
-            img.me-2(src="~/assets/img/icons/lang.svg")
-            | English
-          ul.dropdown-menu(
-            v-if="isDdLangOpen"
-            v-on-click-outside="onClickOutsideHandler"
-          )
-            li
-              a.dropdown-item(href='#') Russian
-            li
-              a.dropdown-item(href='#') English
+        .nav-custom__graph.text-white
+          div
+            img(src="@/assets/img/icons/graph.svg")
+          div 3.735
+          div
+            img(src="~/assets/img/icons/arrow-bear.svg")
+
+        ul.nav-custom__lang.navbar-nav.me-auto.mb-2.mb-lg-0.text-white
+          li.nav-item.dropdown
+            a.nav-link.dropdown-toggle(
+              href='#',
+              role='button',
+              @click.prevent="DdLangToggle"
+              ref="ddLangOutsideIgnoreEl"
+            )
+              img.me-2(src="~/assets/img/icons/lang.svg")
+              | English
+            ul.dropdown-menu(
+              v-if="isDdLangOpen"
+              v-on-click-outside="onClickOutsideHandler"
+            )
+              li
+                a.dropdown-item(href='#') Russian
+              li
+                a.dropdown-item(href='#') English
 
       div
         button.btn.btn-cpink(type="button") Enter App
@@ -66,6 +68,7 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
 
 <script setup>
 import { vOnClickOutside } from '@vueuse/components'
+import {useLayoutStore} from '~/stores/useLayout.js'
 
 const isDdInstructionsOpen = ref(false)
 const ddInstructionsToggle = () => {
@@ -90,14 +93,19 @@ const DdLangToggle = () => {
 <style lang="sass" scoped>
 .dropdown-menu
   display: block
-.graph
-  --bs-btn-color: white
+
+.nav-custom
   display: flex
   justify-content: space-between
-  padding: 0.125rem 0.5rem
-  border: 1px solid rgba(255, 255, 255, 0.2)
-  border-radius: 8px
-  margin-right: 1.5rem
-  > div
-    margin-right: 0.25rem
+  flex-direction: row
+  &__graph
+    --bs-btn-color: white
+    display: flex
+    justify-content: space-between
+    padding: 0.125rem 0.5rem
+    border: 1px solid rgba(255, 255, 255, 0.2)
+    border-radius: 8px
+    margin-right: 1.5rem
+    > div
+      margin-right: 0.25rem
 </style>

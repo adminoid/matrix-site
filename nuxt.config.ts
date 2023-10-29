@@ -8,4 +8,7 @@ export default defineNuxtConfig({
   css: [
     '@/assets/sass/global.sass',
   ],
+  modules: [
+    '@pinia/nuxt',
+  ],
 })
