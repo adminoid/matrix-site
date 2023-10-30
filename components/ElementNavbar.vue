@@ -1,11 +1,14 @@
 <template lang="pug">
 nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
-  .container-fluid
+  .container-fluid(:class="{'over-cover': layoutStore.isOpenedSidebar}")
     a.navbar-brand(href='#')
       .font-monospace DAO DREAM
-    button.navbar-toggler(type='button')
+    button.navbar-toggler(
+      type='button'
+      @click.prevent="layoutStore.toggleSidebar"
+    )
       span.navbar-toggler-icon
-    .collapse.navbar-collapse
+    .navbar-container.collapse.navbar-collapse(:class="{show: layoutStore.isOpenedSidebar}")
       ul.navbar-nav.me-auto.mb-2.mb-lg-0
         li.nav-item
           a.nav-link.active(href='#') About
@@ -41,7 +44,7 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
             img(src="@/assets/img/icons/graph.svg")
           div 3.735
           div
-            img(src="~/assets/img/icons/arrow-bear.svg")
+            img(src="@/assets/img/icons/arrow-bear.svg")
 
         ul.nav-custom__lang.navbar-nav.me-auto.mb-2.mb-lg-0.text-white
           li.nav-item.dropdown
@@ -51,7 +54,7 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
               @click.prevent="DdLangToggle"
               ref="ddLangOutsideIgnoreEl"
             )
-              img.me-2(src="~/assets/img/icons/lang.svg")
+              img.me-2(src="@/assets/img/icons/lang.svg")
               | English
             ul.dropdown-menu(
               v-if="isDdLangOpen"
@@ -68,7 +71,7 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
 
 <script setup>
 import { vOnClickOutside } from '@vueuse/components'
-import {useLayoutStore} from '~/stores/useLayout.js'
+import { useLayoutStore } from '~/stores/useLayout.js'
 
 const isDdInstructionsOpen = ref(false)
 const ddInstructionsToggle = () => {
@@ -88,16 +91,16 @@ const DdLangToggle = () => {
   isDdLangOpen.value = !isDdLangOpen.value
 }
 
+const layoutStore = useLayoutStore()
+
+
 </script>
 
 <style lang="sass" scoped>
-.dropdown-menu
-  display: block
+//.dropdown-menu
+//  display: block
 
 .nav-custom
-  display: flex
-  justify-content: space-between
-  flex-direction: row
   &__graph
     --bs-btn-color: white
     display: flex

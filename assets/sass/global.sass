@@ -5,6 +5,9 @@ $font-family-monospace: 'DX-Rigraf', SFMono-Regular, Menlo, Monaco, Consolas, "L
 $font-family-base: $font-family-sans-serif
 $font-family-monospace: $font-family-monospace
 
+// my custom styles
+$bg-over-cover: #030118
+
 // Configuration
 @import "node_modules/bootstrap/scss/functions"
 @import "node_modules/bootstrap/scss/variables"
@@ -34,6 +37,23 @@ main
   flex: 1
 footer
   height: 100px
+
+.over-cover
+  background: $bg-over-cover
+.navbar-container
+  flex-direction: row
+  @include media-breakpoint-down(lg)
+    flex-direction: column !important
+.nav-custom
+  display: flex
+  justify-content: space-between
+  flex-direction: column
+  @include media-breakpoint-down(lg)
+    flex-direction: row
+    order: 0
+.navbar-container
+  display: flex
+
 
 // Predefined variables
 
