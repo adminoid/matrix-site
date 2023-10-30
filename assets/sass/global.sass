@@ -48,10 +48,16 @@ footer
   display: flex
   justify-content: space-between
   flex-direction: row
+  margin-right: auto
   @include media-breakpoint-down(lg)
     order: -1
+    margin-right: 0 !important
+    width: 100%
+    padding-bottom: 2rem
 .navbar-container
   display: flex
+  @include media-breakpoint-down(lg)
+    padding: 2.2rem 0 0
 .main-button
   width: auto
   @include media-breakpoint-down(lg)

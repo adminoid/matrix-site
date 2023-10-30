@@ -35,7 +35,7 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
             li
               a.dropdown-item(href='#') Menu item 3
 
-      .nav-custom.me-auto
+      .nav-custom
 
         .nav-custom__graph.text-white
           div
@@ -44,7 +44,7 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
           div
             img(src="@/assets/img/icons/arrow-bear.svg")
 
-        ul.nav-custom__lang.navbar-nav.me-auto.text-white
+        ul.nav-custom__lang.navbar-nav.text-white
           li.nav-item.dropdown
             a.nav-link.dropdown-toggle(
               href='#',
@@ -80,6 +80,7 @@ const ddInstructionsToggle = () => {
 const ddLangOutsideIgnoreEl = ref()
 const onClickOutsideHandler = [
   () => {
+    console.info('onClickOutsideHandler')
     isDdLangOpen.value = false
   },
   { ignore: [ddLangOutsideIgnoreEl] }
@@ -87,6 +88,7 @@ const onClickOutsideHandler = [
 
 const isDdLangOpen = ref(false)
 const DdLangToggle = () => {
+  console.info('DdLangToggle')
   isDdLangOpen.value = !isDdLangOpen.value
 }
 
