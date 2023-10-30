@@ -47,13 +47,16 @@ footer
 .nav-custom
   display: flex
   justify-content: space-between
-  flex-direction: column
+  flex-direction: row
   @include media-breakpoint-down(lg)
-    flex-direction: row
-    order: 0
+    order: -1
 .navbar-container
   display: flex
-
+.main-button
+  width: auto
+  @include media-breakpoint-down(lg)
+    width: 100% !important
+    margin-top: 1rem
 
 // Predefined variables
 

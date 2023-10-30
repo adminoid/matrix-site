@@ -24,18 +24,16 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
             href='#',
           )
             | Instructions
-          ul.dropdown-menu(
+          ul.dropdown-menu.show.position-absolute(
             v-if="isDdInstructionsOpen"
             v-on-click-outside="ddInstructionsToggle"
           )
             li
-              a.dropdown-item(href='#') Action
+              a.dropdown-item(href='#') Menu item 1
             li
-              a.dropdown-item(href='#') Another action
+              a.dropdown-item(href='#') Menu item 2
             li
-              hr.dropdown-divider
-            li
-              a.dropdown-item(href='#') Something else here
+              a.dropdown-item(href='#') Menu item 3
 
       .nav-custom.me-auto
 
@@ -46,7 +44,7 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
           div
             img(src="@/assets/img/icons/arrow-bear.svg")
 
-        ul.nav-custom__lang.navbar-nav.me-auto.mb-2.mb-lg-0.text-white
+        ul.nav-custom__lang.navbar-nav.me-auto.text-white
           li.nav-item.dropdown
             a.nav-link.dropdown-toggle(
               href='#',
@@ -56,7 +54,7 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
             )
               img.me-2(src="@/assets/img/icons/lang.svg")
               | English
-            ul.dropdown-menu(
+            ul.dropdown-menu.show.position-absolute(
               v-if="isDdLangOpen"
               v-on-click-outside="onClickOutsideHandler"
             )
@@ -65,14 +63,15 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
               li
                 a.dropdown-item(href='#') English
 
-      div
-        button.btn.btn-cpink(type="button") Enter App
+      button.btn.btn-cpink.main-button(type="button") Enter App
 </template>
 
 <script setup>
+
+// todo: Instructions sub menu: wide screen -> hover, small -> click
+
 import { vOnClickOutside } from '@vueuse/components'
 import { useLayoutStore } from '~/stores/useLayout.js'
-
 const isDdInstructionsOpen = ref(false)
 const ddInstructionsToggle = () => {
   isDdInstructionsOpen.value = !isDdInstructionsOpen.value
@@ -101,6 +100,7 @@ const layoutStore = useLayoutStore()
 //  display: block
 
 .nav-custom
+  align-items: center
   &__graph
     --bs-btn-color: white
     display: flex
