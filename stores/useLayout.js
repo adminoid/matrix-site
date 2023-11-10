@@ -16,5 +16,5 @@ export const useLayoutStore = defineStore('counter', () => {
         }
     }
 
-    return {isOpenedSidebar, toggleSidebar}
+    return {isOpenedSidebar, toggleSidebar, breakpoints}
 })

@@ -17,8 +17,10 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
         li.nav-item
           a.nav-link(href='#') Audit
         li.nav-item.dropdown(
-          @mouseenter="ddInstructionsToggle"
-          @mouseleave="ddInstructionsToggle"
+          @mouseenter="ddInstructionsToggleWide"
+          @mouseleave="ddInstructionsToggleWide"
+          @click.prevent="ddInstructionsToggleMobile"
+          v-on-click-outside="ddInstructionsToggleMobileClose"
         )
           a.nav-link.dropdown-toggle(
             href='#',
@@ -26,7 +28,7 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
             | Instructions
           ul.dropdown-menu.show.position-absolute(
             v-if="isDdInstructionsOpen"
-            v-on-click-outside="ddInstructionsToggle"
+            v-on-click-outside="ddInstructionsToggleWide"
           )
             li
               a.dropdown-item(href='#') Menu item 1
@@ -37,7 +39,7 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
 
       .nav-custom
 
-        .nav-custom__graph.text-white
+        .nav-custom__graph.text-white.white-border
           div
             img(src="@/assets/img/icons/graph.svg")
           div 3.735
@@ -72,9 +74,32 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
 
 import { vOnClickOutside } from '@vueuse/components'
 import { useLayoutStore } from '~/stores/useLayout.js'
+import {
+  breakpointsBootstrapV5,
+  useBreakpoints,
+} from '@vueuse/core'
+
+const layoutStore = useLayoutStore()
+
+const breakpoints = useBreakpoints(breakpointsBootstrapV5)
+
 const isDdInstructionsOpen = ref(false)
-const ddInstructionsToggle = () => {
-  isDdInstructionsOpen.value = !isDdInstructionsOpen.value
+const ddInstructionsToggleWide = () => {
+  if (breakpoints.isGreaterOrEqual('lg')) {
+    isDdInstructionsOpen.value = !isDdInstructionsOpen.value
+  }
+}
+
+const ddInstructionsToggleMobile = () => {
+  if (!breakpoints.isGreaterOrEqual('lg')) {
+    isDdInstructionsOpen.value = !isDdInstructionsOpen.value
+  }
+}
+
+const ddInstructionsToggleMobileClose = () => {
+  if (!breakpoints.isGreaterOrEqual('lg')) {
+    isDdInstructionsOpen.value = false
+  }
 }
 
 const ddLangOutsideIgnoreEl = ref()
@@ -91,13 +116,9 @@ const DdLangToggle = () => {
   console.info('DdLangToggle')
   isDdLangOpen.value = !isDdLangOpen.value
 }
-
-const layoutStore = useLayoutStore()
-
-
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 //.dropdown-menu
 //  display: block
 
@@ -108,8 +129,6 @@ const layoutStore = useLayoutStore()
     display: flex
     justify-content: space-between
     padding: 0.125rem 0.5rem
-    border: 1px solid rgba(255, 255, 255, 0.2)
-    border-radius: 8px
     margin-right: 1.5rem
     > div
       margin-right: 0.25rem

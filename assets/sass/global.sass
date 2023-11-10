@@ -8,6 +8,16 @@ $font-family-monospace: $font-family-monospace
 // my custom styles
 $bg-over-cover: #030118
 
+.white-border, .wb
+  border: 1px solid rgba(255, 255, 255, 0.2)
+  border-radius: 8px
+
+@mixin top-gradient
+  background: radial-gradient(100.06% 120.49% at 50% -20.49%, rgba(255, 255, 255, 0.9) 0%, rgba(113, 61, 255, 0.9) 32.82%, rgba(0, 0, 0, 0) 78.46%)
+
+@mixin bottom-gradient
+  background: radial-gradient(91.53% 133.1% at 50% 133.1%, rgba(255, 255, 255, 0.9) 0%, rgba(113, 61, 255, 0.9) 32.82%, rgba(0, 0, 0, 0) 78.46%)
+
 // Configuration
 @import "node_modules/bootstrap/scss/functions"
 @import "node_modules/bootstrap/scss/variables"
@@ -30,13 +40,22 @@ body
   display: flex
   min-height: 100vh
   flex-direction: column
-  background: radial-gradient(100.06% 120.49% at 50% -20.49%, rgba(255, 255, 255, 0.9) 0%, rgba(113, 61, 255, 0.9) 32.82%, rgba(0, 0, 0, 0) 78.46%)
+  @include top-gradient
 header
   height: 70px
 main
   flex: 1
 footer
-  height: 100px
+  @include bottom-gradient
+  @include media-breakpoint-down(lg)
+    padding-top: 40px
+  .fl
+    &__top
+      @include media-breakpoint-down(lg)
+        padding: 0 16px !important
+    &__bottom
+      @include media-breakpoint-down(lg)
+        padding: 24px 16px 40px 16px !important
 
 .over-cover
   background: $bg-over-cover
@@ -105,7 +124,6 @@ $btn-font-size: 1rem
 $btn-border-width: 1px
 
 //$border-width: 0
-
 
 .btn
   --bs-btn-border-color: rgba(255, 255, 255, 0.2) !important

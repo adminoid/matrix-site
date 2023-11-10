@@ -10,7 +10,8 @@ main
       .col.text-center 2
       .col.text-center 3
 
-footer Footer
+footer
+  footer-layout
 </template>
 
 <script setup>
