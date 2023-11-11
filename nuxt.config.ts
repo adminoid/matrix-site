@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { defineNuxtConfig } from 'nuxt/config'
+import getRuntimeConfig from './config/runtime'
 
 export default defineNuxtConfig({
   devtools: {
@@ -11,4 +12,5 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
   ],
+  runtimeConfig: getRuntimeConfig(),
 })
