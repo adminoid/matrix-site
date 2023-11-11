@@ -5,13 +5,11 @@
 
 main
   .container
-    .row.mt-5
-      .col.text-center 1
-      .col.text-center 2
-      .col.text-center 3
+    NuxtPage.m-2.mt-5
 
 footer
-  footer-layout
+  .container
+    footer-layout
 </template>
 
 <script setup>

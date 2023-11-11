@@ -1,7 +1,7 @@
 <template lang="pug">
 nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
   .container-fluid(:class="{'over-cover': layoutStore.isOpenedSidebar}")
-    a.navbar-brand(href='#')
+    a.navbar-brand(href='/')
       .font-monospace DAO DREAM
     button.navbar-toggler(
       type='button'
@@ -11,7 +11,7 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
     .navbar-container.collapse.navbar-collapse(:class="{show: layoutStore.isOpenedSidebar}")
       ul.navbar-nav.me-auto.mb-2.mb-lg-0
         li.nav-item
-          a.nav-link.active(href='#') About
+          a.nav-link.active(href='/statistics') Statistics
         li.nav-item
           a.nav-link(href='#') Documents
         li.nav-item
