@@ -1,11 +1,4 @@
 <template lang="pug">
 h1 Your statistics
+p hohoho
 </template>
-
-<script setup>
-const publicConfig = useRuntimeConfig()
-
-onMounted(() => {
-  console.info(publicConfig)
-})
-</script>

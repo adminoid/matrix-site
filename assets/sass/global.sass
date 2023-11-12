@@ -32,7 +32,7 @@ $bg-over-cover: #030118
 // Global layout
 body
   font-family: $font-family-base
-  background-color: #040119
+  background-color: #040119 !important
   &.is-sidebar-opened
     #__nuxt
       background: #030118
@@ -40,23 +40,16 @@ body
   display: flex
   min-height: 100vh
   flex-direction: column
-  @include top-gradient
 header
   height: 70px
 main
   flex: 1
-footer
-  @include bottom-gradient
-  @include media-breakpoint-down(lg)
-    padding-top: 40px
-  .fl
-    &__top
-      @include media-breakpoint-down(lg)
-        padding: 0 16px !important
-    &__bottom
-      @include media-breakpoint-down(lg)
-        padding: 24px 16px 40px 16px !important
+  > .container
+    padding: 5rem 1.5rem 0
+body.is-main-page
+  @include top-gradient
 
+// Responsive and common styles
 .over-cover
   background: $bg-over-cover
 .navbar-container
@@ -82,6 +75,24 @@ footer
   @include media-breakpoint-down(lg)
     width: 100% !important
     margin-top: 1rem
+.nav-custom
+  &__graph
+    margin-right: 1.5rem
+    @include media-breakpoint-down(xl)
+      margin-right: 0.5rem
+footer
+  @include media-breakpoint-down(lg)
+    padding-top: 40px
+  .fl
+    &__top
+      @include media-breakpoint-down(lg)
+        padding: 0 16px !important
+    &__bottom
+      @include media-breakpoint-down(lg)
+        padding: 24px 16px 40px 16px !important
+body.is-main-page
+  footer
+    @include bottom-gradient
 
 // Predefined variables
 

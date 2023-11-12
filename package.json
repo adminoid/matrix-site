@@ -11,7 +11,8 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
-    "nuxt": "^3.7.4",
+    "events": "^3.3.0",
+    "nuxt": "^3.8.1",
     "pug": "^3.0.2",
     "pug-loader": "^2.4.0",
     "sass": "^1.68.0",
@@ -23,6 +24,9 @@
     "@vueuse/components": "^10.5.0",
     "@vueuse/core": "^10.5.0",
     "bootstrap": "^5.3.2",
-    "pinia": "^2.1.7"
+    "mitt": "^3.0.1",
+    "pinia": "^2.1.7",
+    "vue": "^3.3.8",
+    "web3": "^4.2.2"
   }
 }

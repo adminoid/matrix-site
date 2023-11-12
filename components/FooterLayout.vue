@@ -18,8 +18,6 @@
 
 <style scoped lang="sass">
 .fl
-  &__top
-    padding: 0 80px
   &__url
     margin-bottom: 40px
   &__buttons

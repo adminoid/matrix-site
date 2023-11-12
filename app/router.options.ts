@@ -11,9 +11,9 @@ export default <RouterConfig> {
       component: () => import('~/pages/index.vue'),
       children: [
         {
-          path: 'statistics',
+          name: 'statistics',
+          path: '/statistics',
           component: () => import('~/pages/statistics.vue'),
-          name: 'read',
         },
       ],
     },

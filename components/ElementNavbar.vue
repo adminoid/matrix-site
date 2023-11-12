@@ -65,7 +65,10 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
               li
                 a.dropdown-item(href='#') English
 
-      button.btn.btn-cpink.main-button(type="button") Enter App
+      button.btn.btn-cpink.main-button(
+        type="button"
+        @click.prevent="connectWallet"
+      ) {{ buttonText }}
 </template>
 
 <script setup>
@@ -78,6 +81,7 @@ import {
   breakpointsBootstrapV5,
   useBreakpoints,
 } from '@vueuse/core'
+const { $Blockchain } = useNuxtApp()
 
 const layoutStore = useLayoutStore()
 
@@ -116,6 +120,49 @@ const DdLangToggle = () => {
   console.info('DdLangToggle')
   isDdLangOpen.value = !isDdLangOpen.value
 }
+
+const connectWallet = async () => {
+  await $Blockchain.connect()
+  await checkConnected([$Blockchain.Wallet])
+}
+
+const connectedWallet = ref('')
+const buttonText = ref('Connect')
+const buttonDisabled = ref(false)
+
+const checkConnected = async (accounts) => {
+  // if mm is not installed
+  if (!$Blockchain.Ethereum) {
+    $Blockchain.Nuxt.$emit('disabled', {
+      cause: 'Please install Metamask and reload the page',
+      status: true,
+    })
+    // buttonText.value = 'Install Metamask'
+    buttonDisabled.value = true
+  }
+  // if empty accounts
+  else if (
+      Array.isArray(accounts)
+      && accounts.length <= 0
+  ){
+    $Blockchain.Nuxt.$emit('disabled', {
+      cause: 'Please connect Metamask',
+      status: true,
+    })
+    connectedWallet.value = ''
+    buttonText.value = 'Connect'
+    buttonDisabled.value = false
+    $Blockchain.Wallet = ''
+  }
+  // is ok
+  else {
+    connectedWallet.value = accounts[0]
+    buttonText.value = 'Connected'
+    buttonDisabled.value = true
+  }
+  $Blockchain.Nuxt.$emit('update-whose')
+}
+
 </script>
 
 <style lang="sass">
@@ -129,7 +176,6 @@ const DdLangToggle = () => {
     display: flex
     justify-content: space-between
     padding: 0.125rem 0.5rem
-    margin-right: 1.5rem
     > div
       margin-right: 0.25rem
 </style>
