@@ -5,7 +5,6 @@
 
 main
   .container
-    p statistics page is there
     slot
 
 footer

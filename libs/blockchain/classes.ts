@@ -1,9 +1,9 @@
 import Web3 from 'web3'
 
-import {
+import type {
   TCurrency,
   ICommon, IExternal, INetwork
-} from '~/libs/blockchain/types'
+} from '@/libs/blockchain/types'
 
 import CoreJson from '~/artifacts/contracts/Core.sol/Core.json'
 
@@ -47,12 +47,16 @@ class Common implements ICommon {
   Wallet: any
   constructor (nuxt: any, globalThis: any) {
     this.Nuxt = nuxt
-    this.Ethereum = globalThis['ethereum']
-    const publicConfig = new Config()
-    this.Config = publicConfig['public']
-    // this.Web3 = new Web3(this.Ethereum)
-    this.Web3 = new Web3(this.Config.RPC_URL)
-    this.Core = new CoreContract(this.Web3, this.Config.CONTRACT_ADDRESS)
+    if (!globalThis['ethereum']) {
+      this.ThrowAlert('danger', 'Please install Metamask 123')
+    } else {
+      this.Ethereum = globalThis['ethereum']
+      const publicConfig = new Config()
+      this.Config = publicConfig['public']
+      // this.Web3 = new Web3(this.Ethereum)
+      this.Web3 = new Web3(this.Config.RPC_URL)
+      this.Core = new CoreContract(this.Web3, this.Config.CONTRACT_ADDRESS)
+    }
   }
   async init() {
     const accounts = await this.Web3.eth.getAccounts()
@@ -78,10 +82,14 @@ class Common implements ICommon {
       // "message":"Nonce too high. Expected nonce to be 0 but got 4. Note that transactions can't be queued when auto mining."
       message = error.match(/"message":"([^"]+)"/)[1]
     }
-    this.Nuxt.$emit('alert', {
-      type,
-      message,
-    })
+    if (this.Nuxt.$emit) {
+      this.Nuxt.$emit('alert', {
+        type,
+        message,
+      })
+    }
+
+    return false
   }
 }
 
@@ -90,9 +98,9 @@ class Network extends Common implements INetwork {
   private checkInstalledMetamask (): boolean {
     return Boolean(this.Ethereum && this.Ethereum.isMetaMask);
   }
-  async setNetwork (): Promise<void> {
+  async setNetwork (): Promise<void | boolean> {
     if (!this.checkInstalledMetamask() || !this.Ethereum) {
-      await this.ThrowAlert('danger', 'Metamask is not installed!')
+      return await this.ThrowAlert('danger', 'Metamask is not installed!')
     } else {
       try {
         // check if the chain that for connect to is installed
@@ -100,7 +108,7 @@ class Network extends Common implements INetwork {
           method: 'wallet_switchEthereumChain',
           params: [{ chainId: this.Config.CHAIN_ID }],
         })
-      } catch (e) {
+      } catch (e: any) {
         // This error code indicates that the chain has not been added to MetaMask
         // if it is not, then install it into the user MetaMask
         if (e.code === 4902) {
@@ -124,7 +132,7 @@ class Network extends Common implements INetwork {
           },
         ],
       })
-    } catch (e) {
+    } catch (e: any) {
       await this.ThrowAlert('danger', e.message)
     }
   }
@@ -134,7 +142,9 @@ export class External extends Network implements IExternal {
   constructor (nuxt: any, globalThis: any) {super(nuxt, globalThis)}
   async connect (): Promise<void> {
     this.EmitDisabled('connect', true)
-    await this.setNetwork()
+
+    const res = await this.setNetwork()
+    if (!res) return
     try {
       const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
       if (accounts && accounts.length > 0) {
@@ -147,12 +157,15 @@ export class External extends Network implements IExternal {
     }
   }
 
-  async getCoreUser (wallet: string): Promise<void> {
+  async getCoreUser (wallet: string): Promise<void | boolean> {
     if (!this.Wallet) {
       await this.ThrowAlert('danger', 'Please connect Metamask')
     } else {
       try {
         this.EmitDisabled(`getCoreUser`, true)
+        if (!this.Core) {
+          return false
+        }
         const resp = await this.Core
           .methods.getUserFromCore(wallet)
           .call({
@@ -172,7 +185,7 @@ whose: ${resp.whose}
 `
         }
         await this.ThrowAlert('primary', msg)
-      } catch (e) {
+      } catch (e: any) {
         await this.ThrowAlert('danger', e.message)
       } finally {
         this.EmitDisabled(`getCoreUser`, false)
@@ -180,12 +193,10 @@ whose: ${resp.whose}
     }
   }
 
-  async getMatrixUser (level: number | string, wallet: string): Promise<void> {
-
-    console.info('..getMatrixUser..')
-
+  async getMatrixUser(level: number | string, wallet: string): Promise<void | boolean> {
     try {
       this.EmitDisabled(`getMatrixUser`, true)
+      if (!this.Core) return false
       const resp = await this.Core
         .methods.getUserFromMatrix(level, wallet)
         .call({
@@ -211,19 +222,20 @@ plateau: ${resp.user.plateau}
 `
       }
       await this.ThrowAlert('primary', msg)
-    } catch (e) {
+    } catch (e: any) {
       await this.ThrowAlert('danger', e.message)
     } finally {
       this.EmitDisabled(`getMatrixUser`, false)
     }
   }
 
-  async GetCoreUserByMatrixPosition (level: number | string, userIndex: number | string): Promise<void> {
+  async GetCoreUserByMatrixPosition (level: number | string, userIndex: number | string): Promise<void|boolean> {
 
     console.log('GetCoreUserByMatrixPosition!')
 
     try {
       this.EmitDisabled(`GetCoreUserByMatrixPosition`, true)
+      if (!this.Core) return false
       const resp = await this.Core
         .methods.getCoreUserByMatrixPosition(level, userIndex)
         .call({
@@ -248,14 +260,14 @@ whose: ${resp.user.whose}
 `
       }
       await this.ThrowAlert('primary', msg)
-    } catch (e) {
+    } catch (e: any) {
       await this.ThrowAlert('danger', e.message)
     } finally {
       this.EmitDisabled(`GetCoreUserByMatrixPosition`, false)
     }
   }
 
-  async registerWhose (whose: string): Promise<void> {
+  async registerWhose (whose: string): Promise<void|boolean> {
     try {
       this.EmitDisabled(`registerWhose`, true)
       // const value = await this.Core.methods
@@ -263,6 +275,7 @@ whose: ${resp.user.whose}
       //   .call({
       //     from: this.Wallet,
       //   });
+      if (!this.Core) return false
       const resp = await this.Core
       .methods.register(whose).send({
         from: this.Wallet,
@@ -280,15 +293,16 @@ GAS: ${resp.gasUsed}
 TX: ${resp.transactionHash}
 `
       await this.ThrowAlert('success', msg)
-    } catch (e) {
+    } catch (e: any) {
       await this.ThrowAlert('danger', e.message)
     } finally {
       this.EmitDisabled(`registerWhose`, false)
     }
   }
-  async withdrawClaim (amount: number | string): Promise<void> {
+  async withdrawClaim (amount: number | string): Promise<void|boolean> {
     this.EmitDisabled(`withdrawClaim`, true)
     try {
+      if (!this.Core) return false
       const resp = await this.Core.methods
         .withdrawClaim(this.Web3.utils.toWei(String(amount), "ether"))
         .send({
@@ -305,7 +319,7 @@ GAS: ${resp.gasUsed}
 TX: ${resp.transactionHash}
 `
       await this.ThrowAlert('success', msg)
-    } catch (e) {
+    } catch (e: any) {
       await this.ThrowAlert('danger', e.message)
     } finally {
       this.EmitDisabled(`withdrawClaim`, false)
@@ -327,15 +341,16 @@ GAS: ${resp.gasUsed}
 TX: ${resp.transactionHash}
 `
       await this.ThrowAlert('success', msg)
-    } catch (e) {
+    } catch (e: any) {
       await this.ThrowAlert('danger', e.message)
     } finally {
       this.EmitDisabled(`sendAmount`, false)
     }
   }
-  async withdrawTen (): Promise<void> {
+  async withdrawTen (): Promise<void|boolean> {
     this.EmitDisabled(`withdrawTen`, true)
     try {
+      if (!this.Core) return false
       await this.Core.methods
         .getTenPercentOnceYear()
         .send({
@@ -344,7 +359,7 @@ TX: ${resp.transactionHash}
         })
       await this.ThrowAlert('success', "check your balance")
 
-    } catch (e) {
+    } catch (e: any) {
       await this.ThrowAlert('danger', e.message)
     } finally {
       this.EmitDisabled(`withdrawTen`, false)

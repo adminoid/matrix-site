@@ -1,3 +1,3 @@
 <template lang="pug">
-div blablalba
+div 222
 </template>

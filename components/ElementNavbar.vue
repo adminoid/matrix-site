@@ -81,7 +81,7 @@ import {
   breakpointsBootstrapV5,
   useBreakpoints,
 } from '@vueuse/core'
-const { $Blockchain } = useNuxtApp()
+const { $B } = useNuxtApp()
 
 const layoutStore = useLayoutStore()
 
@@ -122,8 +122,8 @@ const DdLangToggle = () => {
 }
 
 const connectWallet = async () => {
-  await $Blockchain.connect()
-  await checkConnected([$Blockchain.Wallet])
+  await $B.connect()
+  await checkConnected([$B.Wallet])
 }
 
 const connectedWallet = ref('')
@@ -132,8 +132,8 @@ const buttonDisabled = ref(false)
 
 const checkConnected = async (accounts) => {
   // if mm is not installed
-  if (!$Blockchain.Ethereum) {
-    $Blockchain.Nuxt.$emit('disabled', {
+  if (!$B.Ethereum) {
+    $B.Nuxt.$emit('disabled', {
       cause: 'Please install Metamask and reload the page',
       status: true,
     })
@@ -145,14 +145,14 @@ const checkConnected = async (accounts) => {
       Array.isArray(accounts)
       && accounts.length <= 0
   ){
-    $Blockchain.Nuxt.$emit('disabled', {
+    $B.Nuxt.$emit('disabled', {
       cause: 'Please connect Metamask',
       status: true,
     })
     connectedWallet.value = ''
     buttonText.value = 'Connect'
     buttonDisabled.value = false
-    $Blockchain.Wallet = ''
+    $B.Wallet = ''
   }
   // is ok
   else {
@@ -160,7 +160,7 @@ const checkConnected = async (accounts) => {
     buttonText.value = 'Connected'
     buttonDisabled.value = true
   }
-  $Blockchain.Nuxt.$emit('update-whose')
+  $B.Nuxt.$emit('update-whose')
 }
 
 </script>

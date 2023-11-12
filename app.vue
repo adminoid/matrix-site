@@ -1,6 +1,9 @@
 <template lang="pug">
 nuxt-layout(:name="layoutName")
   nuxt-page
+alert-modal(
+  :alert="alert"
+)
 </template>
 
 <script setup>
@@ -11,11 +14,28 @@ import {
 } from '@vueuse/core'
 import { useLayoutStore } from '~/stores/useLayout.js'
 import { useRoute } from 'vue-router'
+import AlertModal from '~/components/AlertModal.vue'
 
 const route = useRoute()
 
 const layoutName = ref('')
 layoutName.value = (route.path === '/') ? 'main-page' : 'common'
+
+const { $on } = useNuxtApp()
+
+const alert = ref({
+  type: '',
+  message: '',
+})
+
+$on('alert', ({type, message}) => {
+  console.info('on alert...')
+  console.log('type', type)
+  console.log('message', message)
+  alert.value = {
+    type, message
+  }
+})
 
 onMounted(async () => {
   window.addEventListener('resize', (evt) => {

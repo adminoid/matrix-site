@@ -5,7 +5,6 @@
 
 main
   .container
-    p main page is there
     slot
 
 footer

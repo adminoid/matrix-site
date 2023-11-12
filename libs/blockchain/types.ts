@@ -8,18 +8,19 @@ export interface IExternal {
   // technical methods
   connect(): Promise<void>
   // info methods
-  getCoreUser(wallet: string): Promise<void>
-  getMatrixUser(level: number|string, wallet: string): Promise<void>
+  getCoreUser(wallet: string): Promise<void | boolean>
+
+  getMatrixUser(level: number | string, wallet: string): Promise<void | boolean>
 
   // interaction methods
-  registerWhose(whose: string): Promise<void>
-  withdrawClaim(amount: number | string): Promise<void>
+  registerWhose(whose: string): Promise<void|boolean>
+  withdrawClaim(amount: number | string): Promise<void|boolean>
   sendAmount(amount: string|number): Promise<void>
-  withdrawTen(): Promise<void>
+  withdrawTen(): Promise<void|boolean>
 }
 
 export interface INetwork {
-  setNetwork(): Promise<void>
+  setNetwork(): Promise<void | boolean>
 }
 
 export interface ICommon {

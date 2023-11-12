@@ -81,6 +81,7 @@ body.is-main-page
     @include media-breakpoint-down(xl)
       margin-right: 0.5rem
 footer
+  @include bottom-gradient
   @include media-breakpoint-down(lg)
     padding-top: 40px
   .fl
@@ -90,9 +91,6 @@ footer
     &__bottom
       @include media-breakpoint-down(lg)
         padding: 24px 16px 40px 16px !important
-body.is-main-page
-  footer
-    @include bottom-gradient
 
 // Predefined variables
 
