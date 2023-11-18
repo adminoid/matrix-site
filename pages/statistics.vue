@@ -1,4 +1,9 @@
 <template lang="pug">
-h1 Your statistics
-p hohoho
+h1 page: statistics page ___statistics
 </template>
+
+<script setup>
+definePageMeta({
+  layout: "common",
+})
+</script>
