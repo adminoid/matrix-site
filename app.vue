@@ -1,5 +1,6 @@
 <template lang="pug">
 nuxt-layout(:name="layoutName")
+  pre {{ layoutName }}
   nuxt-page
 alert-modal(
   :alert="alert"

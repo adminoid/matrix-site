@@ -8,11 +8,15 @@ export default <RouterConfig> {
     {
       name: 'main',
       path: '/',
-      component: () => import('~/pages/main.vue'),
       children: [
         {
+          name: 'main',
+          path: '',
+          component: () => import('~/pages/main.vue'),
+        },
+        {
           name: 'statistics',
-          path: '/statistics',
+          path: 'statistics',
           component: () => import('~/pages/statistics.vue'),
         },
       ],

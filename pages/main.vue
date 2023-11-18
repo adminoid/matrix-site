@@ -1,5 +1,5 @@
 <template lang="pug">
-h1 page: main page ___main
+h1 page: ___main
 </template>
 
 <script setup>

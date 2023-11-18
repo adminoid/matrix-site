@@ -1,5 +1,5 @@
 <template lang="pug">
-h1 page: statistics page ___statistics
+h1 page: ___statistics
 </template>
 
 <script setup>
