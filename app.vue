@@ -1,7 +1,8 @@
 <template lang="pug">
 nuxt-layout(:name="layoutName")
-  pre {{ layoutName }}
+  pre 111 {{ layoutName }}
   nuxt-page
+  pre 222 {{ alert }}
 alert-modal(
   :alert="alert"
 )
@@ -20,7 +21,7 @@ import AlertModal from '~/components/AlertModal.vue'
 const route = useRoute()
 
 const layoutName = ref('')
-layoutName.value = (route.path === '/') ? 'main-page' : 'common'
+layoutName.value = (route.path === '/') ? 'main-page' : 'common-with-auth'
 
 const { $on } = useNuxtApp()
 

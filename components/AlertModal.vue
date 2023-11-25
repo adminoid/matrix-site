@@ -19,7 +19,7 @@
         )
       .modal-body.py-0
         p.text-center
-          | {{ alert.message }}
+          | {{ localAlertPropCopy.message }}
       .modal-footer.flex-column.align-items-stretch.w-100.gap-2.pb-3.border-top-0
         button.btn.btn-lg.btn-secondary(
           type='button'
@@ -41,16 +41,32 @@ const props = defineProps({
 const localAlertPropCopy = ref({})
 
 onMounted(()=>{
-  localAlertPropCopy
+  localAlertPropCopy.value = props.alert
 })
 const showModal = ref(true)
+
 watchEffect(() => {
+
+  console.log('watchEffect watchEffect watchEffect')
+
   showModal.value = (props.alert.type && props.alert.message)
+  const alertCopy = props.alert
+
+  console.info('alertCopy:', alertCopy)
+
+  const test = alertCopy.message.indexOf('this.Ethereum is undefined')
+  console.log(test)
+  if (test > -1) {
+    console.log(alertCopy)
+    alertCopy.message = 'Please install Metamask w'
+  }
+
+  localAlertPropCopy.value = alertCopy
 })
 
 const closeModal = () => {
   console.info('closeModal.-s4')
-  props.alert = {
+  localAlertPropCopy.alert = {
     type: '',
     message: '',
   }

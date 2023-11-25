@@ -40,35 +40,80 @@ class CoreContract {
 
 class Common implements ICommon {
   Nuxt
-  Ethereum
+  Ethereum: any
   Web3: any
   Config: any
-  Core
+  Core: any
   Wallet: any
-  constructor (nuxt: any, globalThis: any) {
+  constructor (nuxt: any) {
+    console.info('class Common constructor')
     this.Nuxt = nuxt
+
+    console.log('nuxt', nuxt)
+
+  }
+  async init(globalThis: any) {
+    console.info('class Common async init()')
+    // console.log(this.Web3)
+    // console.log('this.Web3[\'eth\'].accounts', this.Web3['eth'].accounts[0])
+    // web3.eth.accounts[0]
+
     if (!globalThis['ethereum']) {
+
+      // console.info('globalThis[\'ethereum\']')
+      // console.log(globalThis['ethereum'])
+
       this.ThrowAlert('danger', 'Please install Metamask 123')
+
     } else {
       this.Ethereum = globalThis['ethereum']
+
+      console.log('this.Ethereum 2', this.Ethereum)
+
       const publicConfig = new Config()
       this.Config = publicConfig['public']
       // this.Web3 = new Web3(this.Ethereum)
       this.Web3 = new Web3(this.Config.RPC_URL)
       this.Core = new CoreContract(this.Web3, this.Config.CONTRACT_ADDRESS)
     }
-  }
-  async init() {
-    const accounts = await this.Web3.eth.getAccounts()
-    this.Wallet = accounts[0]
+
+    console.info('this.EmitDisabled')
+    console.log(this.EmitDisabled)
+
+    if (!this.Web3 || !this.Ethereum) {
+      this.EmitDisabled('connect', true)
+    }
+
+    // const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
+    // console.log('accounts...', accounts)
+
+    // todo --
+    // this.Wallet = accounts[0]
+    // const updateWallet = (accounts: any) => {
+    //   this.Wallet = accounts[0]
+    //   console.log('this.Wallet:', this.Wallet)
+    // }
+    //
+    // this.Ethereum.on('accountsChanged', updateWallet)
+
+    console.info('this.Wallet -> ')
+    // console.log(this.Wallet)
+
   }
   EmitDisabled (cause: string, status: boolean) {
-    this.Nuxt.$emit('disabled', {
-      cause,
-      status,
-    })
+    console.info('EmitDisabled this.Nuxt')
+    console.log(this.Nuxt)
+
+    // todo --
+    // this.Nuxt.$emit('disabled', {
+    //   cause,
+    //   status,
+    // })
   }
-  async ThrowAlert (type: string, error: any) {
+  ThrowAlert (type: string, error: any) {
+
+    console.warn('ThrowAlert', error)
+
     let message: any = error
     // only for error messages
     if (
@@ -94,13 +139,13 @@ class Common implements ICommon {
 }
 
 class Network extends Common implements INetwork {
-  constructor (nuxt: any, globalThis: any) {super(nuxt, globalThis)}
+  constructor (nuxt: any) {super(nuxt)}
   private checkInstalledMetamask (): boolean {
     return Boolean(this.Ethereum && this.Ethereum.isMetaMask);
   }
   async setNetwork (): Promise<void | boolean> {
     if (!this.checkInstalledMetamask() || !this.Ethereum) {
-      return await this.ThrowAlert('danger', 'Metamask is not installed!')
+      return this.ThrowAlert('danger', 'Metamask is not installed!')
     } else {
       try {
         // check if the chain that for connect to is installed
@@ -114,7 +159,7 @@ class Network extends Common implements INetwork {
         if (e.code === 4902) {
           await this.addNetwork()
         } else {
-          await this.ThrowAlert('danger', e.message)
+          this.ThrowAlert('danger', e.message)
         }
       }
     }
@@ -133,25 +178,36 @@ class Network extends Common implements INetwork {
         ],
       })
     } catch (e: any) {
-      await this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message)
     }
   }
 }
 
 export class External extends Network implements IExternal {
-  constructor (nuxt: any, globalThis: any) {super(nuxt, globalThis)}
+  constructor (nuxt: any) {super(nuxt)}
   async connect (): Promise<void> {
+
+    console.info('External::connect()')
+
     this.EmitDisabled('connect', true)
 
+    // console.log('this.Ethereum', this.Ethereum)
+
     const res = await this.setNetwork()
-    if (!res) return
+    console.log('res', res)
+    // if (!res) return
     try {
       const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
-      if (accounts && accounts.length > 0) {
-        this.Wallet = accounts[0]
-      }
+
+      console.info('connect method in classes')
+      console.info('accounts', accounts)
+
+      // todo --
+      // if (accounts && accounts.length > 0) {
+      //   this.Wallet = accounts[0]
+      // }
     } catch (e: any) {
-      await this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message)
     } finally {
       this.EmitDisabled('connect', false)
     }
@@ -159,7 +215,7 @@ export class External extends Network implements IExternal {
 
   async getCoreUser (wallet: string): Promise<void | boolean> {
     if (!this.Wallet) {
-      await this.ThrowAlert('danger', 'Please connect Metamask')
+      this.ThrowAlert('danger', 'Please connect Metamask')
     } else {
       try {
         this.EmitDisabled(`getCoreUser`, true)
@@ -184,9 +240,9 @@ level: ${resp.level}
 whose: ${resp.whose}
 `
         }
-        await this.ThrowAlert('primary', msg)
+        this.ThrowAlert('primary', msg)
       } catch (e: any) {
-        await this.ThrowAlert('danger', e.message)
+        this.ThrowAlert('danger', e.message)
       } finally {
         this.EmitDisabled(`getCoreUser`, false)
       }
@@ -221,9 +277,9 @@ isRight: ${resp.user.isRight}
 plateau: ${resp.user.plateau}
 `
       }
-      await this.ThrowAlert('primary', msg)
+      this.ThrowAlert('primary', msg)
     } catch (e: any) {
-      await this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message)
     } finally {
       this.EmitDisabled(`getMatrixUser`, false)
     }
@@ -259,9 +315,9 @@ level: ${resp.user.level}
 whose: ${resp.user.whose}
 `
       }
-      await this.ThrowAlert('primary', msg)
+      this.ThrowAlert('primary', msg)
     } catch (e: any) {
-      await this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message)
     } finally {
       this.EmitDisabled(`GetCoreUserByMatrixPosition`, false)
     }
@@ -292,9 +348,9 @@ TO: ${resp.to}
 GAS: ${resp.gasUsed}
 TX: ${resp.transactionHash}
 `
-      await this.ThrowAlert('success', msg)
+      this.ThrowAlert('success', msg)
     } catch (e: any) {
-      await this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message)
     } finally {
       this.EmitDisabled(`registerWhose`, false)
     }
@@ -318,9 +374,9 @@ AMOUNT: ${amount}
 GAS: ${resp.gasUsed}
 TX: ${resp.transactionHash}
 `
-      await this.ThrowAlert('success', msg)
+      this.ThrowAlert('success', msg)
     } catch (e: any) {
-      await this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message)
     } finally {
       this.EmitDisabled(`withdrawClaim`, false)
     }
@@ -340,9 +396,9 @@ TO: ${resp.to}
 GAS: ${resp.gasUsed}
 TX: ${resp.transactionHash}
 `
-      await this.ThrowAlert('success', msg)
+      this.ThrowAlert('success', msg)
     } catch (e: any) {
-      await this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message)
     } finally {
       this.EmitDisabled(`sendAmount`, false)
     }
@@ -357,10 +413,10 @@ TX: ${resp.transactionHash}
           from: this.Wallet,
           gasLimit: 310000, // not required
         })
-      await this.ThrowAlert('success', "check your balance")
+      this.ThrowAlert('success', "check your balance")
 
     } catch (e: any) {
-      await this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message)
     } finally {
       this.EmitDisabled(`withdrawTen`, false)
     }

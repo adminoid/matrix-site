@@ -81,6 +81,8 @@ import {
   breakpointsBootstrapV5,
   useBreakpoints,
 } from '@vueuse/core'
+import {getGlobalThis} from "@vue/shared";
+
 const { $B } = useNuxtApp()
 
 const layoutStore = useLayoutStore()
@@ -122,17 +124,24 @@ const DdLangToggle = () => {
 }
 
 const connectWallet = async () => {
+  console.info('connectWallet')
   await $B.connect()
-  await checkConnected([$B.Wallet])
+  console.warn('EN $B.Wallet|Web3', $B.Wallet, $B.Web3)
+  await checkConnected()
 }
 
 const connectedWallet = ref('')
 const buttonText = ref('Connect')
 const buttonDisabled = ref(false)
 
-const checkConnected = async (accounts) => {
+const checkConnected = async () => {
+  console.info('checkConnected 0')
+  console.log(!!$B.Ethereum)
+  // console.log($B.Wallet)
+
   // if mm is not installed
   if (!$B.Ethereum) {
+    console.info('checkConnected 1')
     $B.Nuxt.$emit('disabled', {
       cause: 'Please install Metamask and reload the page',
       status: true,
@@ -145,6 +154,7 @@ const checkConnected = async (accounts) => {
       Array.isArray(accounts)
       && accounts.length <= 0
   ){
+    console.info('checkConnected 2')
     $B.Nuxt.$emit('disabled', {
       cause: 'Please connect Metamask',
       status: true,
@@ -155,13 +165,21 @@ const checkConnected = async (accounts) => {
     $B.Wallet = ''
   }
   // is ok
-  else {
-    connectedWallet.value = accounts[0]
-    buttonText.value = 'Connected'
-    buttonDisabled.value = true
-  }
+  // else if (accounts) {
+  //   console.info('checkConnected 3')
+  //   connectedWallet.value = accounts[0]
+  //   buttonText.value = 'Disconnect'
+  //   buttonDisabled.value = true
+  // }
   $B.Nuxt.$emit('update-whose')
 }
+
+onMounted(async () => {
+  console.info('onMounted')
+  const glob = getGlobalThis()
+  await $B.init(glob)
+  await checkConnected()
+})
 
 </script>
 
