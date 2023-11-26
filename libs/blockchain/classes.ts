@@ -63,7 +63,7 @@ class Common implements ICommon {
       // console.info('globalThis[\'ethereum\']')
       // console.log(globalThis['ethereum'])
 
-      this.ThrowAlert('danger', 'Please install Metamask 123')
+      this.ThrowAlert('danger', 'Please install Metamask and reload the page 1')
 
     } else {
       this.Ethereum = globalThis['ethereum']
@@ -81,24 +81,25 @@ class Common implements ICommon {
     console.log(this.EmitDisabled)
 
     if (!this.Web3 || !this.Ethereum) {
+      // metamask is not installed
       this.EmitDisabled('connect', true)
+    } else {
+      // metamask installed
+      const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
+      console.log('accounts...', accounts)
+
+      // todo --
+      this.Wallet = accounts[0]
+      const updateWallet = (accounts: any) => {
+        this.Wallet = accounts[0]
+        console.log('this.Wallet:', this.Wallet)
+      }
+
+      this.Ethereum.on('accountsChanged', updateWallet)
+
+      console.info('this.Wallet -> ')
+      console.log(this.Wallet)
     }
-
-    // const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
-    // console.log('accounts...', accounts)
-
-    // todo --
-    // this.Wallet = accounts[0]
-    // const updateWallet = (accounts: any) => {
-    //   this.Wallet = accounts[0]
-    //   console.log('this.Wallet:', this.Wallet)
-    // }
-    //
-    // this.Ethereum.on('accountsChanged', updateWallet)
-
-    console.info('this.Wallet -> ')
-    // console.log(this.Wallet)
-
   }
   EmitDisabled (cause: string, status: boolean) {
     console.info('EmitDisabled this.Nuxt')
@@ -196,6 +197,7 @@ export class External extends Network implements IExternal {
     const res = await this.setNetwork()
     console.log('res', res)
     // if (!res) return
+
     try {
       const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
 

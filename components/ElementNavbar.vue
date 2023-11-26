@@ -127,6 +127,9 @@ const connectWallet = async () => {
   console.info('connectWallet')
   await $B.connect()
   console.warn('EN $B.Wallet|Web3', $B.Wallet, $B.Web3)
+
+  const glob = getGlobalThis()
+  await $B.init(glob)
   await checkConnected()
 }
 
@@ -137,33 +140,33 @@ const buttonDisabled = ref(false)
 const checkConnected = async () => {
   console.info('checkConnected 0')
   console.log(!!$B.Ethereum)
-  // console.log($B.Wallet)
+  console.log($B.Wallet)
 
   // if mm is not installed
   if (!$B.Ethereum) {
     console.info('checkConnected 1')
     $B.Nuxt.$emit('disabled', {
-      cause: 'Please install Metamask and reload the page',
+      cause: 'Please install Metamask and reload the page 0',
       status: true,
     })
     // buttonText.value = 'Install Metamask'
     buttonDisabled.value = true
   }
   // if empty accounts
-  else if (
-      Array.isArray(accounts)
-      && accounts.length <= 0
-  ){
-    console.info('checkConnected 2')
-    $B.Nuxt.$emit('disabled', {
-      cause: 'Please connect Metamask',
-      status: true,
-    })
-    connectedWallet.value = ''
-    buttonText.value = 'Connect'
-    buttonDisabled.value = false
-    $B.Wallet = ''
-  }
+  // else if (
+  //     Array.isArray(accounts)
+  //     && accounts.length <= 0
+  // ){
+  //   console.info('checkConnected 2')
+  //   $B.Nuxt.$emit('disabled', {
+  //     cause: 'Please connect Metamask',
+  //     status: true,
+  //   })
+  //   connectedWallet.value = ''
+  //   buttonText.value = 'Connect'
+  //   buttonDisabled.value = false
+  //   $B.Wallet = ''
+  // }
   // is ok
   // else if (accounts) {
   //   console.info('checkConnected 3')
@@ -174,12 +177,12 @@ const checkConnected = async () => {
   $B.Nuxt.$emit('update-whose')
 }
 
-onMounted(async () => {
-  console.info('onMounted')
-  const glob = getGlobalThis()
-  await $B.init(glob)
-  await checkConnected()
-})
+// onMounted(async () => {
+//   console.info('onMounted')
+//   const glob = getGlobalThis()
+//   await $B.init(glob)
+//   await checkConnected()
+// })
 
 </script>
 

@@ -53,13 +53,14 @@ watchEffect(() => {
   const alertCopy = props.alert
 
   console.info('alertCopy:', alertCopy)
+  console.info('alertCopy.message:', alertCopy.message)
 
-  const test = alertCopy.message.indexOf('this.Ethereum is undefined')
-  console.log(test)
-  if (test > -1) {
-    console.log(alertCopy)
-    alertCopy.message = 'Please install Metamask w'
-  }
+  // const test = alertCopy.message.indexOf('this.Ethereum is undefined')
+  // console.log(test)
+  // if (test > -1) {
+  //   console.log(alertCopy)
+  //   alertCopy.message = 'Please install Metamask w'
+  // }
 
   localAlertPropCopy.value = alertCopy
 })
