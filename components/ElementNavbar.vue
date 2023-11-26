@@ -79,12 +79,17 @@ import {
   useBreakpoints,
 } from '@vueuse/core'
 import {getGlobalThis} from "@vue/shared";
-
-const { $B } = useNuxtApp()
+import {useWeb3Store} from "~/stores/useWeb3.js";
 
 const layoutStore = useLayoutStore()
-
+const web3Store = useWeb3Store()
 const breakpoints = useBreakpoints(breakpointsBootstrapV5)
+
+const connectWallet = async () => {
+  if (!web3Store.connectedWallet) {
+    await web3Store.connectWallet()
+  }
+}
 
 const isDdInstructionsOpen = ref(false)
 const ddInstructionsToggleWide = () => {
@@ -120,28 +125,7 @@ const DdLangToggle = () => {
   isDdLangOpen.value = !isDdLangOpen.value
 }
 
-const connectWallet = async () => {
-  const glob = getGlobalThis()
-  await $B.init(glob)
-  await $B.connect()
-  await checkConnected()
-}
-
-const connectedWallet = ref('')
 const buttonText = ref('Connect')
-const buttonDisabled = ref(false)
-
-const checkConnected = async () => {
-  // if mm is not installed
-  if (!$B.Ethereum) {
-    $B.Nuxt.$emit('disabled', {
-      cause: 'Please install Metamask and reload the page 0',
-      status: true,
-    })
-    buttonDisabled.value = true
-  }
-  $B.Nuxt.$emit('update-whose')
-}
 </script>
 
 <style lang="sass">

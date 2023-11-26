@@ -46,75 +46,45 @@ class Common implements ICommon {
   Core: any
   Wallet: any
   constructor (nuxt: any) {
-    console.info('class Common constructor')
     this.Nuxt = nuxt
-
-    console.log('nuxt', nuxt)
-
   }
   async init(globalThis: any) {
-    console.info('class Common async init()')
-    console.log(this.Web3)
-
-    // console.log('this.Web3[\'eth\'].accounts', this.Web3['eth'].accounts[0])
-    // web3.eth.accounts[0]
-
-    console.warn('globalThis[\'ethereum\']')
-    // console.log(globalThis)
-    console.log(globalThis['ethereum'])
-
     if (!globalThis['ethereum']) {
       this.ThrowAlert('danger', 'Please install Metamask and reload the page 1')
     } else {
       this.Ethereum = globalThis['ethereum']
-
-      console.log('this.Ethereum 2', this.Ethereum)
-
       const publicConfig = new Config()
       this.Config = publicConfig['public']
       // this.Web3 = new Web3(this.Ethereum)
       this.Web3 = new Web3(this.Config.RPC_URL)
       this.Core = new CoreContract(this.Web3, this.Config.CONTRACT_ADDRESS)
     }
-
-    console.info('this.EmitDisabled')
-    console.log(this.EmitDisabled)
-
     if (!this.Web3 || !this.Ethereum) {
       // metamask is not installed
       this.EmitDisabled('connect', true)
     } else {
       // metamask installed
       const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
-      console.log('accounts...', accounts)
-
       // todo --
       this.Wallet = accounts[0]
-      const updateWallet = (accounts: any) => {
-        this.Wallet = accounts[0]
-        console.log('this.Wallet:', this.Wallet)
-      }
-
-      this.Ethereum.on('accountsChanged', updateWallet)
-
-      console.info('this.Wallet -> ')
-      console.log(this.Wallet)
+      // const updateWallet = (accounts: any) => {
+      //   this.Wallet = accounts[0]
+      //   console.warn('updateWallet:')
+      //   console.log(this.Wallet)
+      //   this.Nuxt.$emit('update-wallet', this.Wallet)
+      // }
+      //
+      // this.Ethereum.on('accountsChanged', updateWallet)
     }
   }
   EmitDisabled (cause: string, status: boolean) {
-    console.info('EmitDisabled this.Nuxt')
-    console.log(this.Nuxt)
-
     // todo --
-    // this.Nuxt.$emit('disabled', {
-    //   cause,
-    //   status,
-    // })
+    this.Nuxt.$emit('disabled', {
+      cause,
+      status,
+    })
   }
   ThrowAlert (type: string, error: any) {
-
-    console.warn('ThrowAlert', error)
-
     let message: any = error
     // only for error messages
     if (
@@ -142,11 +112,6 @@ class Common implements ICommon {
 class Network extends Common implements INetwork {
   constructor (nuxt: any) {super(nuxt)}
   private checkInstalledMetamask (): boolean {
-
-    console.warn('this.Ethereum.isMetaMask')
-    console.warn(this.Ethereum)
-    console.warn(this.Ethereum.isMetaMask)
-
     return Boolean(this.Ethereum && this.Ethereum.isMetaMask);
   }
   async setNetwork (): Promise<void | boolean> {
@@ -192,17 +157,8 @@ class Network extends Common implements INetwork {
 export class External extends Network implements IExternal {
   constructor (nuxt: any) {super(nuxt)}
   async connect (): Promise<void> {
-
-    console.info('External::connect()')
-
     this.EmitDisabled('connect', true)
-
-    console.log('this.Ethereum', this.Ethereum)
-
     const res = await this.setNetwork()
-    console.log('res', res)
-    // if (!res) return
-
     try {
 
       if (!this.Web3 || !this.Ethereum) {
@@ -211,9 +167,6 @@ export class External extends Network implements IExternal {
       } else {
         // metamask installed
         const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
-
-        console.info('connect method in classes')
-        console.info('accounts', accounts)
       }
 
       // todo --
@@ -273,10 +226,6 @@ whose: ${resp.whose}
           from: this.Wallet,
           to: new Config().CONTRACT_ADDRESS,
         })
-
-      console.info('here debug')
-      console.log(resp)
-
       // todo: display resp in web interface
       let msg
       if (!resp.user.isValue) {
@@ -300,9 +249,6 @@ plateau: ${resp.user.plateau}
   }
 
   async GetCoreUserByMatrixPosition (level: number | string, userIndex: number | string): Promise<void|boolean> {
-
-    console.log('GetCoreUserByMatrixPosition!')
-
     try {
       this.EmitDisabled(`GetCoreUserByMatrixPosition`, true)
       if (!this.Core) return false
@@ -312,9 +258,6 @@ plateau: ${resp.user.plateau}
           from: this.Wallet,
           to: new Config().CONTRACT_ADDRESS,
         })
-
-      console.log(resp)
-
       // todo: display resp in web interface
       let msg
       if (!resp.user.isValue) {

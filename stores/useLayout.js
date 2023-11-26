@@ -4,7 +4,7 @@ import {
     useBreakpoints,
 } from '@vueuse/core'
 
-export const useLayoutStore = defineStore('counter', () => {
+export const useLayoutStore = defineStore('layout_store', () => {
     const isOpenedSidebar = ref(false)
     const breakpoints = useBreakpoints(breakpointsBootstrapV5)
     const toggleSidebar = () => {
