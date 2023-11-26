@@ -59,7 +59,7 @@ watchEffect(() => {
   // console.log(test)
   // if (test > -1) {
   //   console.log(alertCopy)
-  //   alertCopy.message = 'Please install Metamask w'
+  //   alertCopy.message = 'Please connect Metamask'
   // }
 
   localAlertPropCopy.value = alertCopy

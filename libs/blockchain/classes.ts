@@ -54,17 +54,17 @@ class Common implements ICommon {
   }
   async init(globalThis: any) {
     console.info('class Common async init()')
-    // console.log(this.Web3)
+    console.log(this.Web3)
+
     // console.log('this.Web3[\'eth\'].accounts', this.Web3['eth'].accounts[0])
     // web3.eth.accounts[0]
 
+    console.warn('globalThis[\'ethereum\']')
+    // console.log(globalThis)
+    console.log(globalThis['ethereum'])
+
     if (!globalThis['ethereum']) {
-
-      // console.info('globalThis[\'ethereum\']')
-      // console.log(globalThis['ethereum'])
-
       this.ThrowAlert('danger', 'Please install Metamask and reload the page 1')
-
     } else {
       this.Ethereum = globalThis['ethereum']
 
@@ -142,6 +142,11 @@ class Common implements ICommon {
 class Network extends Common implements INetwork {
   constructor (nuxt: any) {super(nuxt)}
   private checkInstalledMetamask (): boolean {
+
+    console.warn('this.Ethereum.isMetaMask')
+    console.warn(this.Ethereum)
+    console.warn(this.Ethereum.isMetaMask)
+
     return Boolean(this.Ethereum && this.Ethereum.isMetaMask);
   }
   async setNetwork (): Promise<void | boolean> {
@@ -192,17 +197,24 @@ export class External extends Network implements IExternal {
 
     this.EmitDisabled('connect', true)
 
-    // console.log('this.Ethereum', this.Ethereum)
+    console.log('this.Ethereum', this.Ethereum)
 
     const res = await this.setNetwork()
     console.log('res', res)
     // if (!res) return
 
     try {
-      const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
 
-      console.info('connect method in classes')
-      console.info('accounts', accounts)
+      if (!this.Web3 || !this.Ethereum) {
+        // metamask is not installed
+        this.EmitDisabled('connect', true)
+      } else {
+        // metamask installed
+        const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
+
+        console.info('connect method in classes')
+        console.info('accounts', accounts)
+      }
 
       // todo --
       // if (accounts && accounts.length > 0) {
