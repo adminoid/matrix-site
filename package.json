@@ -12,7 +12,7 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "events": "^3.3.0",
-    "nuxt": "^3.8.1",
+    "nuxt": "^3.8.2",
     "pug": "^3.0.2",
     "pug-loader": "^2.4.0",
     "sass": "^1.68.0",

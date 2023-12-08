@@ -25,5 +25,17 @@ export const useWeb3Store = defineStore('web3_store', () => {
             connectedWallet.value = accounts[0]
         })
     }
+    watchEffect(() => {
+        console.log("...connectedWallet.value...")
+        console.log(connectedWallet.value)
+    })
+
+    const checkRegister = (wallet) => {
+        const resp = $B.getCoreUser(wallet)
+        console.log(resp)
+    }
+
     return {connectedWallet, connectWallet}
 })
+
+// todo: when going to auth protected page - need to run authorization
