@@ -65,10 +65,7 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
               li
                 a.dropdown-item(href='#') English
 
-      button.btn.btn-cpink.main-button(
-        type="button"
-        @click.prevent="connectWallet"
-      ) {{ buttonText }}
+      connect-button
 </template>
 
 <script setup>
@@ -78,18 +75,10 @@ import {
   breakpointsBootstrapV5,
   useBreakpoints,
 } from '@vueuse/core'
-import {getGlobalThis} from "@vue/shared";
-import {useWeb3Store} from "~/stores/useWeb3.js";
+import ConnectButton from '~/components/ConnectButton.vue'
 
 const layoutStore = useLayoutStore()
-const web3Store = useWeb3Store()
 const breakpoints = useBreakpoints(breakpointsBootstrapV5)
-
-const connectWallet = async () => {
-  if (!web3Store.connectedWallet) {
-    await web3Store.connectWallet()
-  }
-}
 
 const isDdInstructionsOpen = ref(false)
 const ddInstructionsToggleWide = () => {
@@ -124,8 +113,6 @@ const DdLangToggle = () => {
   console.info('DdLangToggle')
   isDdLangOpen.value = !isDdLangOpen.value
 }
-
-const buttonText = ref('Connect')
 </script>
 
 <style lang="sass">
