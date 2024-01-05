@@ -55,7 +55,6 @@ class Common implements ICommon {
     } else {
       this.Ethereum = globalThis['ethereum']
       this.Ethereum.on('accountsChanged', (accounts: any[]) => {
-        console.warn("accountsChanged 1")
         this.Storage.value = accounts[0]
       })
 

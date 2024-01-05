@@ -17,15 +17,15 @@ watch(storage, (nVal) => {
   console.warn("watch", nVal)
 })
 
-// todo: checkRegister()
 const web3Store = useWeb3Store()
 const isRegistered = ref(false)
+
 // check if wallet registered
 onMounted(async () => {
-  // isRegistered.value = web3Store.checkRegister()
-  const test = await web3Store.checkRegister()
-  console.warn("test", test)
-  isRegistered.value = test
+  isRegistered.value = await web3Store.checkRegister()
 })
 
+watch(storage, async () => {
+  isRegistered.value = await web3Store.checkRegister()
+})
 </script>
