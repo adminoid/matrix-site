@@ -1,5 +1,4 @@
 import { useNuxtApp } from "#app"
-import { TDisabled } from '@/types'
 import { nextTick } from 'vue'
 
 export function useDisabled() {
@@ -14,7 +13,7 @@ export function useDisabled() {
   }
 
   // @ts-ignore
-  useNuxtApp().$on('disabled', async (disabledObj: TDisabled) => {
+  useNuxtApp().$on('disabled', async (disabledObj: any) => {
     await update(disabledObj)
   })
 

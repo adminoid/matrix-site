@@ -1,8 +1,6 @@
 <template lang="pug">
 nuxt-layout(:name="layoutName")
-  pre 111 {{ layoutName }}
   nuxt-page
-  pre 222 {{ alert }}
 alert-modal(
   :alert="alert"
 )
@@ -31,9 +29,6 @@ const alert = ref({
 })
 
 $on('alert', ({type, message}) => {
-  console.info('on alert...')
-  console.log('type', type)
-  console.log('message', message)
   alert.value = {
     type, message
   }

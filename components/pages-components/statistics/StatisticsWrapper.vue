@@ -1,5 +1,4 @@
 <template lang="pug">
-p rflink
 referral-link
 </template>
 

@@ -39,12 +39,11 @@ class CoreContract {
 }
 
 class Common implements ICommon {
-  Nuxt
+  Nuxt: any
   Ethereum: any
   Web3: any
   Config: any
   Core: any
-  Wallet: any
   constructor (nuxt: any) {
     this.Nuxt = nuxt
   }
@@ -62,27 +61,15 @@ class Common implements ICommon {
     if (!this.Web3 || !this.Ethereum) {
       // metamask is not installed
       this.EmitDisabled('connect', true)
-    } else {
-      // metamask installed
-      const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
-      // todo --
-      this.Wallet = accounts[0]
-      // const updateWallet = (accounts: any) => {
-      //   this.Wallet = accounts[0]
-      //   console.warn('updateWallet:')
-      //   console.log(this.Wallet)
-      //   this.Nuxt.$emit('update-wallet', this.Wallet)
-      // }
-      //
-      // this.Ethereum.on('accountsChanged', updateWallet)
     }
   }
   EmitDisabled (cause: string, status: boolean) {
-    // todo --
-    this.Nuxt.$emit('disabled', {
-      cause,
-      status,
-    })
+    if (this.Nuxt.$emit) {
+      this.Nuxt.$emit('disabled', {
+        cause,
+        status,
+      })
+    }
   }
   ThrowAlert (type: string, error: any) {
     let message: any = error
@@ -155,24 +142,28 @@ class Network extends Common implements INetwork {
 }
 
 export class External extends Network implements IExternal {
-  constructor (nuxt: any) {super(nuxt)}
+  Storage: any
+
+  constructor (nuxt: any, storage: any) {
+    super(nuxt)
+    this.Storage = storage
+  }
+
   async connect (): Promise<void> {
     this.EmitDisabled('connect', true)
     const res = await this.setNetwork()
     try {
-
       if (!this.Web3 || !this.Ethereum) {
         // metamask is not installed
+
+        this.Storage.value = "333-12121212121-333"
+
         this.EmitDisabled('connect', true)
       } else {
         // metamask installed
         const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
+        this.Storage.value = accounts[0]
       }
-
-      // todo --
-      // if (accounts && accounts.length > 0) {
-      //   this.Wallet = accounts[0]
-      // }
     } catch (e: any) {
       this.ThrowAlert('danger', e.message)
     } finally {
@@ -181,7 +172,7 @@ export class External extends Network implements IExternal {
   }
 
   async getCoreUser (wallet: string): Promise<void | boolean> {
-    if (!this.Wallet) {
+    if (!this.Storage.value) {
       this.ThrowAlert('danger', 'Please connect Metamask')
     } else {
       try {
@@ -192,7 +183,7 @@ export class External extends Network implements IExternal {
         const resp = await this.Core
           .methods.getUserFromCore(wallet)
           .call({
-            from: this.Wallet,
+            from: this.Storage.value,
           })
         // display resp in web interface
         let msg
@@ -223,7 +214,7 @@ whose: ${resp.whose}
       const resp = await this.Core
         .methods.getUserFromMatrix(level, wallet)
         .call({
-          from: this.Wallet,
+          from: this.Storage.value,
           to: new Config().CONTRACT_ADDRESS,
         })
       // todo: display resp in web interface
@@ -255,7 +246,7 @@ plateau: ${resp.user.plateau}
       const resp = await this.Core
         .methods.getCoreUserByMatrixPosition(level, userIndex)
         .call({
-          from: this.Wallet,
+          from: this.Storage.value,
           to: new Config().CONTRACT_ADDRESS,
         })
       // todo: display resp in web interface
@@ -291,7 +282,7 @@ whose: ${resp.user.whose}
       if (!this.Core) return false
       const resp = await this.Core
       .methods.register(whose).send({
-        from: this.Wallet,
+        from: this.Storage.value,
         value: 10000000000000000,
         // gasLimit: 5000000, // not required
         gas: 300000, // 274633
@@ -319,7 +310,7 @@ TX: ${resp.transactionHash}
       const resp = await this.Core.methods
         .withdrawClaim(this.Web3.utils.toWei(String(amount), "ether"))
         .send({
-          from: this.Wallet,
+          from: this.Storage.value,
           gasLimit: 310000, // not required
         });
       // from - address for withdrawing
@@ -342,7 +333,7 @@ TX: ${resp.transactionHash}
     this.EmitDisabled(`sendAmount`, true)
     try {
       const resp = await this.Web3.eth.sendTransaction({
-        from: this.Wallet,
+        from: this.Storage.value,
         to: this.Config.CONTRACT_ADDRESS,
         value: this.Web3.utils.toWei(String(amount), "ether")
       });
@@ -367,7 +358,7 @@ TX: ${resp.transactionHash}
       await this.Core.methods
         .getTenPercentOnceYear()
         .send({
-          from: this.Wallet,
+          from: this.Storage.value,
           gasLimit: 310000, // not required
         })
       this.ThrowAlert('success', "check your balance")

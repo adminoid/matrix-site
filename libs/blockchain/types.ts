@@ -5,9 +5,6 @@ export type TCurrency = {
 }
 
 export interface IExternal {
-  // technical methods
-  connect(): Promise<void>
-  // info methods
   getCoreUser(wallet: string): Promise<void | boolean>
 
   getMatrixUser(level: number | string, wallet: string): Promise<void | boolean>
@@ -31,7 +28,6 @@ export interface ICommon {
   Web3: any
   Config: any
   Core: any
-  Wallet: string
   EmitDisabled(type: string, status: boolean): void
   ThrowAlert(type: string, error: any): void
 }

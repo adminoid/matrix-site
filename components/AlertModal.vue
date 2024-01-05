@@ -46,27 +46,11 @@ onMounted(()=>{
 const showModal = ref(true)
 
 watchEffect(() => {
-
-  console.log('watchEffect watchEffect watchEffect')
-
   showModal.value = (props.alert.type && props.alert.message)
-  const alertCopy = props.alert
-
-  console.info('alertCopy:', alertCopy)
-  console.info('alertCopy.message:', alertCopy.message)
-
-  // const test = alertCopy.message.indexOf('this.Ethereum is undefined')
-  // console.log(test)
-  // if (test > -1) {
-  //   console.log(alertCopy)
-  //   alertCopy.message = 'Please connect Metamask'
-  // }
-
-  localAlertPropCopy.value = alertCopy
+  localAlertPropCopy.value = props.alert
 })
 
 const closeModal = () => {
-  console.info('closeModal.-s4')
   localAlertPropCopy.alert = {
     type: '',
     message: '',

@@ -1,9 +1,8 @@
 import {defineStore} from "pinia";
-import {getGlobalThis} from "@vue/shared";
 
 export const useWeb3Store = defineStore('web3_store', () => {
     const { $B } = useNuxtApp()
-    const connectedWallet = ref('')
+    // const connectedWallet = ref('')
     const checkConnected = async () => {
         // if mm is not installed
         if (!$B.Ethereum) {
@@ -14,28 +13,27 @@ export const useWeb3Store = defineStore('web3_store', () => {
         }
         $B.Nuxt.$emit('update-whose')
     }
+
     const connectWallet = async () => {
-        const glob = getGlobalThis()
-        await $B.init(glob)
         await $B.connect()
         await checkConnected()
-        connectedWallet.value = $B.Wallet
-
-        $B.Ethereum.on('accountsChanged', (accounts) => {
-            connectedWallet.value = accounts[0]
-        })
+        // if ($B.Ethereum) {
+        //     $B.Ethereum.on('accountsChanged', (accounts) => {
+        //         localStorage.setItem("connected-wallet", accounts[0])
+        //     })
+        // }
     }
-    watchEffect(() => {
-        console.log("...connectedWallet.value...")
-        console.log(connectedWallet.value)
-    })
 
     const checkRegister = (wallet) => {
         const resp = $B.getCoreUser(wallet)
         console.log(resp)
     }
 
-    return {connectedWallet, connectWallet}
+    return {
+        connectWallet,
+        checkRegister,
+        checkConnected,
+    }
 })
 
 // todo: when going to auth protected page - need to run authorization
