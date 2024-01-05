@@ -1,22 +1,31 @@
 <template lang="pug">
 client-only
   div(v-if="storage")
-    statistics-wrapper
+    div(v-if="isRegistered")
+      referral-link
+    div(v-else) Please register first
   div(v-else) Please connect wallet
 </template>
 
 <script lang="ts" setup>
-import StatisticsWrapper from '~/components/pages-components/statistics/StatisticsWrapper.vue'
 import { useStorage } from '@vueuse/core'
+import ReferralLink from '~/components/pages-components/statistics/ReferralLink.vue'
+import {useWeb3Store} from "~/stores/useWeb3.js";
 
 const storage = useStorage('connected-wallet', '')
-// const wallet = ref<null|string>('')
+watch(storage, (nVal) => {
+  console.warn("watch", nVal)
+})
 
-// onMounted(() => {
-//   wallet.value = storage.value
-// })
-// watchEffect(() => {
-//   wallet.value = storage.value
-// })
+// todo: checkRegister()
+const web3Store = useWeb3Store()
+const isRegistered = ref(false)
+// check if wallet registered
+onMounted(async () => {
+  // isRegistered.value = web3Store.checkRegister()
+  const test = await web3Store.checkRegister()
+  console.warn("test", test)
+  isRegistered.value = test
+})
 
 </script>

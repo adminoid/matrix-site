@@ -19,9 +19,14 @@ export const useWeb3Store = defineStore('web3_store', () => {
         await checkConnected()
     }
 
-    const checkRegister = (wallet) => {
-        const resp = $B.getCoreUser(wallet)
-        console.log(resp)
+    const checkRegister = async () => {
+        if ($B.Storage.value) {
+            const resp = await $B.getCoreUser($B.Storage.value)
+            if (resp) {
+                return true
+            }
+        }
+        return false
     }
 
     return {
