@@ -17,11 +17,6 @@ export const useWeb3Store = defineStore('web3_store', () => {
     const connectWallet = async () => {
         await $B.connect()
         await checkConnected()
-        // if ($B.Ethereum) {
-        //     $B.Ethereum.on('accountsChanged', (accounts) => {
-        //         localStorage.setItem("connected-wallet", accounts[0])
-        //     })
-        // }
     }
 
     const checkRegister = (wallet) => {

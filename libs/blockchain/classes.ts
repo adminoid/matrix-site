@@ -54,6 +54,11 @@ class Common implements ICommon {
       this.ThrowAlert('danger', 'Please install Metamask and reload the page 1')
     } else {
       this.Ethereum = globalThis['ethereum']
+      this.Ethereum.on('accountsChanged', (accounts: any[]) => {
+        console.warn("accountsChanged 1")
+        this.Storage.value = accounts[0]
+      })
+
       const publicConfig = new Config()
       this.Config = publicConfig['public']
       // this.Web3 = new Web3(this.Ethereum)
@@ -157,9 +162,7 @@ export class External extends Network implements IExternal {
     try {
       if (!this.Web3 || !this.Ethereum) {
         // metamask is not installed
-
         this.Storage.value = ""
-
         this.EmitDisabled('connect', true)
       } else {
         // metamask installed
@@ -173,34 +176,28 @@ export class External extends Network implements IExternal {
     }
   }
 
-  async getCoreUser (wallet: string): Promise<void | boolean> {
+  async getCoreUser (): Promise<void | boolean> {
     if (!this.Storage.value) {
       this.ThrowAlert('danger', 'Please connect Metamask')
     } else {
       try {
         this.EmitDisabled(`getCoreUser`, true)
-        if (!this.Core) {
+        if (!this.Core || !this.Storage.value) {
           return false
         }
         const resp = await this.Core
-          .methods.getUserFromCore(wallet)
+          .methods.getUserFromCore(this.Storage.value)
           .call({
             from: this.Storage.value,
           })
         // display resp in web interface
         let msg
         if (!resp.isValue) {
-          msg = `user ${wallet} is not registered`
+          msg = `user ${this.Storage.value} is not registered`
+          this.ThrowAlert('primary', msg)
         } else {
-          msg = `
-getCoreUser() method response:
-claims: ${this.Web3.utils.fromWei(resp.claims, "ether")} BNB
-gifts: ${this.Web3.utils.fromWei(resp.gifts, "ether")} BNB
-level: ${resp.level}
-whose: ${resp.whose}
-`
+          return resp
         }
-        this.ThrowAlert('primary', msg)
       } catch (e: any) {
         this.ThrowAlert('danger', e.message)
       } finally {
@@ -223,17 +220,10 @@ whose: ${resp.whose}
       let msg
       if (!resp.user.isValue) {
         msg = `user ${wallet} is not registered`
+        this.ThrowAlert('primary', msg)
       } else {
-        msg = `
-getMatrixUser() method response:
-total in matrix level[${level}] (starts with 1): ${resp.total}
-index (starts with 0): ${resp.user.index}
-parent: ${resp.user.parent}
-isRight: ${resp.user.isRight}
-plateau: ${resp.user.plateau}
-`
+        return resp
       }
-      this.ThrowAlert('primary', msg)
     } catch (e: any) {
       this.ThrowAlert('danger', e.message)
     } finally {
