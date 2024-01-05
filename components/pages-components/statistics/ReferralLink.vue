@@ -1,13 +1,19 @@
 <template lang="pug">
-p Ref link: {{ refLink }}
+p Ref link: {{ storage }}
 </template>
 
 <script setup>
-import {useWeb3Store} from "~/stores/useWeb3.js";
 import { useStorage } from '@vueuse/core'
+const { $B } = useNuxtApp()
 
-const web3Store = useWeb3Store()
+console.info("$B")
+console.warn($B.Ethereum)
+
 const storage = useStorage("connected-wallet", "")
-const refLink = ref(storage.value)
 
+onMounted(() => {
+  if (!$B.Ethereum) {
+    storage.value = ''
+  }
+})
 </script>

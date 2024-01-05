@@ -44,8 +44,10 @@ class Common implements ICommon {
   Web3: any
   Config: any
   Core: any
-  constructor (nuxt: any) {
+  Storage: any
+  constructor (nuxt: any, storage: any) {
     this.Nuxt = nuxt
+    this.Storage = storage
   }
   async init(globalThis: any) {
     if (!globalThis['ethereum']) {
@@ -97,12 +99,15 @@ class Common implements ICommon {
 }
 
 class Network extends Common implements INetwork {
-  constructor (nuxt: any) {super(nuxt)}
+  constructor (nuxt: any, storage: any) {
+    super(nuxt, storage)
+  }
   private checkInstalledMetamask (): boolean {
     return Boolean(this.Ethereum && this.Ethereum.isMetaMask);
   }
   async setNetwork (): Promise<void | boolean> {
     if (!this.checkInstalledMetamask() || !this.Ethereum) {
+      this.Storage.value = ''
       return this.ThrowAlert('danger', 'Metamask is not installed!')
     } else {
       try {
@@ -142,11 +147,8 @@ class Network extends Common implements INetwork {
 }
 
 export class External extends Network implements IExternal {
-  Storage: any
-
   constructor (nuxt: any, storage: any) {
-    super(nuxt)
-    this.Storage = storage
+    super(nuxt, storage)
   }
 
   async connect (): Promise<void> {
@@ -156,7 +158,7 @@ export class External extends Network implements IExternal {
       if (!this.Web3 || !this.Ethereum) {
         // metamask is not installed
 
-        this.Storage.value = "333-12121212121-333"
+        this.Storage.value = ""
 
         this.EmitDisabled('connect', true)
       } else {
