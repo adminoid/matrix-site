@@ -3,6 +3,7 @@ client-only
   div(v-if="storage")
     div(v-if="isRegistered")
       referral-link
+      p Total members: {{ addressesGlobalTotal }}
     div(v-else) Please register first
   div(v-else) Please connect wallet
 </template>
@@ -12,20 +13,19 @@ import { useStorage } from '@vueuse/core'
 import ReferralLink from '~/components/pages-components/statistics/ReferralLink.vue'
 import {useWeb3Store} from "~/stores/useWeb3.js";
 
-const storage = useStorage('connected-wallet', '')
-watch(storage, (nVal) => {
-  console.warn("watch", nVal)
-})
-
 const web3Store = useWeb3Store()
 const isRegistered = ref(false)
 
+const addressesGlobalTotal = ref<boolean|undefined>(undefined)
 // check if wallet registered
 onMounted(async () => {
   isRegistered.value = await web3Store.checkRegister()
+  addressesGlobalTotal.value = await web3Store.getAddressesGlobalTotal()
 })
 
+const storage = useStorage('connected-wallet', '')
 watch(storage, async () => {
   isRegistered.value = await web3Store.checkRegister()
 })
+
 </script>

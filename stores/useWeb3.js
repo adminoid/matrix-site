@@ -21,7 +21,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
 
     const checkRegister = async () => {
         if ($B.Storage.value) {
-            const resp = await $B.getCoreUser($B.Storage.value)
+            const resp = await $B.getCoreUser()
             if (resp) {
                 return true
             }
@@ -29,10 +29,21 @@ export const useWeb3Store = defineStore('web3_store', () => {
         return false
     }
 
+    const getAddressesGlobalTotal = async () => {
+        if ($B.Storage.value) {
+            const resp = await $B.getAddressesGlobalTotal()
+            if (resp) {
+                return resp
+            }
+            return false
+        }
+    }
+
     return {
         connectWallet,
         checkRegister,
         checkConnected,
+        getAddressesGlobalTotal,
     }
 })
 

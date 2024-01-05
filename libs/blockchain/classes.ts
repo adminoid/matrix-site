@@ -230,6 +230,18 @@ export class External extends Network implements IExternal {
     }
   }
 
+  async getAddressesGlobalTotal (): Promise<any> {
+    try {
+      this.EmitDisabled(`getAddressesGlobalTotal`, true)
+      if (!this.Core) return false
+      return this.Core.methods.AddressesGlobalTotal.call().call();
+    } catch (e: any) {
+      this.ThrowAlert('danger', e.message)
+    } finally {
+      this.EmitDisabled(`getAddressesGlobalTotal`, false)
+    }
+  }
+
   async GetCoreUserByMatrixPosition (level: number | string, userIndex: number | string): Promise<void|boolean> {
     try {
       this.EmitDisabled(`GetCoreUserByMatrixPosition`, true)
