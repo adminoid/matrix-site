@@ -252,6 +252,16 @@ export class External extends Network implements IExternal {
     })
   }
 
+  async getReferralEarn () {
+    return await this.Core.getPastEvents('ReferralEarn', {
+      filter: {
+        whose: this.Storage.value,
+      },
+      fromBlock: 0,
+      toBlock: 'latest',
+    })
+  }
+
   async GetCoreUserByMatrixPosition (level: number | string, userIndex: number | string): Promise<void|boolean> {
     try {
       this.EmitDisabled(`GetCoreUserByMatrixPosition`, true)

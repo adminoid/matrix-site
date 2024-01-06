@@ -1,9 +1,15 @@
 <template lang="pug">
 .wrapper(v-if="events.length > 0")
-  h2 Yours referrals ({{total}})
-  table
-    tr(v-for="event in events")
-      td {{ event.user }}
+  h2 Your claims earned by descendants
+  table.table.table-dark.table-striped-columns
+    thead
+      tr
+        td Referral
+        td Earned
+    tbody
+      tr(v-for="event in events")
+        td {{ event.whose }}
+        td {{ event.amount }}
 </template>
 
 <script lang="ts" setup>
@@ -12,34 +18,29 @@ import { useStorage } from '@vueuse/core'
 const web3Store = useWeb3Store()
 
 type TEvent = {
-  change: number,
   whose: string,
-  user: string,
+  amount: number,
 }
 
 const events = ref<TEvent[]>([])
-const total = ref(0)
-
 const fillEvents = async () => {
   events.value = []
-  const eventsFound = await web3Store.getWhoseOfUser()
-  total.value = eventsFound.length
+  const eventsFound = await web3Store.getReferralEarn()
   for (const eventFound of eventsFound) {
     events.value.push({
-      change: eventFound.returnValues.change,
       whose: eventFound.returnValues.whose,
-      user: eventFound.returnValues.user,
+      amount: eventFound.returnValues.amount,
     })
   }
 }
 
-onMounted(async () => {
-  await fillEvents()
+onMounted(() => {
+  fillEvents()
 })
 const storage = useStorage('connected-wallet', '')
 watch(storage, async () => {
   await fillEvents()
 })
 
-// test local wallet (hardhat): 0xbcd4042de499d14e55001ccbb24a551f3b954096
+// test local hardhat wallet: 0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc
 </script>

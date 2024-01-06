@@ -49,12 +49,23 @@ export const useWeb3Store = defineStore('web3_store', () => {
         }
     }
 
+    const getReferralEarn = async () => {
+        if ($B.Storage.value) {
+            const resp = await $B.getReferralEarn()
+            if (resp) {
+                return resp
+            }
+            return false
+        }
+    }
+
     return {
         connectWallet,
         checkRegister,
         checkConnected,
         getAddressesGlobalTotal,
         getWhoseOfUser,
+        getReferralEarn,
     }
 })
 

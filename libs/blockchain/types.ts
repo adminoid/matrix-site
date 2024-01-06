@@ -10,6 +10,7 @@ export interface IExternal {
 
   getAddressesGlobalTotal(): Promise<any>
   getWhoseOfUser(): Promise<any>
+  getReferralEarn(): Promise<any>
 
   // interaction methods
   registerWhose(whose: string): Promise<void|boolean>
