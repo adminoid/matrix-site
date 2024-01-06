@@ -1,6 +1,7 @@
 <template lang="pug">
+h3 YoursReferrals
 .wrapper(v-if="events.length > 0")
-  h2 Yours referrals ({{total}})
+  h4 Yours referrals ({{total}})
   table
     tr(v-for="event in events")
       td {{ event.user }}

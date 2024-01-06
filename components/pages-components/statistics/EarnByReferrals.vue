@@ -1,14 +1,15 @@
 <template lang="pug">
+h3 EarnByReferrals
 .wrapper(v-if="events.length > 0")
-  h2 Your claims earned by descendants
+  h4 Your claims earned by descendants
   table.table.table-dark.table-striped-columns
     thead
       tr
-        td Referral
+        td User
         td Earned
     tbody
       tr(v-for="event in events")
-        td {{ event.whose }}
+        td {{ event.user }}
         td {{ event.amount }}
 </template>
 
@@ -18,7 +19,7 @@ import { useStorage } from '@vueuse/core'
 const web3Store = useWeb3Store()
 
 type TEvent = {
-  whose: string,
+  user: string,
   amount: number,
 }
 
@@ -28,7 +29,7 @@ const fillEvents = async () => {
   const eventsFound = await web3Store.getReferralEarn()
   for (const eventFound of eventsFound) {
     events.value.push({
-      whose: eventFound.returnValues.whose,
+      user: eventFound.returnValues.user,
       amount: eventFound.returnValues.amount,
     })
   }
