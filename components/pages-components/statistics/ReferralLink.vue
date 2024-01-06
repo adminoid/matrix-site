@@ -7,6 +7,8 @@ p Referral link:
 <script setup>
 import { useStorage } from '@vueuse/core'
 
+// todo: copy to clipboard by click on the link
+
 const { $B } = useNuxtApp()
 const storage = useStorage("connected-wallet", "")
 onMounted(() => {

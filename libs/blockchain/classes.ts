@@ -242,6 +242,16 @@ export class External extends Network implements IExternal {
     }
   }
 
+  async getWhoseOfUser () {
+    return await this.Core.getPastEvents('WhoseRegistered', {
+      filter: {
+        whose: this.Storage.value,
+      },
+      fromBlock: 0,
+      toBlock: 'latest',
+    })
+  }
+
   async GetCoreUserByMatrixPosition (level: number | string, userIndex: number | string): Promise<void|boolean> {
     try {
       this.EmitDisabled(`GetCoreUserByMatrixPosition`, true)
