@@ -11,8 +11,10 @@ export interface IExternal {
   getAddressesGlobalTotal(): Promise<any>
   getWhoseOfUser(): Promise<any>
   getReferralEarn(): Promise<any>
+  getGiftsAccrued(): Promise<any>
 
-  // interaction methods
+
+// interaction methods
   registerWhose(whose: string): Promise<void|boolean>
   withdrawClaim(amount: number | string): Promise<void|boolean>
   sendAmount(amount: string|number): Promise<void>

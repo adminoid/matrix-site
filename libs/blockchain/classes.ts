@@ -262,6 +262,16 @@ export class External extends Network implements IExternal {
     })
   }
 
+  async getGiftsAccrued () {
+    return await this.Core.getPastEvents('GiftAppear', {
+      filter: {
+        user: this.Storage.value,
+      },
+      fromBlock: 0,
+      toBlock: 'latest',
+    })
+  }
+
   async GetCoreUserByMatrixPosition (level: number | string, userIndex: number | string): Promise<void|boolean> {
     try {
       this.EmitDisabled(`GetCoreUserByMatrixPosition`, true)
@@ -272,7 +282,6 @@ export class External extends Network implements IExternal {
           from: this.Storage.value,
           to: new Config().CONTRACT_ADDRESS,
         })
-      // todo: display resp in web interface
       let msg
       if (!resp.user.isValue) {
         msg = `user N ${userIndex} is not registered`

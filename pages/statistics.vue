@@ -6,6 +6,7 @@ client-only
       p Total members: {{ addressesGlobalTotal }}
       yours-referrals
       earn-by-referrals
+      gifts-accrued
     div(v-else) Please register first
   div(v-else) Please connect wallet
 </template>
@@ -15,6 +16,7 @@ import { useStorage } from '@vueuse/core'
 import ReferralLink from '~/components/pages-components/statistics/ReferralLink.vue'
 import YoursReferrals from '~/components/pages-components/statistics/YoursReferrals.vue'
 import EarnByReferrals from '~/components/pages-components/statistics/EarnByReferrals.vue'
+import GiftsAccrued from '~/components/pages-components/statistics/GiftsAccrued.vue'
 import {useWeb3Store} from "~/stores/useWeb3.js";
 
 const web3Store = useWeb3Store()
