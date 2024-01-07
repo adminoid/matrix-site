@@ -2,7 +2,7 @@
 h3 GiftsAccrued
 .wrapper(v-if="events.length > 0")
   h4 Your gifts earned by descendants
-  table.table.table-dark.table-striped-columns
+  table.table.table-success.table-striped
     thead
       tr
         td Matrix level

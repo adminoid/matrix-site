@@ -12,6 +12,7 @@ export interface IExternal {
   getWhoseOfUser(): Promise<any>
   getReferralEarn(): Promise<any>
   getGiftsAccrued(): Promise<any>
+  getGiftsSpent(): Promise<any>
 
 
 // interaction methods

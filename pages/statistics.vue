@@ -7,6 +7,7 @@ client-only
       yours-referrals
       earn-by-referrals
       gifts-accrued
+      gift-spent
     div(v-else) Please register first
   div(v-else) Please connect wallet
 </template>
@@ -17,6 +18,7 @@ import ReferralLink from '~/components/pages-components/statistics/ReferralLink.
 import YoursReferrals from '~/components/pages-components/statistics/YoursReferrals.vue'
 import EarnByReferrals from '~/components/pages-components/statistics/EarnByReferrals.vue'
 import GiftsAccrued from '~/components/pages-components/statistics/GiftsAccrued.vue'
+import GiftSpent from '~/components/pages-components/statistics/GiftSpent.vue'
 import {useWeb3Store} from "~/stores/useWeb3.js";
 
 const web3Store = useWeb3Store()

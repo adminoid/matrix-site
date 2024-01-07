@@ -272,6 +272,18 @@ export class External extends Network implements IExternal {
     })
   }
 
+  async getGiftsSpent () {
+    const test = await this.Core.getPastEvents('GiftSpent', {
+      filter: {
+        owner: this.Storage.value,
+      },
+      fromBlock: 0,
+      toBlock: 'latest',
+    })
+    console.warn(test)
+    return test
+  }
+
   async GetCoreUserByMatrixPosition (level: number | string, userIndex: number | string): Promise<void|boolean> {
     try {
       this.EmitDisabled(`GetCoreUserByMatrixPosition`, true)
