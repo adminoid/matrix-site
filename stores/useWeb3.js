@@ -19,10 +19,11 @@ export const useWeb3Store = defineStore('web3_store', () => {
         await checkConnected()
     }
 
+    const coreUser = ref({})
     const checkRegister = async () => {
-        if ($B.Storage.value) {
-            const resp = await $B.getCoreUser()
-            if (resp) {
+        if ($B.Wallet.value) {
+            coreUser.value = await $B.getUserFromCore()
+            if (coreUser.value) {
                 return true
             }
         }
@@ -30,7 +31,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getAddressesGlobalTotal = async () => {
-        if ($B.Storage.value) {
+        if ($B.Wallet.value) {
             const resp = await $B.getAddressesGlobalTotal()
             if (resp) {
                 return resp
@@ -40,7 +41,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getWhoseOfUser = async () => {
-        if ($B.Storage.value) {
+        if ($B.Wallet.value) {
             const resp = await $B.getWhoseOfUser()
             if (resp) {
                 return resp
@@ -50,7 +51,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getReferralEarn = async () => {
-        if ($B.Storage.value) {
+        if ($B.Wallet.value) {
             const resp = await $B.getReferralEarn()
             if (resp) {
                 return resp
@@ -60,7 +61,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getGiftsAccrued = async () => {
-        if ($B.Storage.value) {
+        if ($B.Wallet.value) {
             const resp = await $B.getGiftsAccrued()
             if (resp) {
                 return resp
@@ -70,12 +71,40 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getGiftsSpent = async () => {
-        if ($B.Storage.value) {
+        if ($B.Wallet.value) {
             const resp = await $B.getGiftsSpent()
             if (resp) {
                 return resp
             }
             return false
+        }
+    }
+
+    const getDescendants = async () => {
+        // getUserFromCore
+        // console.warn(coreUser.value.claims)
+        if (coreUser.value) {
+            // console.warn("claims", Number(coreUser.value.claims))
+            // console.warn("gifts", Number(coreUser.value.gifts))
+            // console.warn("isValue", coreUser.value.isValue)
+            console.warn("level", Number(coreUser.value.level))
+            // console.warn("whose", String(coreUser.value.whose))
+
+            const maxLevel = Number(coreUser.value.level)
+            for (let i = 0; i < maxLevel; i++) {
+                // response from getMatrixUser() contains user and total
+                const matrixUser = await $B.getMatrixUser(i)
+                console.info('____________________')
+                console.warn('matrixUser for to maxLevel ' + i)
+                console.info('user:')
+                console.log(matrixUser.user.index)
+                console.log(matrixUser.user.isRight)
+                console.log(matrixUser.user.isValue)
+                console.log(matrixUser.user.parent)
+                console.log(matrixUser.user.plateau)
+                console.info('--------------------')
+                console.info('total: ', Number(matrixUser.total))
+            }
         }
     }
 
@@ -88,6 +117,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
         getReferralEarn,
         getGiftsAccrued,
         getGiftsSpent,
+        getDescendants,
     }
 })
 

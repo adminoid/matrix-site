@@ -44,10 +44,10 @@ class Common implements ICommon {
   Web3: any
   Config: any
   Core: any
-  Storage: any
+  Wallet: any
   constructor (nuxt: any, storage: any) {
     this.Nuxt = nuxt
-    this.Storage = storage
+    this.Wallet = storage
   }
   async init(globalThis: any) {
     if (!globalThis['ethereum']) {
@@ -55,7 +55,7 @@ class Common implements ICommon {
     } else {
       this.Ethereum = globalThis['ethereum']
       this.Ethereum.on('accountsChanged', (accounts: any[]) => {
-        this.Storage.value = accounts[0]
+        this.Wallet.value = accounts[0]
       })
 
       const publicConfig = new Config()
@@ -111,7 +111,7 @@ class Network extends Common implements INetwork {
   }
   async setNetwork (): Promise<void | boolean> {
     if (!this.checkInstalledMetamask() || !this.Ethereum) {
-      this.Storage.value = ''
+      this.Wallet.value = ''
       return this.ThrowAlert('danger', 'Metamask is not installed!')
     } else {
       try {
@@ -161,12 +161,12 @@ export class External extends Network implements IExternal {
     try {
       if (!this.Web3 || !this.Ethereum) {
         // metamask is not installed
-        this.Storage.value = ""
+        this.Wallet.value = ""
         this.EmitDisabled('connect', true)
       } else {
         // metamask installed
         const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
-        this.Storage.value = accounts[0]
+        this.Wallet.value = accounts[0]
       }
     } catch (e: any) {
       this.ThrowAlert('danger', e.message)
@@ -175,24 +175,24 @@ export class External extends Network implements IExternal {
     }
   }
 
-  async getCoreUser (): Promise<void | boolean> {
-    if (!this.Storage.value) {
+  async getUserFromCore (): Promise<void | boolean> {
+    if (!this.Wallet.value) {
       this.ThrowAlert('danger', 'Please connect Metamask')
     } else {
       try {
-        this.EmitDisabled(`getCoreUser`, true)
-        if (!this.Core || !this.Storage.value) {
+        this.EmitDisabled(`getUserFromCore`, true)
+        if (!this.Core || !this.Wallet.value) {
           return false
         }
         const resp = await this.Core
-          .methods.getUserFromCore(this.Storage.value)
+          .methods.getUserFromCore(this.Wallet.value)
           .call({
-            from: this.Storage.value,
+            from: this.Wallet.value,
           })
         // display resp in web interface
         let msg
         if (!resp.isValue) {
-          msg = `user ${this.Storage.value} is not registered`
+          msg = `user ${this.Wallet.value} is not registered`
           this.ThrowAlert('primary', msg)
         } else {
           return resp
@@ -200,25 +200,27 @@ export class External extends Network implements IExternal {
       } catch (e: any) {
         this.ThrowAlert('danger', e.message)
       } finally {
-        this.EmitDisabled(`getCoreUser`, false)
+        this.EmitDisabled(`getUserFromCore`, false)
       }
     }
   }
 
-  async getMatrixUser(level: number | string, wallet: string): Promise<void | boolean> {
+  async getMatrixUser(level: number | string): Promise<void | boolean> {
     try {
       this.EmitDisabled(`getMatrixUser`, true)
-      if (!this.Core) return false
+      if (!this.Core || !this.Wallet.value) {
+        return false
+      }
       const resp = await this.Core
-        .methods.getUserFromMatrix(level, wallet)
+        .methods.getUserFromMatrix(level, this.Wallet.value)
         .call({
-          from: this.Storage.value,
+          from: this.Wallet.value,
           to: new Config().CONTRACT_ADDRESS,
         })
       // todo: display resp in web interface
       let msg
       if (!resp.user.isValue) {
-        msg = `user ${wallet} is not registered`
+        msg = `user ${this.Wallet.value} is not registered`
         this.ThrowAlert('primary', msg)
       } else {
         return resp
@@ -245,7 +247,7 @@ export class External extends Network implements IExternal {
   async getWhoseOfUser () {
     return await this.Core.getPastEvents('WhoseRegistered', {
       filter: {
-        whose: this.Storage.value,
+        whose: this.Wallet.value,
       },
       fromBlock: 0,
       toBlock: 'latest',
@@ -255,7 +257,7 @@ export class External extends Network implements IExternal {
   async getReferralEarn () {
     return await this.Core.getPastEvents('ReferralEarn', {
       filter: {
-        whose: this.Storage.value,
+        whose: this.Wallet.value,
       },
       fromBlock: 0,
       toBlock: 'latest',
@@ -265,7 +267,7 @@ export class External extends Network implements IExternal {
   async getGiftsAccrued () {
     return await this.Core.getPastEvents('GiftAppear', {
       filter: {
-        user: this.Storage.value,
+        user: this.Wallet.value,
       },
       fromBlock: 0,
       toBlock: 'latest',
@@ -273,15 +275,13 @@ export class External extends Network implements IExternal {
   }
 
   async getGiftsSpent () {
-    const test = await this.Core.getPastEvents('GiftSpent', {
+    return await this.Core.getPastEvents('GiftSpent', {
       filter: {
-        owner: this.Storage.value,
+        owner: this.Wallet.value,
       },
       fromBlock: 0,
       toBlock: 'latest',
     })
-    console.warn(test)
-    return test
   }
 
   async GetCoreUserByMatrixPosition (level: number | string, userIndex: number | string): Promise<void|boolean> {
@@ -291,7 +291,7 @@ export class External extends Network implements IExternal {
       const resp = await this.Core
         .methods.getCoreUserByMatrixPosition(level, userIndex)
         .call({
-          from: this.Storage.value,
+          from: this.Wallet.value,
           to: new Config().CONTRACT_ADDRESS,
         })
       let msg
@@ -326,7 +326,7 @@ whose: ${resp.user.whose}
       if (!this.Core) return false
       const resp = await this.Core
       .methods.register(whose).send({
-        from: this.Storage.value,
+        from: this.Wallet.value,
         value: 10000000000000000,
         // gasLimit: 5000000, // not required
         gas: 300000, // 274633
@@ -354,7 +354,7 @@ TX: ${resp.transactionHash}
       const resp = await this.Core.methods
         .withdrawClaim(this.Web3.utils.toWei(String(amount), "ether"))
         .send({
-          from: this.Storage.value,
+          from: this.Wallet.value,
           gasLimit: 310000, // not required
         });
       // from - address for withdrawing
@@ -377,7 +377,7 @@ TX: ${resp.transactionHash}
     this.EmitDisabled(`sendAmount`, true)
     try {
       const resp = await this.Web3.eth.sendTransaction({
-        from: this.Storage.value,
+        from: this.Wallet.value,
         to: this.Config.CONTRACT_ADDRESS,
         value: this.Web3.utils.toWei(String(amount), "ether")
       });
@@ -402,7 +402,7 @@ TX: ${resp.transactionHash}
       await this.Core.methods
         .getTenPercentOnceYear()
         .send({
-          from: this.Storage.value,
+          from: this.Wallet.value,
           gasLimit: 310000, // not required
         })
       this.ThrowAlert('success', "check your balance")

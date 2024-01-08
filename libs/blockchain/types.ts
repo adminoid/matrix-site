@@ -5,7 +5,7 @@ export type TCurrency = {
 }
 
 export interface IExternal {
-  getCoreUser(wallet: string): Promise<void | boolean>
+  getUserFromCore(wallet: string): Promise<void | boolean>
   getMatrixUser(level: number | string, wallet: string): Promise<void | boolean>
 
   getAddressesGlobalTotal(): Promise<any>
