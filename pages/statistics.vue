@@ -2,13 +2,37 @@
 client-only
   div(v-if="storage")
     div(v-if="isRegistered")
-      descendants
-      referral-link
       p Total members: {{ addressesGlobalTotal }}
+      descendants
+      br
+      br
+      br
+
+      referral-link
+      br
+      br
+      br
+
       yours-referrals
+      br
+      br
+      br
+
       earn-by-referrals
+      br
+      br
+      br
+
       gifts-accrued
+      br
+      br
+      br
+
       gift-spent
+      br
+      br
+      br
+
     div(v-else) Please register first
   div(v-else) Please connect wallet
 </template>

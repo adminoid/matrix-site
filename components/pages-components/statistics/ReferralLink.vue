@@ -1,7 +1,6 @@
 <template lang="pug">
-p Referral link:
-  br
-  a(:href="'https://givedream.io/' + storage") https://givedream.io/{{ storage }}
+h4 Referral link:
+a(:href="'https://givedream.io/' + storage") https://givedream.io/{{ storage }}
 </template>
 
 <script setup>

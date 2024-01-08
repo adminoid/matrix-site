@@ -81,31 +81,30 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getDescendants = async () => {
-        // getUserFromCore
-        // console.warn(coreUser.value.claims)
+        // index: 0n
+        // isRight: false
+        // isValue: true
+        // parent: 0n
+        // plateau: 1n
+        const matrixData = []
         if (coreUser.value) {
-            // console.warn("claims", Number(coreUser.value.claims))
-            // console.warn("gifts", Number(coreUser.value.gifts))
-            // console.warn("isValue", coreUser.value.isValue)
-            console.warn("level", Number(coreUser.value.level))
-            // console.warn("whose", String(coreUser.value.whose))
-
             const maxLevel = Number(coreUser.value.level)
             for (let i = 0; i < maxLevel; i++) {
                 // response from getMatrixUser() contains user and total
-                const matrixUser = await $B.getMatrixUser(i)
-                console.info('____________________')
-                console.warn('matrixUser for to maxLevel ' + i)
-                console.info('user:')
-                console.log(matrixUser.user.index)
-                console.log(matrixUser.user.isRight)
-                console.log(matrixUser.user.isValue)
-                console.log(matrixUser.user.parent)
-                console.log(matrixUser.user.plateau)
-                console.info('--------------------')
-                console.info('total: ', Number(matrixUser.total))
+                const matrixReceivedData = await $B.getMatrixUser(i)
+                matrixData[i] = {
+                    user: {
+                        index: Number(matrixReceivedData.user.index),
+                        isRight: matrixReceivedData.user.isRight,
+                        isValue: matrixReceivedData.user.isValue,
+                        parent: Number(matrixReceivedData.user.parent),
+                        plateau: Number(matrixReceivedData.user.plateau),
+                    },
+                    total: Number(matrixReceivedData.total),
+                }
             }
         }
+        return matrixData
     }
 
     return {

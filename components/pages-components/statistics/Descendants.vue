@@ -1,5 +1,5 @@
 <template lang="pug">
-h3 GiftSpent
+h3 Descendants
 .wrapper
   h4 Your descendants
   table.table.table-success.table-striped
@@ -15,10 +15,43 @@ import { useStorage } from '@vueuse/core'
 
 const web3Store = useWeb3Store()
 
+const getChildForElement = (index: number, plateau: number) => {
+  console.log('index', index)
+  console.log('plateau', plateau)
+
+  const indexToFirstElPlateau = (pl: number) => (2 ** (pl - 1)) - 1
+  const indexToPlateau = indexToFirstElPlateau(plateau)
+  const elNumInPlateau = index - indexToPlateau + 1
+  const nextPlateauStart = indexToFirstElPlateau(plateau + 1)
+  const leftChildEl = (elNumInPlateau * 2) - 2 + nextPlateauStart
+  return {
+    left: leftChildEl,
+    right: leftChildEl + 1,
+  }
+
+}
+
+const scheme = ref({})
+
+const getTotalPlateaus = (total: number) => {
+  console.log('total', total)
+  // uint plateau = log2(IndicesTotal.add(2));
+  return Math.ceil(Math.log2(total + 2))
+}
+
 const fillDescendants = async () => {
-  const result = await web3Store.getDescendants()
-  console.warn('result')
-  console.log(result)
+  const matrices = await web3Store.getDescendants()
+
+  const testMx = matrices[0]
+  console.log("testMx", testMx)
+
+  // const {left, right} = getChildForElement(testMx.user.index, testMx.user.plateau)
+  const {left, right} = getChildForElement(11, 4)
+  console.log('left, right')
+  console.log(left, right)
+
+  const totalPlateaus = getTotalPlateaus(47) // 4
+  console.warn('totalPlateaus', totalPlateaus)
 }
 
 onMounted(async () => {
