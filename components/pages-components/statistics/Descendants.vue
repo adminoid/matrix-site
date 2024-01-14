@@ -45,10 +45,40 @@ const fillDescendants = async () => {
   const testMx = matrices[0]
   console.log("testMx", testMx)
 
-  // const {left, right} = getChildForElement(testMx.user.index, testMx.user.plateau)
-  const {left, right} = getChildForElement(11, 4)
+  let plateau = 4
+  const
+      start = 11,
+      lastEl = 49,
+      root = getChildForElement(start, plateau)
+
+  let resultLeft = root.left
+  let resultRight = root.right
+
   console.log('left, right')
-  console.log(left, right)
+  console.log(resultLeft, resultRight)
+
+  while (lastEl >= resultLeft) {
+
+    plateau++
+
+    // const {left, right} = getChildForElement(testMx.user.index, testMx.user.plateau)
+    console.info("resultLeft >= lastEl && resultRight < lastEl")
+    console.log(resultLeft, lastEl, resultRight, lastEl)
+    if (resultLeft <= lastEl && resultRight > lastEl) {
+      console.info('left1, right1, plateau1')
+      console.warn(resultLeft, lastEl, plateau)
+      break
+    } else {
+      console.info('left, right, plateau')
+      console.warn(resultLeft, resultRight, plateau)
+    }
+
+    const nextElLeft = getChildForElement(resultLeft, plateau)
+    const nextElRight = getChildForElement(resultRight, plateau)
+    resultLeft = nextElLeft.left
+    resultRight = nextElRight.right
+
+  }
 
   const totalPlateaus = getTotalPlateaus(47) // 4
   console.warn('totalPlateaus', totalPlateaus)
