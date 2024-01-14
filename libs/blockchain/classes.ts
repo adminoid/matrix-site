@@ -264,6 +264,22 @@ export class External extends Network implements IExternal {
     })
   }
 
+  async getClaimSpent () {
+    console.info('getClaimSpent()')
+    const test = await this.Core.getPastEvents('ClaimsSpent', {
+      filter: {
+        owner: this.Wallet.value,
+      },
+      fromBlock: 0,
+      toBlock: 'latest',
+    })
+
+    console.warn('(!!!!!)')
+    console.warn(test)
+
+    return test
+  }
+
   async getGiftsAccrued () {
     return await this.Core.getPastEvents('GiftAppear', {
       filter: {

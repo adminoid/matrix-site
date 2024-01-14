@@ -53,7 +53,7 @@ const recursive = (obj: any, pl: number, last: number) => {
 const descendants = ref<any[]>([])
 const fillDescendants = async () => {
   const matrices = await web3Store.getDescendants()
-  // console.warn('matrices', matrices)
+  console.warn('matrices', matrices)
 
   for (const mxNum in matrices) {
     let plateau = getTotalPlateaus(matrices[mxNum].total)

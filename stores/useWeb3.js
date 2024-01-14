@@ -60,6 +60,16 @@ export const useWeb3Store = defineStore('web3_store', () => {
         }
     }
 
+    const getClaimSpent = async () => {
+        if ($B.Wallet.value) {
+            const resp = await $B.getClaimSpent()
+            if (resp) {
+                return resp
+            }
+            return false
+        }
+    }
+
     const getGiftsAccrued = async () => {
         if ($B.Wallet.value) {
             const resp = await $B.getGiftsAccrued()
@@ -114,6 +124,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
         getAddressesGlobalTotal,
         getWhoseOfUser,
         getReferralEarn,
+        getClaimSpent,
         getGiftsAccrued,
         getGiftsSpent,
         getDescendants,
