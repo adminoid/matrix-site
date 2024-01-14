@@ -3,10 +3,6 @@ client-only
   div(v-if="storage")
     div(v-if="isRegistered")
       p Total members: {{ addressesGlobalTotal }}
-      descendants
-      br
-      br
-      br
 
       referral-link
       br
@@ -29,6 +25,11 @@ client-only
       br
 
       gift-spent
+      br
+      br
+      br
+
+      descendants
       br
       br
       br

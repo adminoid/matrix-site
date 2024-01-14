@@ -1,6 +1,6 @@
 <template lang="pug">
 ul
-  li(v-if="descendants.i")
+  li(v-if="descendants.i || descendants.i == 0")
     div {{ descendants.i }}
     ul(v-if="descendants.left || descendants.right")
       binary-tree(v-if="descendants.left" :descendants="descendants.left")
@@ -8,6 +8,7 @@ ul
 </template>
 
 <script lang="ts" setup>
+// TODO: use case for d3 tree: https://codepen.io/katzkode/pen/ZegQQB
 type TNode = {
   i: number,
   left: any,
@@ -18,7 +19,4 @@ const props = defineProps({
     type: Object as PropType<TNode>
   }
 })
-// const props = defineProps({
-//   descendants: Object
-// })
 </script>

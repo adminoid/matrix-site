@@ -2,8 +2,9 @@
 h3 Descendants
 .wrapper
   h4 Your descendants
-  .row
-    binary-tree(:descendants="descendants")
+  .row(v-for="dsds of descendants")
+    binary-tree(:descendants="dsds")
+    hr
 </template>
 
 <script lang="ts" setup>
@@ -13,9 +14,6 @@ import BinaryTree from '~/components/pages-components/statistics/BinaryTree.vue'
 const web3Store = useWeb3Store()
 
 const getChildForElement = (index: number, plateau: number) => {
-  console.warn('index', index)
-  console.log('plateau', plateau)
-
   const indexToFirstElPlateau = (pl: number) => (2 ** (pl - 1)) - 1
   const indexToPlateau = indexToFirstElPlateau(plateau)
   const elNumInPlateau = index - indexToPlateau + 1
@@ -29,51 +27,46 @@ const getChildForElement = (index: number, plateau: number) => {
 }
 
 const getTotalPlateaus = (total: number) => {
-  console.log('total', total)
-  // uint plateau = log2(IndicesTotal.add(2));
   return Math.ceil(Math.log2(total + 2))
 }
 
-const descendants = ref({})
+const recursive = (obj: any, pl: number, last: number) => {
+  const {left, right} = getChildForElement(obj.i, pl + 1)
+
+  if (left <= last) {
+    obj.left = {
+      i: left,
+    }
+    obj.left = recursive(obj.left, pl + 1, last)
+  }
+
+  if (right <= last) {
+    obj.right = {
+      i: right,
+    }
+    obj.right = recursive(obj.right, pl + 1, last)
+  }
+
+  return obj
+}
+
+const descendants = ref<any[]>([])
 const fillDescendants = async () => {
   const matrices = await web3Store.getDescendants()
+  // console.warn('matrices', matrices)
 
-  const testMx = matrices[0]
-  console.log("testMx", testMx)
-
-  const recursive = (obj: any, pl: number, last: number) => {
-    const {left, right} = getChildForElement(obj.i, pl + 1)
-
-    if (left <= last) {
-      obj.left = {
-        i: left,
-      }
-      obj.left = recursive(obj.left, pl + 1, last)
+  for (const mxNum in matrices) {
+    let plateau = getTotalPlateaus(matrices[mxNum].total)
+    const
+        start = matrices[mxNum].user.index,
+        lastEl = matrices[mxNum].total
+    const obj = {
+      i: start,
+      left: {},
+      right: {},
     }
-
-    if (right <= last) {
-      obj.right = {
-        i: right,
-      }
-      obj.right = recursive(obj.right, pl + 1, last)
-    }
-
-    return obj
+    descendants.value[mxNum] = recursive(obj, plateau, lastEl)
   }
-
-  let plateau = 4
-  const
-      start = 11,
-      // lastEl = 49,
-      lastEl = 99
-
-  const obj = {
-    i: start,
-    left: {},
-    right: {},
-  }
-
-  descendants.value = recursive(obj, plateau, lastEl)
 }
 
 const processRow = (left: number, right: number) => {
