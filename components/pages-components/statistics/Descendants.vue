@@ -2,9 +2,8 @@
 h3 Descendants
 .wrapper
   h4 Your descendants
-  //pre {{ descendants }}
   .row
-    binary-tree
+    binary-tree(:descendants="descendants")
 </template>
 
 <script lang="ts" setup>
@@ -35,7 +34,7 @@ const getTotalPlateaus = (total: number) => {
   return Math.ceil(Math.log2(total + 2))
 }
 
-const descendants = ref<number[][]>([])
+const descendants = ref({})
 const fillDescendants = async () => {
   const matrices = await web3Store.getDescendants()
 
@@ -56,15 +55,15 @@ const fillDescendants = async () => {
       obj.left = {
         i: left,
       }
+      obj.left = recursive(obj.left, pl + 1, last)
     }
-    obj.left = recursive(obj.left, pl + 1, last)
 
     if (right <= last) {
       obj.right = {
         i: right,
       }
+      obj.right = recursive(obj.right, pl + 1, last)
     }
-    obj.right = recursive(obj.right, pl + 1, last)
 
     // if (right <= last) {
     //   obj.right = {
@@ -86,7 +85,7 @@ const fillDescendants = async () => {
   const
       start = 11,
       // lastEl = 49,
-      lastEl = 94
+      lastEl = 97
 
   const obj = {
     i: start,
@@ -94,9 +93,9 @@ const fillDescendants = async () => {
     right: {},
   }
 
-  const test = recursive(obj, plateau, lastEl)
-  console.warn("test")
-  console.log(test)
+  descendants.value = recursive(obj, plateau, lastEl)
+  // console.warn("test")
+  // console.log(test)
 
 
   // let resultLeft = root.left
