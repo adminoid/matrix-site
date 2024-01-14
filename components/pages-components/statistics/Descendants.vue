@@ -2,16 +2,14 @@
 h3 Descendants
 .wrapper
   h4 Your descendants
-  table.table.table-success.table-striped
-    thead
-      tr
-        td Left
-        td Right
-    tbody
+  //pre {{ descendants }}
+  .row
+    binary-tree
 </template>
 
 <script lang="ts" setup>
 import { useStorage } from '@vueuse/core'
+import BinaryTree from '~/components/pages-components/statistics/BinaryTree.vue'
 
 const web3Store = useWeb3Store()
 
@@ -31,14 +29,13 @@ const getChildForElement = (index: number, plateau: number) => {
 
 }
 
-const scheme = ref({})
-
 const getTotalPlateaus = (total: number) => {
   console.log('total', total)
   // uint plateau = log2(IndicesTotal.add(2));
   return Math.ceil(Math.log2(total + 2))
 }
 
+const descendants = ref<number[][]>([])
 const fillDescendants = async () => {
   const matrices = await web3Store.getDescendants()
 
@@ -57,6 +54,7 @@ const fillDescendants = async () => {
   console.log('left, right')
   console.log(resultLeft, resultRight)
 
+  const results = []
   while (lastEl >= resultLeft) {
 
     plateau++
@@ -73,15 +71,28 @@ const fillDescendants = async () => {
       console.warn(resultLeft, resultRight, plateau)
     }
 
+    results.push(processRow(resultLeft, resultRight))
+
     const nextElLeft = getChildForElement(resultLeft, plateau)
     const nextElRight = getChildForElement(resultRight, plateau)
     resultLeft = nextElLeft.left
     resultRight = nextElRight.right
 
   }
+  results.push(processRow(resultLeft, resultRight))
 
   const totalPlateaus = getTotalPlateaus(47) // 4
   console.warn('totalPlateaus', totalPlateaus)
+
+  descendants.value = results
+}
+
+const processRow = (left: number, right: number) => {
+  const result = []
+  for (let i = left; i <= right; i++) {
+    result.push(i)
+  }
+  return result
 }
 
 onMounted(async () => {
