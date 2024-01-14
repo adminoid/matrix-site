@@ -14,7 +14,7 @@ import BinaryTree from '~/components/pages-components/statistics/BinaryTree.vue'
 const web3Store = useWeb3Store()
 
 const getChildForElement = (index: number, plateau: number) => {
-  console.log('index', index)
+  console.warn('index', index)
   console.log('plateau', plateau)
 
   const indexToFirstElPlateau = (pl: number) => (2 ** (pl - 1)) - 1
@@ -42,49 +42,100 @@ const fillDescendants = async () => {
   const testMx = matrices[0]
   console.log("testMx", testMx)
 
+  const recursive = (obj: any, pl: number, last: number) => {
+    console.warn('<<<---recursive--->>>')
+    console.info(obj)
+    console.warn('---------------------')
+    if (!obj) {
+      return true
+    }
+
+    const {left, right} = getChildForElement(obj.i, pl + 1)
+
+    if (left <= last) {
+      obj.left = {
+        i: left,
+      }
+    }
+    obj.left = recursive(obj.left, pl + 1, last)
+
+    if (right <= last) {
+      obj.right = {
+        i: right,
+      }
+    }
+    obj.right = recursive(obj.right, pl + 1, last)
+
+    // if (right <= last) {
+    //   obj.right = {
+    //     i: right,
+    //     right: recursive(right, pl + 1, last),
+    //   }
+    //
+    //   console.info('obj.right.right = recursive')
+    //   obj.right.right = recursive(obj.right, pl + 1, last)
+    // }
+
+    // j++
+    // console.log('out', obj)
+
+    return obj
+  }
+
   let plateau = 4
   const
       start = 11,
-      lastEl = 49,
-      root = getChildForElement(start, plateau)
+      // lastEl = 49,
+      lastEl = 94
 
-  let resultLeft = root.left
-  let resultRight = root.right
-
-  console.log('left, right')
-  console.log(resultLeft, resultRight)
-
-  const results = []
-  while (lastEl >= resultLeft) {
-
-    plateau++
-
-    // const {left, right} = getChildForElement(testMx.user.index, testMx.user.plateau)
-    console.info("resultLeft >= lastEl && resultRight < lastEl")
-    console.log(resultLeft, lastEl, resultRight, lastEl)
-    if (resultLeft <= lastEl && resultRight > lastEl) {
-      console.info('left1, right1, plateau1')
-      console.warn(resultLeft, lastEl, plateau)
-      break
-    } else {
-      console.info('left, right, plateau')
-      console.warn(resultLeft, resultRight, plateau)
-    }
-
-    results.push(processRow(resultLeft, resultRight))
-
-    const nextElLeft = getChildForElement(resultLeft, plateau)
-    const nextElRight = getChildForElement(resultRight, plateau)
-    resultLeft = nextElLeft.left
-    resultRight = nextElRight.right
-
+  const obj = {
+    i: start,
+    left: {},
+    right: {},
   }
-  results.push(processRow(resultLeft, resultRight))
 
-  const totalPlateaus = getTotalPlateaus(47) // 4
-  console.warn('totalPlateaus', totalPlateaus)
+  const test = recursive(obj, plateau, lastEl)
+  console.warn("test")
+  console.log(test)
 
-  descendants.value = results
+
+  // let resultLeft = root.left
+  // let resultRight = root.right
+  //
+  // console.log('left, right')
+  // console.log(resultLeft, resultRight)
+  //
+  // const results = []
+  // while (lastEl >= resultLeft) {
+  //
+  //   plateau++
+  //
+  //   // const {left, right} = getChildForElement(testMx.user.index, testMx.user.plateau)
+  //   console.info("resultLeft >= lastEl && resultRight < lastEl")
+  //   console.log(resultLeft, lastEl, resultRight, lastEl)
+  //   if (resultLeft <= lastEl && resultRight > lastEl) {
+  //     console.info('left1, right1, plateau1')
+  //     console.warn(resultLeft, lastEl, plateau)
+  //     break
+  //   } else {
+  //     console.info('left, right, plateau')
+  //     console.warn(resultLeft, resultRight, plateau)
+  //   }
+  //
+  //   results.push(processRow(resultLeft, resultRight))
+  //
+  //   const nextElLeft = getChildForElement(resultLeft, plateau)
+  //   const nextElRight = getChildForElement(resultRight, plateau)
+  //   resultLeft = nextElLeft.left
+  //   resultRight = nextElRight.right
+  //
+  // }
+  // results.push(processRow(resultLeft, resultRight))
+  //
+  // const totalPlateaus = getTotalPlateaus(47) // 4
+  // console.warn('totalPlateaus', totalPlateaus)
+  //
+  // descendants.value = results
 }
 
 const processRow = (left: number, right: number) => {
