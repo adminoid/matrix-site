@@ -190,10 +190,10 @@ export class External extends Network implements IExternal {
             from: this.Wallet.value,
           })
         // display resp in web interface
-        let msg
         if (!resp.isValue) {
-          msg = `user ${this.Wallet.value} is not registered`
-          this.ThrowAlert('primary', msg)
+          // msg = `111 user ${this.Wallet.value} is not registered`
+          // this.ThrowAlert('primary', msg)
+          return false
         } else {
           return resp
         }

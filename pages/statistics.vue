@@ -51,7 +51,17 @@ client-only
 
       descendants
 
-    div(v-else) Please register first
+    div(v-else)
+      register-form
+      br
+      br
+      br
+
+      register-whose-form
+      br
+      br
+      br
+
   div(v-else) Please connect wallet
 </template>
 
@@ -67,6 +77,8 @@ import GiftSpent from '~/components/pages-components/statistics/GiftSpent.vue'
 import Descendants from '~/components/pages-components/statistics/Descendants.vue'
 import UserInfo from '~/components/pages-components/statistics/UserInfo.vue'
 import FirstUsers from '~/components/pages-components/statistics/FirstUsers.vue'
+import RegisterForm from '~/components/pages-components/statistics/RegisterForm.vue'
+import RegisterWhoseForm from '~/components/pages-components/statistics/RegisterWhoseForm.vue'
 
 import {useWeb3Store} from "~/stores/useWeb3.js";
 
