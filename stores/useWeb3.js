@@ -130,9 +130,16 @@ export const useWeb3Store = defineStore('web3_store', () => {
     // todo -- add getUserFromCore and same with mat
 
     const getUserData = async () => {
-        // if (coreUser.value) {
-        return coreUser
-        // }
+        if (coreUser) {
+            const matrixUser = await $B.getMatrixUser(0)
+            if (matrixUser) {
+                return {
+                    core: coreUser,
+                    matrix: matrixUser.user,
+                }
+            }
+        }
+        return false
     }
 
     return {
