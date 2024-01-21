@@ -4,12 +4,17 @@ client-only
     div(v-if="isRegistered")
       p Total members: {{ addressesGlobalTotal }}
 
+      referral-link
+      br
+      br
+      br
+
       user-info
       br
       br
       br
 
-      referral-link
+      first-users
       br
       br
       br
@@ -61,6 +66,7 @@ import GiftsAccrued from '~/components/pages-components/statistics/GiftsAccrued.
 import GiftSpent from '~/components/pages-components/statistics/GiftSpent.vue'
 import Descendants from '~/components/pages-components/statistics/Descendants.vue'
 import UserInfo from '~/components/pages-components/statistics/UserInfo.vue'
+import FirstUsers from '~/components/pages-components/statistics/FirstUsers.vue'
 
 import {useWeb3Store} from "~/stores/useWeb3.js";
 

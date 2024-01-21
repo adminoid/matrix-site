@@ -142,6 +142,14 @@ export const useWeb3Store = defineStore('web3_store', () => {
         return false
     }
 
+    const getFirstUsers = async (total) => {
+        const wallets = []
+        for (let i = 0; i < total; i++) {
+            wallets.push(await $B.getWalletByIndexFromMatrix(0, i))
+        }
+        return wallets
+    }
+
     return {
         connectWallet,
         checkRegister,
@@ -155,6 +163,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
         getGiftsSpent,
         getDescendants,
         getUserData,
+        getFirstUsers,
     }
 })
 

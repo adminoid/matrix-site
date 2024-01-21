@@ -205,7 +205,33 @@ export class External extends Network implements IExternal {
     }
   }
 
+  async getWalletByIndexFromMatrix(level: number, index: number) {
+    if (!this.Wallet.value) {
+      this.ThrowAlert('danger', 'Please connect Metamask')
+    } else {
+      try {
+        this.EmitDisabled(`getWalletsByIndexFromMatrix`, true)
+        if (!this.Core || !this.Wallet.value) {
+          return false
+        }
+        const resp = await this.Core
+            .methods.getWalletByIndexFromMatrix(level, index)
+            .call({
+              from: this.Wallet.value,
+            })
+
+        // console.warn(resp)
+        return resp
+      } catch (e: any) {
+        this.ThrowAlert('danger', e.message)
+      } finally {
+        this.EmitDisabled(`getWalletsByIndexFromMatrix`, false)
+      }
+    }
+  }
+
   async getMatrixUser(level: number | string): Promise<void | boolean> {
+    console.info("getMatrixUser for level: " + level + " and wallet: " + this.Wallet.value)
     try {
       this.EmitDisabled(`getMatrixUser`, true)
       if (!this.Core || !this.Wallet.value) {
