@@ -19,11 +19,11 @@ export const useWeb3Store = defineStore('web3_store', () => {
         await checkConnected()
     }
 
-    const coreUser = ref({})
+    let coreUser
     const checkRegister = async () => {
         if ($B.Wallet.value) {
-            coreUser.value = await $B.getUserFromCore()
-            if (coreUser.value) {
+            coreUser = await $B.getUserFromCore()
+            if (coreUser) {
                 return true
             }
         }
@@ -53,6 +53,16 @@ export const useWeb3Store = defineStore('web3_store', () => {
     const getReferralEarn = async () => {
         if ($B.Wallet.value) {
             const resp = await $B.getReferralEarn()
+            if (resp) {
+                return resp
+            }
+            return false
+        }
+    }
+
+    const getClaimsAppear = async () => {
+        if ($B.Wallet.value) {
+            const resp = await $B.getClaimsAppear()
             if (resp) {
                 return resp
             }
@@ -97,8 +107,8 @@ export const useWeb3Store = defineStore('web3_store', () => {
         // parent: 0n
         // plateau: 1n
         const matrixData = []
-        if (coreUser.value) {
-            const maxLevel = Number(coreUser.value.level)
+        if (coreUser) {
+            const maxLevel = Number(coreUser.level)
             for (let i = 0; i < maxLevel; i++) {
                 // response from getMatrixUser() contains user and total
                 const matrixReceivedData = await $B.getMatrixUser(i)
@@ -117,6 +127,14 @@ export const useWeb3Store = defineStore('web3_store', () => {
         return matrixData
     }
 
+    // todo -- add getUserFromCore and same with mat
+
+    const getUserData = async () => {
+        // if (coreUser.value) {
+        return coreUser
+        // }
+    }
+
     return {
         connectWallet,
         checkRegister,
@@ -124,10 +142,12 @@ export const useWeb3Store = defineStore('web3_store', () => {
         getAddressesGlobalTotal,
         getWhoseOfUser,
         getReferralEarn,
+        getClaimsAppear,
         getClaimSpent,
         getGiftsAccrued,
         getGiftsSpent,
         getDescendants,
+        getUserData,
     }
 })
 

@@ -1,18 +1,18 @@
 <template lang="pug">
-h3 ClaimSpent
+h3 ClaimAppear
 .wrapper(v-if="events.length > 0")
-  h4 Your claims was spent
+  h4 Your claims appear
   table.table.table-success.table-striped
     thead
       tr
         td Owner
-        td Spent
-        td To level
+        td Level price
+        td New value
     tbody
       tr(v-for="event in events")
         td {{ event.owner }}
-        td {{ event.value }}
-        td {{ event.level }}
+        td {{ event.levelPrice }}
+        td {{ event.newValue }}
 </template>
 
 <script lang="ts" setup>
@@ -22,19 +22,19 @@ const web3Store = useWeb3Store()
 
 type TEvent = {
   owner: string,
-  value: string,
-  level: string,
+  levelPrice: string,
+  newValue: string,
 }
 
 const events = ref<TEvent[]>([])
 const fillEvents = async () => {
   events.value = []
-  const eventsFound = await web3Store.getClaimSpent()
+  const eventsFound = await web3Store.getClaimsAppear()
   for (const eventFound of eventsFound) {
     events.value.push({
       owner: eventFound.returnValues.owner,
-      value: eventFound.returnValues.value.toString(),
-      level: eventFound.returnValues.newLevel.toString(),
+      levelPrice: eventFound.returnValues.levelPrice,
+      newValue: eventFound.returnValues.newLevel,
     })
   }
 }

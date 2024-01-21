@@ -4,6 +4,11 @@ client-only
     div(v-if="isRegistered")
       p Total members: {{ addressesGlobalTotal }}
 
+      user-info
+      br
+      br
+      br
+
       referral-link
       br
       br
@@ -15,6 +20,11 @@ client-only
       br
 
       earn-by-referrals
+      br
+      br
+      br
+
+      claim-appear
       br
       br
       br
@@ -45,10 +55,12 @@ import { useStorage } from '@vueuse/core'
 import ReferralLink from '~/components/pages-components/statistics/ReferralLink.vue'
 import YoursReferrals from '~/components/pages-components/statistics/YoursReferrals.vue'
 import EarnByReferrals from '~/components/pages-components/statistics/EarnByReferrals.vue'
+import ClaimAppear from '~/components/pages-components/statistics/ClaimAppear.vue'
 import ClaimSpent from '~/components/pages-components/statistics/ClaimSpent.vue'
 import GiftsAccrued from '~/components/pages-components/statistics/GiftsAccrued.vue'
 import GiftSpent from '~/components/pages-components/statistics/GiftSpent.vue'
 import Descendants from '~/components/pages-components/statistics/Descendants.vue'
+import UserInfo from '~/components/pages-components/statistics/UserInfo.vue'
 
 import {useWeb3Store} from "~/stores/useWeb3.js";
 
