@@ -24,6 +24,8 @@ const total = ref(0)
 const fillEvents = async () => {
   events.value = []
   const eventsFound = await web3Store.getWhoseOfUser()
+  console.info('eventsFound')
+  console.log(eventsFound)
   total.value = eventsFound.length
   for (const eventFound of eventsFound) {
     events.value.push({
@@ -35,7 +37,9 @@ const fillEvents = async () => {
 }
 
 onMounted(async () => {
-  await fillEvents()
+  setTimeout(async ()=>{
+    await fillEvents()
+  }, 7000)
 })
 const storage = useStorage('connected-wallet', '')
 watch(storage, async () => {

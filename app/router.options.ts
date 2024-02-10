@@ -16,6 +16,11 @@ export default <RouterConfig> {
           path: 'statistics',
           component: () => import('~/pages/statistics.vue'),
         },
+        {
+          name: 'main_w',
+          path: ':w',
+          component: () => import('~/pages/main.vue'),
+        },
       ],
     },
   ],

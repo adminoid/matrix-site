@@ -43,6 +43,8 @@ export const useWeb3Store = defineStore('web3_store', () => {
     const getWhoseOfUser = async () => {
         if ($B.Wallet.value) {
             const resp = await $B.getWhoseOfUser()
+            console.info('resp useWeb3')
+            console.log(resp)
             if (resp) {
                 return resp
             }
