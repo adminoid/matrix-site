@@ -41,6 +41,7 @@ onMounted(async () => {
     await fillEvents()
   }, 7000)
 })
+
 const storage = useStorage('connected-wallet', '')
 watch(storage, async () => {
   await fillEvents()

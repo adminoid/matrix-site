@@ -7,7 +7,7 @@ div(v-for="(user, i) of users") {{ i }}. {{ user }}
 import { useStorage } from '@vueuse/core'
 const web3Store = useWeb3Store()
 
-const total = 70
+const total = 109
 
 const users = ref([])
 const fillData = async () => {
