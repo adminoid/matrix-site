@@ -5,7 +5,6 @@
 
 main
   .container
-    pre layouts/MainPage.vue
     slot
 
 footer
