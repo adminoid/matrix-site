@@ -1,9 +1,11 @@
 <template lang="pug">
 main-intro
+personal-account
 </template>
 
 <script setup>
 import MainIntro from '~/components/pages-components/main/MainIntro.vue'
+import PersonalAccount from '~/components/pages-components/main/PersonalAccount.vue'
 
 const { $B } = useNuxtApp()
 const route = useRoute()
