@@ -10,6 +10,7 @@
             .personal-account__contract-address
               | <span class="personal-account__contract-elipsis">0x4D7fc3A131B9530996593e098EAAC5f43a7179A1</span><span class="personal-account__contract-indent" ref="refAddress">{{ rightAddress }}</span>
             .personal-account__contract-link
+            .personal-account__contract-copy
         .personal-account__amount.pb-3
           label.form-label(for="amount") Send amount
           input.form-control(name="amount" id="amount")
@@ -54,6 +55,7 @@ const getSymbolsByWidth = (inputString, maxWidth) => {
   &__header
     text-align: center
     font-weight: 400
+    margin-bottom: 24px
   &__frame
     padding: 16px
     border-radius: 1rem
@@ -62,7 +64,8 @@ const getSymbolsByWidth = (inputString, maxWidth) => {
     .form-label
       color: #7B859F
   &__contract
-    border: 1px solid red
+    background-color: #1C1A2E
+    border-radius: 0.5rem
     white-space: nowrap
     display: flex
     padding: 10px
@@ -73,11 +76,17 @@ const getSymbolsByWidth = (inputString, maxWidth) => {
     &-link
       background-image: url("@/assets/img/icons/link-external.svg")
       background-repeat: no-repeat
+      background-position: 50%
       width: 22px
       height: 27px
+    &-copy
+      background-image: url("@/assets/img/icons/copy.svg")
+      background-repeat: no-repeat
+      width: 22px
+      height: 27px
+      background-position: 50%
     &-address
       width: 90%
-      border: 1px solid green
       white-space: nowrap
       > span
         white-space: nowrap
