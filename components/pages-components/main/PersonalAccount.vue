@@ -14,7 +14,9 @@
         .personal-account__amount.pb-3
           label.form-label(for="amount") Send amount
           input.form-control(name="amount" id="amount")
-        button.btn.btn-outline-light.personal-account__button Contribution
+        .row
+          .col
+            button.btn.btn-outline-light.personal-account__button.w-100 Contribution
 </template>
 
 <script setup>
