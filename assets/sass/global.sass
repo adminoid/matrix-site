@@ -151,6 +151,27 @@ $btn-border-width: 1px
   //&:hover,&:active
   //  background-image: linear-gradient(rgba(249, 90, 204, 1) 0%, rgba(113, 61, 255, 0) 100%)
 
+.table-spec
+  width: 100%
+  &__thead
+    th
+      color: #7B859F
+      font-size: 12px
+      font-weight: 400
+      line-height: 30px
+      border-bottom: 1px solid #353445
+  &__tbody
+    color: #E4EBFA
+    font-size: 12px
+    font-weight: 400
+    line-height: 16px
+    td
+      &::before
+        content: ''
+        display: block
+        height: 7px
+
+
 // Layout & components
 @import "node_modules/bootstrap/scss/type"
 @import "node_modules/bootstrap/scss/images"

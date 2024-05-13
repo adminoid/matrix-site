@@ -1,17 +1,17 @@
 <template lang="pug">
-.referrals
-  .referrals__header Your referral link
-  .referrals__link
-    .referrals__link-text https://givedream.io/?referrer=8fisnba4TMygvDTQsFAbHGEHTEs
-    .referrals__link-copy
-  .referrals__header.referrals__header_big Referrals
-  table.table-spec.table-dark.table-hover.table-spec__body-table
-    thead.table-spec__thead
+.registered-table
+  .registered-table__header Accounts registered in the structure
+  .registered-table__link
+    .registered-table__link-text https://givedream.io/?referrer=8fisnba4TMygvDTQsFAbHGEHTEs
+    .registered-table__link-copy
+  .registered-table__header.registered-table__header_big Referrals
+  table.registered-table__table.table-dark.table-hover.registered-table__body-table
+    thead.registered-table__table-thead
       tr
         th Wallet address
         th Friends
         th Gifts
-    tbody.table-spec__tbody
+    tbody.registered-table__table-tbody
       tr
         td Ox9f6D...F4BC
         td friend1
@@ -24,14 +24,15 @@
         td Ox9f6D...F4BC
         td friend1
         td 0.01
+
 </template>
 
 <style lang="sass">
-.referrals
+.registered-table
   &__header
-    font-size: 13px
-    font-weight: 400
-    line-height: 18px
+    font-size: 1rem
+    font-weight: 500
+    line-height: 24px
     margin-bottom: 1rem
   &__header_big
     font-size: 1rem
@@ -59,4 +60,23 @@
       width: 22px
       height: 27px
       background-position: 50%
+  &__table
+    width: 100%
+    //border-collapse: collapse
+    &-thead
+      color: #7B859F
+      font-size: 12px
+      font-weight: 400
+      line-height: 30px
+      border-bottom: 1px solid #353445
+    &-tbody
+      color: #E4EBFA
+      font-size: 12px
+      font-weight: 400
+      line-height: 16px
+      td
+        &::before
+          content: ''
+          display: block
+          height: 7px
 </style>
