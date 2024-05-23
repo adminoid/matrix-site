@@ -8,6 +8,8 @@ $font-family-monospace: $font-family-monospace
 // my custom styles
 $bg-over-cover: #030118
 
+//$body-bg-dark: #030117
+
 .white-border, .wb
   border: 1px solid rgba(255, 255, 255, 0.2)
   border-radius: 8px
@@ -25,7 +27,9 @@ $bg-over-cover: #030118
 @import "node_modules/bootstrap/scss/maps"
 @import "node_modules/bootstrap/scss/mixins"
 @import "node_modules/bootstrap/scss/utilities"
+
 @import "node_modules/bootstrap/scss/root"
+//@import "root"
 
 @import "node_modules/bootstrap/scss/reboot"
 
@@ -151,8 +155,15 @@ $btn-border-width: 1px
   //&:hover,&:active
   //  background-image: linear-gradient(rgba(249, 90, 204, 1) 0%, rgba(113, 61, 255, 0) 100%)
 
+//$table-bg: red
+
+//// customizing the .table
+//$custom-table-variants: ("tangerine": $tangerine, "lightcornflowerblue": #8ECAE6)
+//$table-variants: map-merge($table-variants, $custom-table-variants)
+
 .table-spec
-  width: 100%
+  min-width: 100%
+  --bs-table-bg: transarent !important
   &__thead
     th
       color: #7B859F
@@ -166,10 +177,26 @@ $btn-border-width: 1px
     font-weight: 400
     line-height: 16px
     td
+      padding: 0 0 5px 3px !important
       &::before
         content: ''
         display: block
         height: 7px
+    &_strip
+      td
+        border-bottom: 1px solid #353445
+        padding-bottom: 0.4rem
+
+.pink-num
+  color: #F95ACC
+  background-color: #1C1A2E
+  border-radius: 50%
+  display: flex
+  justify-content: center
+  align-items: center
+  height: 22px
+  width: 22px
+
 
 
 // Layout & components
