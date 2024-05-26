@@ -5,6 +5,7 @@ referrals.main-block
 my-rewards.main-block
 registered-table.main-block
 general-stats.main-block
+registered-global-table.main-block
 </template>
 
 <script setup>
@@ -14,6 +15,7 @@ import Referrals from '~/components/pages-components/main/Referrals.vue'
 import MyRewards from '~/components/pages-components/main/MyRewards.vue'
 import RegisteredTable from '~/components/pages-components/main/RegisteredTable.vue'
 import GeneralStats from '~/components/pages-components/main/GeneralStats.vue'
+import RegisteredGlobalTable from '~/components/pages-components/main/RegisteredGlobalTable.vue'
 
 const { $B } = useNuxtApp()
 const route = useRoute()
