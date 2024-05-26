@@ -2,7 +2,7 @@
 .contract-address
   span.contract-address__ellipsis 0x4D7fc3A131B9530996593e098EAAC5f43a7179A1
   span.contract-address__indent(ref="refAddress") {{ rightAddress }}
-  span.contract-address__link
+  a.contract-address__link(href="https://bscscan.com/address/0x4D7fc3A131B9530996593e098EAAC5f43a7179A1" target="_blank")
 </template>
 
 <script setup>

@@ -3,11 +3,11 @@
   h5.centered-header General statistics
   general-stats-block(
     header="Registered accounts"
-    link=true
     footer="24"
   )
   general-stats-block(
     header="Amount of BNB entered to the system"
+    link=true
     footer="0.034"
   )
   general-stats-block(

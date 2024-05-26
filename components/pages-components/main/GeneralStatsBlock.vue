@@ -23,3 +23,28 @@ onMounted(() => {
   isHasFooter.value = !!props.footer
 })
 </script>
+
+<style lang="sass">
+.general-stats-block
+  border: 1px solid #353445
+  border-radius: 1rem
+  margin-bottom: 1rem
+  padding: 1rem
+  background: radial-gradient(137.3% 199.64% at 50% 133.1%, rgba(255, 255, 255, 0.4) 0%, rgba(113, 61, 255, 0.4) 32.82%, rgba(0, 0, 0, 0) 78.46%)
+  &__header
+    font-size: 1rem
+    font-weight: 400
+    line-height: 24px
+    margin-bottom: 0.5rem
+    color: #BABCD0
+  &__link
+    font-size: 13px
+    font-weight: 400
+    line-height: 18px
+  &__footer
+    color: #fff
+    font-size: 24px
+    font-weight: 400
+    line-height: 32px
+    letter-spacing: -0.02em
+</style>
