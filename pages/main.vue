@@ -6,6 +6,7 @@ my-rewards.main-block
 registered-table.main-block
 general-stats.main-block
 registered-global-table.main-block
+philanthropist-banner.main-block
 </template>
 
 <script setup>
@@ -16,6 +17,7 @@ import MyRewards from '~/components/pages-components/main/MyRewards.vue'
 import RegisteredTable from '~/components/pages-components/main/RegisteredTable.vue'
 import GeneralStats from '~/components/pages-components/main/GeneralStats.vue'
 import RegisteredGlobalTable from '~/components/pages-components/main/RegisteredGlobalTable.vue'
+import PhilanthropistBanner from '~/components/pages-components/main/PhilanthropistBanner.vue'
 
 const { $B } = useNuxtApp()
 const route = useRoute()
