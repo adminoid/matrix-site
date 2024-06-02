@@ -1,6 +1,5 @@
 <template lang="pug">
 .general-stats
-  h5.centered-header General statistics
   main-banner(
     header="Registered accounts"
     footer="24"

@@ -1,9 +1,9 @@
 <template lang="pug">
-.general-stats-block
-  .general-stats-block__header(v-if="isHasHeader") {{ header }}
-  .general-stats-block__link(v-if="isHasLink")
+.main-banner
+  .main-banner__header(v-if="isHasHeader") {{ header }}
+  .main-banner__link(v-if="isHasLink")
     contract-address
-  .general-stats-block__footer(v-if="isHasFooter") {{ footer }}
+  .main-banner__footer(v-if="isHasFooter") {{ footer }}
 </template>
 
 <script setup>
@@ -25,7 +25,7 @@ onMounted(() => {
 </script>
 
 <style lang="sass">
-.general-stats-block
+.main-banner
   border: 1px solid #353445
   border-radius: 1rem
   margin-bottom: 1rem

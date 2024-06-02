@@ -1,12 +1,13 @@
 <template lang="pug">
-main-intro.main-block
-personal-account.main-block
-referrals.main-block
-my-rewards.main-block
-registered-table.main-block
-general-stats.main-block
-registered-global-table.main-block
-philanthropist-banner.main-block
+main-intro.mb-4
+personal-account.mb-4
+referrals.mb-4
+my-rewards.mb-4
+registered-table.mb-4
+general-stats.mb-4
+registered-global-table.mb-4
+philanthropist-banner.mb-4
+amount-blocks.mb-4
 </template>
 
 <script setup>
@@ -18,8 +19,11 @@ import RegisteredTable from '~/components/pages-components/main/RegisteredTable.
 import GeneralStats from '~/components/pages-components/main/GeneralStats.vue'
 import RegisteredGlobalTable from '~/components/pages-components/main/RegisteredGlobalTable.vue'
 import PhilanthropistBanner from '~/components/pages-components/main/PhilanthropistBanner.vue'
+import AmountBlocks from '~/components/pages-components/main/AmountBlocks.vue'
 
-const { $B } = useNuxtApp()
+const {
+  $B
+} = useNuxtApp()
 const route = useRoute()
 const W = route.params.w
 
@@ -39,8 +43,3 @@ const W = route.params.w
 // }
 
 </script>
-
-<style lang="sass">
-.main-block
-  margin-bottom: 1.5rem
-</style>
