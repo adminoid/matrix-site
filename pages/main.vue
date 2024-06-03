@@ -8,6 +8,7 @@ general-stats.mb-4
 registered-global-table.mb-4
 philanthropist-banner.mb-4
 amount-blocks.mb-4
+donation-block.mb-4
 </template>
 
 <script setup>
@@ -20,6 +21,7 @@ import GeneralStats from '~/components/pages-components/main/GeneralStats.vue'
 import RegisteredGlobalTable from '~/components/pages-components/main/RegisteredGlobalTable.vue'
 import PhilanthropistBanner from '~/components/pages-components/main/PhilanthropistBanner.vue'
 import AmountBlocks from '~/components/pages-components/main/AmountBlocks.vue'
+import DonationBlock from '~/components/pages-components/main/DonationBlock.vue'
 
 const {
   $B
