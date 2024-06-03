@@ -4,6 +4,11 @@
   .main-banner__link(v-if="isHasLink")
     contract-address
   .main-banner__footer(v-if="isHasFooter") {{ footer }}
+  .main-banner__columns(v-if="isHasColumns")
+    .row
+      .col.px-4.d-flex.justify-content-between.flex-column(v-for="col in columns")
+        .main-banner__columns-title.row {{ col.title }}
+        .main-banner__columns-amount.row {{ col.amount }}
 </template>
 
 <script setup>
@@ -12,15 +17,21 @@ const props = defineProps({
   header: String,
   link: Boolean,
   footer: String,
+  columns: {
+    type: Array,
+    required: false,
+  },
 })
 const isHasHeader = ref(false)
 const isHasLink = ref(false)
 const isHasFooter = ref(false)
+const isHasColumns = ref(false)
 
 onMounted(() => {
   isHasHeader.value = !!props.header
   isHasLink.value = !!props.link
   isHasFooter.value = !!props.footer
+  isHasColumns.value = !!props.columns && props.columns.length > 1
 })
 </script>
 
@@ -41,10 +52,14 @@ onMounted(() => {
     font-size: 13px
     font-weight: 400
     line-height: 18px
-  &__footer
+  &__footer, &__columns-amount
     color: #fff
     font-size: 24px
     font-weight: 400
     line-height: 32px
     letter-spacing: -0.02em
+  &__columns-title
+    font-size: 13px
+    font-weight: 400
+    line-height: 18px
 </style>
