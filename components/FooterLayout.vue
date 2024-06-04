@@ -1,14 +1,14 @@
 <template lang="pug">
-.fl
-  .fl__top
-    .fl__url dao-dream.com
-    .fl__buttons.fl-buttons
-      .fl-buttons__button.wb Channel
-      .fl-buttons__button.wb Chat
-      .fl-buttons__button.wb Discord
-      .fl-buttons__button.wb Bot
-  .fl__bottom
-    .fl__copy © 2023 dao-dream.com. All rights reserved.
+.footer-layout.container
+  .footer-layout__top
+    .footer-layout__url dao-dream.com
+    .container
+      .row.footer-layout__buttons.fl-buttons.d-flex.justify-between
+        a(href="#").col.fl-buttons__button.wb.align-self-center.align-content-around Telegram channel
+        .fl-buttons__spacer.col
+        a(href="#").col.fl-buttons__button.wb.align-self-center.align-content-around Telegram chat
+  .footer-layout__bottom
+    .footer-layout__copy © 2023 dao-dream.com. All rights reserved.
 </template>
 
 
@@ -17,7 +17,7 @@
 </script>
 
 <style scoped lang="sass">
-.fl
+.footer-layout
   &__url
     margin-bottom: 40px
   &__buttons
@@ -31,9 +31,12 @@
 
 .fl-buttons
   display: flex
-  color: #fff
   &__button
-    margin-right: 8px
-    padding: 14px
+    text-decoration: none
+    color: #fff
     font-size: 13px
+    background: url("@/assets/img/icons/tg.svg") 9px 50% no-repeat
+    padding: 10px 32px
+  &__spacer
+    max-width: 10px
 </style>

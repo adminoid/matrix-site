@@ -17,7 +17,6 @@
   align-items: center
   padding: 24px
   background: radial-gradient(97.9% 46.65% at 50% 108.23%, rgba(255, 255, 255, 0.9) 0%, rgba(113, 61, 255, 0.9) 33.33%, rgba(0, 0, 0, 0) 100%), rgba(255, 255, 255, 0.02)
-  backdrop-filter: blur(12px)
   &__header
     font-size: 18px
     font-weight: 400
