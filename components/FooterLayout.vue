@@ -7,6 +7,14 @@
         a(href="#").col.fl-buttons__button.wb.align-self-center.align-content-around Telegram channel
         .fl-buttons__spacer.col
         a(href="#").col.fl-buttons__button.wb.align-self-center.align-content-around Telegram chat
+  .footer-layout__middle.row.d-flex
+    .footer-layout__icon.footer-layout__icon_whatsapp.col
+    .footer-layout__icon.footer-layout__icon_discord.col
+    .footer-layout__icon.footer-layout__icon_twitter.col
+    .footer-layout__icon.footer-layout__icon_facebook.col
+    .footer-layout__icon.footer-layout__icon_ticktock.col
+    .footer-layout__icon.footer-layout__icon_youtube.col
+    .footer-layout__icon.footer-layout__icon_instagram.col
   .footer-layout__bottom
     .footer-layout__copy © 2023 dao-dream.com. All rights reserved.
 </template>
@@ -28,7 +36,26 @@
   &__copy
     font-size: 13px
     color: #BABCD2
-
+  &__icon
+    width: 20px
+    height: 20px
+    background-repeat: no-repeat
+    background-position: 50%
+    margin-bottom: 24px
+    &_whatsapp
+      background-image: url('@/assets/img/icons/whatsapp.svg')
+    &_discord
+      background-image: url('@/assets/img/icons/discord.svg')
+    &_twitter
+      background-image: url('@/assets/img/icons/twitter.svg')
+    &_facebook
+      background-image: url('@/assets/img/icons/facebook.svg')
+    &_ticktock
+      background-image: url('@/assets/img/icons/ticktock.svg')
+    &_youtube
+      background-image: url('@/assets/img/icons/youtube.svg')
+    &_instagram
+      background-image: url('@/assets/img/icons/instagram.svg')
 .fl-buttons
   display: flex
   &__button
