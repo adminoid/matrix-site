@@ -1,7 +1,9 @@
 <template lang="pug">
-main-intro.mb-4
-personal-account.mb-4
-referrals.mb-4
+main-intro.row.mb-4
+h5.centered-header Personal account
+.row.row-cols-1.row-cols-md-2.mb-4
+  smart-contract-send.col
+  referrals.col
 my-rewards.mb-4
 registered-table.mb-4
 general-stats.mb-4
@@ -13,7 +15,7 @@ donation-block.mb-4
 
 <script setup>
 import MainIntro from '~/components/pages-components/main/MainIntro.vue'
-import PersonalAccount from '~/components/pages-components/main/PersonalAccount.vue'
+import SmartContractSend from '~/components/pages-components/main/SmartContractSend.vue'
 import Referrals from '~/components/pages-components/main/Referrals.vue'
 import MyRewards from '~/components/pages-components/main/MyRewards.vue'
 import RegisteredTable from '~/components/pages-components/main/RegisteredTable.vue'

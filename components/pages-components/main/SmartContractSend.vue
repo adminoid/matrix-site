@@ -1,6 +1,5 @@
 <template lang="pug">
-.personal-account.mt-5
-  h5.centered-header Personal account
+.personal-account.mt-5.mt-md-0
   form
     .personal-account__frame
       .personal-account__form
