@@ -6,6 +6,7 @@ h5.centered-header Personal account
   referrals.col
 my-rewards.mb-4
 registered-table.mb-4
+h5.centered-header General statistics
 general-stats.mb-4
 registered-global-table.mb-4
 philanthropist-banner.mb-4
