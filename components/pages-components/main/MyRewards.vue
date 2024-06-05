@@ -1,33 +1,35 @@
 <template lang="pug">
-.my-rewards
-  .my-rewards__header My rewards
-  .my-rewards__table
-    .row.mb-2
-      .col-10 Accounts are connected via referral link
-      .col-2.text-end 42
-    .row.mb-2
-      .col-10 Amount of BNB received to the wallet
-      .col-2.text-end 42
-    .row.mb-2
-      .col-10 Amount of BNB received to the withdrawal (Matrices)
-      .col-2.text-end 42
-    .row.mb-2
-      .col-10 Amount of BNB received to the withdrawal (Referral)
-      .col-2.text-end 42
-    .row.mb-2
-      .col-10 Amount of BNB debited from withdrawal
-      .col-2.text-end 42
-  .my-rewards__form.mt-3
-    .row.mb-2
-      .col-10.mb-3 Account balance
-      .col-2.text-end 42
-      br
-      form
-        label.form-label(for="rewards") Rewards
-        input.form-control.mb-4(name="rewards" id="rewards")
-        .row
-          .col
-            button.btn.btn-outline-light.personal-account__button.w-100 Claim BNB
+.my-rewards.row.row-cols-1.row-cols-md-2
+  .col
+    .my-rewards__header My rewards
+    .my-rewards__table
+      .row.mb-2
+        .col-10 Accounts are connected via referral link
+        .col-2.text-end 42
+      .row.mb-2
+        .col-10 Amount of BNB received to the wallet
+        .col-2.text-end 42
+      .row.mb-2
+        .col-10 Amount of BNB received to the withdrawal (Matrices)
+        .col-2.text-end 42
+      .row.mb-2
+        .col-10 Amount of BNB received to the withdrawal (Referral)
+        .col-2.text-end 42
+      .row.mb-2
+        .col-10 Amount of BNB debited from withdrawal
+        .col-2.text-end 42
+  .col
+    .my-rewards__form.mt-3.mt-md-0
+      .row.mb-2
+        .col-10.mb-3 Account balance
+        .col-2.text-end 42
+        br
+        form
+          label.form-label(for="rewards") Rewards
+          input.form-control.mb-4(name="rewards" id="rewards")
+          .row
+            .col
+              button.btn.btn-outline-light.personal-account__button.w-100 Claim BNB
 </template>
 
 <style lang="sass">
