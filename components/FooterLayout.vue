@@ -1,33 +1,25 @@
 <template lang="pug">
 .footer-layout.container
-  .footer-layout__top
-    .footer-layout__url dao-dream.com
-    .container
-      .row.footer-layout__buttons.fl-buttons.d-flex.justify-between
-        a(href="#").col.fl-buttons__button.wb.align-self-center.align-content-around Telegram channel
-        .fl-buttons__spacer.col
-        a(href="#").col.fl-buttons__button.wb.align-self-center.align-content-around Telegram chat
+  .footer-layout__top.row
+    .footer-layout__buttons.fl-buttons.col
+      a(href="#").col.fl-buttons__button.wb Telegram channel
+      .fl-buttons__spacer.col
+      a(href="#").col.fl-buttons__button.wb Telegram chat
   .footer-layout__middle.row.d-flex
-    .footer-layout__icon.footer-layout__icon_whatsapp.col
-    .footer-layout__icon.footer-layout__icon_discord.col
-    .footer-layout__icon.footer-layout__icon_twitter.col
-    .footer-layout__icon.footer-layout__icon_facebook.col
-    .footer-layout__icon.footer-layout__icon_ticktock.col
-    .footer-layout__icon.footer-layout__icon_youtube.col
-    .footer-layout__icon.footer-layout__icon_instagram.col
+    a(href="#").footer-layout__icon.footer-layout__icon_whatsapp.col
+    a(href="#").footer-layout__icon.footer-layout__icon_discord.col
+    a(href="#").footer-layout__icon.footer-layout__icon_twitter.col
+    a(href="#").footer-layout__icon.footer-layout__icon_facebook.col
+    a(href="#").footer-layout__icon.footer-layout__icon_ticktock.col
+    a(href="#").footer-layout__icon.footer-layout__icon_youtube.col
+    a(href="#").footer-layout__icon.footer-layout__icon_instagram.col
   .footer-layout__bottom
-    .footer-layout__copy © 2023 dao-dream.com. All rights reserved.
+    .footer-layout__copy.text-center © 2023 dao-dream.com. All rights reserved.
 </template>
-
-
-<script setup>
-
-</script>
 
 <style scoped lang="sass">
 .footer-layout
-  &__url
-    margin-bottom: 40px
+  max-width: 516px
   &__buttons
     margin-bottom: 40px
   &__bottom
