@@ -11,10 +11,19 @@ import { useStorage } from '@vueuse/core'
 
 const web3Store = useWeb3Store()
 const buttonText = ref('Connect')
-const storage = useStorage('connected-wallet', '')
-if (storage.value) {
-  // TODO: uncomment this later:
-  // await web3Store.connectWallet()
-}
 
+const connectWallet = () => {
+  // const storage = useStorage('connected-wallet', '')
+
+  console.info('connectWallet.!? -1')
+
+  // console.log(storage.value)
+  // if (storage.value) {
+    console.info('connectWallet.!? 1')
+    web3Store.connectWallet().then(() => {
+      console.info('connectWallet.!? 0')
+      buttonText.value = 'Connected'
+    })
+  // }
+}
 </script>

@@ -40,11 +40,11 @@ const W = route.params.w
 
 // TODO: set storage by useStorage for wallet (rename) and whose
 
-// if ($B.Web3.utils.isAddress(W)) {
-//   localStorage.setItem('whose_param', W)
-// }
-// if (route.name !== 'read') {
-//   await navigateTo({ path: '/' })
-// }
+if ($B.Web3.utils.isAddress(W)) {
+  localStorage.setItem('whose_param', W)
+}
+if (route.name !== 'read') {
+  await navigateTo({ path: '/' })
+}
 
 </script>

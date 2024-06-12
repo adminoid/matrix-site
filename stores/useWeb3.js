@@ -15,6 +15,9 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const connectWallet = async () => {
+
+        console.info('connectWallet.!? 2')
+
         await $B.connect()
         await checkConnected()
     }
