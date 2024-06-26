@@ -13,7 +13,7 @@ export function useDisabled() {
   }
 
   // @ts-ignore
-  useNuxtApp().$on('disabled', async (disabledObj: any) => {
+  useNuxtApp().$on('disabled', async (disabledObj: TDisabled) => {
     await update(disabledObj)
   })
 

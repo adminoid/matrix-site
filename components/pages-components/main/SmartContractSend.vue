@@ -37,9 +37,9 @@ import { useDisabled } from '~/composables/useDisabled'
 import ContractAddress from '~/components/ContractAddress.vue'
 
 const disabled = useDisabled()
-const { $Blockchain } = useNuxtApp()
+const { $B } = useNuxtApp()
 
-console.log(disabled)
+console.log($B)
 
 const amountValue = ref('')
 const error = ref('')
@@ -49,9 +49,9 @@ watch(amountValue, async (newValue) => {
 
 const validateValue = async (value: any) => {
   // @ts-ignore
-  const accounts = await $Blockchain.Web3.eth.getAccounts();
+  const accounts = await $B.Web3.eth.getAccounts();
   // @ts-ignore
-  if (!accounts || !$Blockchain.Wallet) {
+  if (!accounts || !$B.Wallet) {
     error.value = 'Please connect your wallet first'
   } else {
     if (String(value).includes(',')) {
@@ -72,7 +72,7 @@ const sendAmount = async () => {
   await validateValue(amountValue.value)
   if (!error.value) {
     // @ts-ignore
-    await $Blockchain.sendAmount(String(amountValue.value))
+    await $B.sendAmount(String(amountValue.value))
   }
 }
 </script>
