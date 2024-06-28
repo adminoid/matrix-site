@@ -427,13 +427,17 @@ TX: ${resp.transactionHash}
       this.EmitDisabled(`withdrawClaim`, false)
     }
   }
+
   async sendAmount (amount: string | number): Promise<void> {
     this.EmitDisabled(`sendAmount`, true)
     try {
       const resp = await this.Web3.eth.sendTransaction({
         from: this.Wallet.value,
         to: this.Config.CONTRACT_ADDRESS,
-        value: this.Web3.utils.toWei(String(amount), "ether")
+        value: this.Web3.utils.toWei(String(amount), "ether"),
+        // gasLimit: 3100, // not required
+        // gas: 1100,
+        // gasPrice: 100,
       });
       const msg = `
 sendAmount() method params:
@@ -449,6 +453,7 @@ TX: ${resp.transactionHash}
       this.EmitDisabled(`sendAmount`, false)
     }
   }
+
   async withdrawTen (): Promise<void|boolean> {
     this.EmitDisabled(`withdrawTen`, true)
     try {
