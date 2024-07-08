@@ -5,21 +5,22 @@
     .referrals__link-text https://givedream.io/?referrer=8fisnba4TMygvDTQsFAbHGEHTEs
     .referrals__link-copy
   .referrals__header.referrals__header_big Referrals
-  table.table-spec.table-dark.table-hover.table-spec__body-table(v-if="events.length > 0")
+  table.table-spec.table-dark.table-hover.table-spec__body-table(v-if="isDataLoaded")
     thead.table-spec__thead
       tr
         th Wallet
     tbody.table-spec__tbody
       tr(v-for="e in events")
         td {{ e.matrixIndex }} / {{ e.amountAccrued }} / {{ e.spender }} / {{ e.owner }} / {{ e.amountSpent }}
+  div(v-else) Loading data...
 </template>
 
 <script setup>
 import { useStorage } from '@vueuse/core'
 
 const web3Store = useWeb3Store()
-
 const events = ref([])
+const isDataLoaded = ref(false)
 const fillEvents = async () => {
   events.value = []
   // todo: add promise.all
@@ -27,6 +28,7 @@ const fillEvents = async () => {
   // const eventsSpentFound = await web3Store.getGiftsSpent()
 
   const [eventsAccruedFound, eventsSpentFound] = await Promise.all([web3Store.getGiftsAccrued(), web3Store.getGiftsSpent()])
+  isDataLoaded.value = true
 
   console.warn(1, eventsAccruedFound)
   console.warn(2, eventsSpentFound)
