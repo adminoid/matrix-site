@@ -1,7 +1,7 @@
 <template lang="pug">
 h3 GiftSpent
 .wrapper(v-if="events.length > 0")
-  h4 Your gifts spended by referrals
+  h4 Your gifts spent by referrals
   table.table.table-danger.table-striped
     thead
       tr

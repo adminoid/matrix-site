@@ -6,15 +6,20 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true,
   },
+
   css: [
     '@/assets/sass/global.sass',
   ],
+
   modules: [
     '@pinia/nuxt',
     '@vueuse/nuxt',
   ],
+
   pinia: {
     storesDirs: ['./stores/**'],
   },
+
   runtimeConfig: getRuntimeConfig(),
+  compatibilityDate: '2024-07-04',
 })

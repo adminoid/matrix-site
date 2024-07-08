@@ -11,7 +11,7 @@
         th Wallet
     tbody.table-spec__tbody
       tr(v-for="e in events")
-        td {{ e.user }}
+        td {{ e.matrixIndex }} / {{ e.amountAccrued }} / {{ e.spender }} / {{ e.owner }} / {{ e.amountSpent }}
 </template>
 
 <script setup>
@@ -20,33 +20,47 @@ import { useStorage } from '@vueuse/core'
 const web3Store = useWeb3Store()
 
 const events = ref([])
-// const total = ref(0)
-
 const fillEvents = async () => {
   events.value = []
-  const eventsFound = await web3Store.getWhoseOfUser()
-  // console.info('eventsFound')
-  // console.log(eventsFound)
-  // total.value = eventsFound.length
+  // todo: add promise.all
+  // const eventsAccruedFound = await web3Store.getGiftsAccrued()
+  // const eventsSpentFound = await web3Store.getGiftsSpent()
 
-  console.info('eventsFound . , .')
-  console.log(eventsFound)
+  const [eventsAccruedFound, eventsSpentFound] = await Promise.all([web3Store.getGiftsAccrued(), web3Store.getGiftsSpent()])
 
-  for (const eventFound of eventsFound) {
+  console.warn(1, eventsAccruedFound)
+  console.warn(2, eventsSpentFound)
+
+  for (const eventIndex in eventsAccruedFound) {
+    // console.log('eventIndex:', eventIndex)
+    // console.log('eventsAccruedFound -. ', eventsAccruedFound[eventIndex])
+    // console.log('eventsSpentFound -. ', eventsSpentFound[eventIndex])
+
+    // if (eventsAccruedFound[eventIndex]?.returnValues) {
+    //   console.info('isok eventsAccruedFound')
+    // } else {
+    //   console.info('isntok eventsAccruedFound')
+    // }
+    //
+    // if (eventsSpentFound[eventIndex]?.returnValues) {
+    //   console.info('isok eventsSpentFound')
+    // } else {
+    //   console.info('isntok eventsSpentFound')
+    // }
+
     events.value.push({
-      change: eventFound.returnValues.change,
-      whose: eventFound.returnValues.whose,
-      user: eventFound.returnValues.user,
+      matrixIndex: eventsAccruedFound[eventIndex]?.returnValues ? eventsAccruedFound[eventIndex].returnValues.matrixIndex : false,
+      amountAccrued: eventsAccruedFound[eventIndex]?.returnValues ? eventsAccruedFound[eventIndex].returnValues.amount : false,
+      spender: eventsSpentFound[eventIndex]?.returnValues ? eventsSpentFound[eventIndex].returnValues.spender : false,
+      owner: eventsSpentFound[eventIndex]?.returnValues ? eventsSpentFound[eventIndex].returnValues.owner : false,
+      amountSpent: eventsSpentFound[eventIndex]?.returnValues ? eventsSpentFound[eventIndex].returnValues.amount : false,
     })
   }
 }
 
-onMounted(async () => {
-  setTimeout(async ()=>{
-    await fillEvents()
-  }, 7000)
+onMounted(() => {
+  fillEvents()
 })
-
 const storage = useStorage('connected-wallet', '')
 watch(storage, async () => {
   await fillEvents()
