@@ -14,7 +14,9 @@
     tbody.table-spec__tbody
       tr(v-for="event in events")
         td {{ event }}
-        td(v-if="event.isAccrued && !event.isSpent") {{ stages.accrued_not_spent }}
+        td(v-if="!event.isAccrued") {{ stages.not_accrued }}
+        td(v-else-if="event.isAccrued && !event.isSpent") {{ stages.accrued_not_spent }}
+        td(v-else) {{ stages.accrued_and_spent }}
   div(v-else) Loading data...
 </template>
 
@@ -36,32 +38,37 @@ const fillEvents = async () => {
   console.warn(1, eventsAccruedFound)
   console.warn(2, eventsSpentFound)
 
-  if (eventsAccruedFound.length === 0) {
-    events.value = [
-      {
-        isAccrued: false,
-        isSpent: false,
-      },
-      {
-        isAccrued: false,
-        isSpent: false,
-      }
-    ]
-  } else {
+  events.value = [
+    {
+      isAccrued: false,
+      isSpent: false,
+    },
+    {
+      isAccrued: false,
+      isSpent: false,
+    }
+  ]
+
+  if (eventsAccruedFound.length > 0) {
     for (const eventIndex in eventsAccruedFound) {
       if (eventsAccruedFound[eventIndex]) {
-        let insertValue = {
+        console.info('events.value[eventIndex]events.value[eventIndex]events.value[eventIndex]')
+        console.log(eventIndex)
+        // console.log(events.value)
+        // console.log(events.value[eventIndex])
+        events.value[eventIndex] = {
           isAccrued: true,
           isSpent: false,
           accrued: eventsAccruedFound[eventIndex]?.returnValues?.amount.toString()
         }
 
         if (eventsSpentFound[eventIndex]) {
-          insertValue.isSpent = true
-          insertValue.isSpent = true
-          insertValue.spender = eventsSpentFound[eventIndex]?.returnValues?.returnValues?.spender
+          events.value[eventIndex] = {
+            isAccrued: true,
+            isSpent: true,
+            spender: eventsSpentFound[eventIndex]?.returnValues?.returnValues?.spender
+          }
         }
-        events.value.push(insertValue)
       }
     }
   }
