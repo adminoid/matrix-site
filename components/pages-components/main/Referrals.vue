@@ -5,13 +5,16 @@
     .referrals__link-text https://givedream.io/?referrer=8fisnba4TMygvDTQsFAbHGEHTEs
     .referrals__link-copy
   .referrals__header.referrals__header_big Referrals
+  pre {{ events }}
   table.table-spec.table-dark.table-hover.table-spec__body-table(v-if="isDataLoaded")
     thead.table-spec__thead
       tr
         th Wallet
+        th Wallet
     tbody.table-spec__tbody
-      tr(v-for="e in events")
-        td {{ e.matrixIndex }} / {{ e.amountAccrued }} / {{ e.spender }} / {{ e.owner }} / {{ e.amountSpent }}
+      tr(v-for="event in events")
+        td {{ event }}
+        td(v-if="event.isAccrued && !event.isSpent") {{ stages.accrued_not_spent }}
   div(v-else) Loading data...
 </template>
 
@@ -19,45 +22,60 @@
 import { useStorage } from '@vueuse/core'
 
 const web3Store = useWeb3Store()
+const stages = {
+  not_accrued: 'Not accrued yet',
+  accrued_not_spent: 'Already accrued, but not spent',
+  accrued_and_spent: 'Already spent',
+}
 const events = ref([])
 const isDataLoaded = ref(false)
 const fillEvents = async () => {
-  events.value = []
-  // todo: add promise.all
-  // const eventsAccruedFound = await web3Store.getGiftsAccrued()
-  // const eventsSpentFound = await web3Store.getGiftsSpent()
-
   const [eventsAccruedFound, eventsSpentFound] = await Promise.all([web3Store.getGiftsAccrued(), web3Store.getGiftsSpent()])
   isDataLoaded.value = true
 
   console.warn(1, eventsAccruedFound)
   console.warn(2, eventsSpentFound)
 
-  for (const eventIndex in eventsAccruedFound) {
-    // console.log('eventIndex:', eventIndex)
-    // console.log('eventsAccruedFound -. ', eventsAccruedFound[eventIndex])
-    // console.log('eventsSpentFound -. ', eventsSpentFound[eventIndex])
+  if (eventsAccruedFound.length === 0) {
+    events.value = [
+      {
+        isAccrued: false,
+        isSpent: false,
+      },
+      {
+        isAccrued: false,
+        isSpent: false,
+      }
+    ]
+  } else {
+    for (const eventIndex in eventsAccruedFound) {
+      if (eventsAccruedFound[eventIndex]) {
+        let insertValue = {
+          isAccrued: true,
+          isSpent: false,
+          accrued: eventsAccruedFound[eventIndex]?.returnValues?.amount.toString()
+        }
 
-    // if (eventsAccruedFound[eventIndex]?.returnValues) {
-    //   console.info('isok eventsAccruedFound')
-    // } else {
-    //   console.info('isntok eventsAccruedFound')
-    // }
-    //
-    // if (eventsSpentFound[eventIndex]?.returnValues) {
-    //   console.info('isok eventsSpentFound')
-    // } else {
-    //   console.info('isntok eventsSpentFound')
-    // }
-
-    events.value.push({
-      matrixIndex: eventsAccruedFound[eventIndex]?.returnValues ? eventsAccruedFound[eventIndex].returnValues.matrixIndex : false,
-      amountAccrued: eventsAccruedFound[eventIndex]?.returnValues ? eventsAccruedFound[eventIndex].returnValues.amount : false,
-      spender: eventsSpentFound[eventIndex]?.returnValues ? eventsSpentFound[eventIndex].returnValues.spender : false,
-      owner: eventsSpentFound[eventIndex]?.returnValues ? eventsSpentFound[eventIndex].returnValues.owner : false,
-      amountSpent: eventsSpentFound[eventIndex]?.returnValues ? eventsSpentFound[eventIndex].returnValues.amount : false,
-    })
+        if (eventsSpentFound[eventIndex]) {
+          insertValue.isSpent = true
+          insertValue.isSpent = true
+          insertValue.spender = eventsSpentFound[eventIndex]?.returnValues?.returnValues?.spender
+        }
+        events.value.push(insertValue)
+      }
+    }
   }
+
+
+  // for (const eventIndex in eventsAccruedFound) {
+  //   if (eventIndex <= 1) {
+  //     events.value[eventIndex].amountAccrued = eventsAccruedFound[eventIndex]?.returnValues?.amount.toString() ? eventsAccruedFound[eventIndex].returnValues?.amount.toString() : false
+  //     events.value[eventIndex].spender = eventsSpentFound[eventIndex]?.returnValues?.returnValues?.spender ? eventsSpentFound[eventIndex].returnValues?.spender : false
+  //     events.value[eventIndex].owner = eventsSpentFound[eventIndex]?.returnValues?.owner ? eventsSpentFound[eventIndex].returnValues?.owner : false
+  //     events.value[eventIndex].amountSpent = eventsSpentFound[eventIndex]?.returnValues?.amountSpent ? eventsSpentFound[eventIndex].returnValues?.amountSpent : false
+  //   }
+  // }
+
 }
 
 onMounted(() => {
