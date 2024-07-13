@@ -3,9 +3,7 @@
   .col
     .my-rewards__header My rewards
     .my-rewards__table
-      .row.mb-2
-        .col-10 Accounts are connected via referral link
-        .col-2.text-end 42
+      my-rewards-referrals
       .row.mb-2
         .col-10 Amount of BNB received to the wallet
         .col-2.text-end 42
@@ -31,6 +29,10 @@
             .col
               button.btn.btn-outline-light.personal-account__button.w-100 Claim BNB
 </template>
+
+<script setup>
+import MyRewardsReferrals from '~/components/pages-components/main/MyRewardsReferrals.vue'
+</script>
 
 <style lang="sass">
 .my-rewards
