@@ -7,32 +7,23 @@
 
 <script setup>
 import { useStorage } from '@vueuse/core'
-// import { ethers } from 'ethers'
-import BigNumber from "bignumber.js"
 
 const web3Store = useWeb3Store()
 const totalBnb = ref(0)
 const isLoaded = ref(false)
 const fillEvents = async () => {
   const eventsFound = await web3Store.getClaimsAppear()
-
   let lastAmount
   for (const evt of eventsFound) {
-    const result = new BigNumber(new BigNumber(evt.returnValues.newValue).toNumber() / (new BigNumber(10**18)))
-    lastAmount = result.toNumber()
+    lastAmount = evt.returnValues.newValue
   }
-
-  // totalBnb.value = ethers.toWei(String(lastAmount), "ether")
-
+  lastAmount = Number(lastAmount) / 10**18
   totalBnb.value = lastAmount
-  console.log(totalBnb.value)
   isLoaded.value = true
 }
 
 onMounted(async () => {
-  setTimeout(async ()=>{
-    await fillEvents()
-  }, 7000)
+  await fillEvents()
 })
 
 const storage = useStorage('connected-wallet', '')

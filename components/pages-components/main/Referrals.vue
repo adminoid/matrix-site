@@ -39,10 +39,6 @@ const isDataLoaded = ref(false)
 const fillEvents = async () => {
   const [eventsAccruedFound, eventsSpentFound] = await Promise.all([web3Store.getGiftsAccrued(), web3Store.getGiftsSpent()])
   isDataLoaded.value = true
-
-  console.warn(1, eventsAccruedFound)
-  console.warn(2, eventsSpentFound)
-
   events.value = [
     {
       isAccrued: false,
@@ -77,17 +73,6 @@ const fillEvents = async () => {
       }
     }
   }
-
-
-  // for (const eventIndex in eventsAccruedFound) {
-  //   if (eventIndex <= 1) {
-  //     events.value[eventIndex].amountAccrued = eventsAccruedFound[eventIndex]?.returnValues?.amount.toString() ? eventsAccruedFound[eventIndex].returnValues?.amount.toString() : false
-  //     events.value[eventIndex].spender = eventsSpentFound[eventIndex]?.returnValues?.returnValues?.spender ? eventsSpentFound[eventIndex].returnValues?.spender : false
-  //     events.value[eventIndex].owner = eventsSpentFound[eventIndex]?.returnValues?.owner ? eventsSpentFound[eventIndex].returnValues?.owner : false
-  //     events.value[eventIndex].amountSpent = eventsSpentFound[eventIndex]?.returnValues?.amountSpent ? eventsSpentFound[eventIndex].returnValues?.amountSpent : false
-  //   }
-  // }
-
 }
 
 onMounted(() => {
