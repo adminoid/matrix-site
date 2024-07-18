@@ -272,20 +272,13 @@ export class External extends Network implements IExternal {
 
   async getWhoseOfUser () {
 
-    console.info("before test")
-    console.log(this.Wallet.value)
-
-    const test = await this.Core.getPastEvents('WhoseRegistered', {
+    return await this.Core.getPastEvents('WhoseRegistered', {
       filter: {
         whose: this.Wallet.value,
       },
       fromBlock: 0,
       toBlock: 'latest',
     })
-
-    console.info('classes')
-    console.log(test)
-    return test
   }
 
   async getReferralEarn () {
