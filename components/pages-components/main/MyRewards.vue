@@ -4,13 +4,8 @@
     .my-rewards__header My rewards
     .my-rewards__table
       my-rewards-referrals
+      my-rewards-below-two
       my-rewards-claims
-      .row.mb-2
-        .col-10 Amount of BNB received to the wallet
-        .col-2.text-end 42
-      .row.mb-2
-        .col-10 Amount of BNB received to the withdrawal (Matrices)
-        .col-2.text-end 42
       .row.mb-2
         .col-10 Amount of BNB received to the withdrawal (Referral)
         .col-2.text-end 42
@@ -34,6 +29,7 @@
 <script setup>
 import MyRewardsReferrals from '~/components/pages-components/main/MyRewardsReferrals.vue'
 import MyRewardsClaims from '~/components/pages-components/main/MyRewardsClaims.vue'
+import MyRewardsBelowTwo from "~/components/pages-components/main/MyRewardsBelowTwo.vue";
 </script>
 
 <style lang="sass">

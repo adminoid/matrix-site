@@ -77,6 +77,16 @@ export const useWeb3Store = defineStore('web3_store', () => {
         }
     }
 
+    const getBelowTwoAppear = async () => {
+        if ($B.Wallet.value) {
+            const resp = await $B.getBelowTwoAppear()
+            if (resp) {
+                return resp
+            }
+            return false
+        }
+    }
+
     const getClaimSpent = async () => {
         if ($B.Wallet.value) {
             const resp = await $B.getClaimSpent()
@@ -165,6 +175,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
         getWhoseOfUser,
         getReferralEarn,
         getClaimsAppear,
+        getBelowTwoAppear,
         getClaimSpent,
         getGiftsAccrued,
         getGiftsSpent,

@@ -308,6 +308,16 @@ export class External extends Network implements IExternal {
     })
   }
 
+  async getBelowTwoAppear () {
+    return await this.Core.getPastEvents('BelowTwoAppear', {
+      filter: {
+        receiver: this.Wallet.value,
+      },
+      fromBlock: 0,
+      toBlock: 'latest',
+    })
+  }
+
   async getClaimSpent () {
     return await this.Core.getPastEvents('ClaimsSpent', {
       filter: {

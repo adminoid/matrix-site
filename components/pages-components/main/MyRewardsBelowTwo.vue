@@ -1,6 +1,6 @@
 <template lang="pug">
 .my-rewards-referrals.row.mb-2
-  .col-10 Amount of BNB received to the withdrawal (Matrices)
+  .col-10 Amount of BNB received to the wallet
   .col-2.text-end(v-if="isLoaded") {{ totalBnb }}
   .col-2.text-end(v-else) Loading...
 </template>
@@ -12,13 +12,17 @@ const web3Store = useWeb3Store()
 const totalBnb = ref(0)
 const isLoaded = ref(false)
 const fillEvents = async () => {
-  const eventsFound = await web3Store.getClaimsAppear()
-  let lastAmount
-  for (const evt of eventsFound) {
-    lastAmount = evt.returnValues.newValue
+  const eventsFound = await web3Store.getBelowTwoAppear()
+  let amount = 0n
+  if (eventsFound.length > 0) {
+    for (const evt of eventsFound) {
+      amount = amount + evt?.returnValues.amount
+    }
+  } else {
+    amount = 0
   }
-  lastAmount = Number(lastAmount) / 10**18
-  totalBnb.value = lastAmount
+
+  totalBnb.value = Number(amount) / 10**18
   isLoaded.value = true
 }
 
