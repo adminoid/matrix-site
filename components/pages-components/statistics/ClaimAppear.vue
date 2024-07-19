@@ -1,7 +1,7 @@
 <template lang="pug">
 h3 ClaimAppear
 .wrapper(v-if="events.length > 0")
-  h4 Your claims appear
+  h4 Your claim balance appear
   table.table.table-success.table-striped
     thead
       tr

@@ -167,6 +167,8 @@ export const useWeb3Store = defineStore('web3_store', () => {
         return wallets
     }
 
+    const withdrawClaims = async amount => await withdrawClaims(amount)
+
     return {
         connectWallet,
         checkRegister,
@@ -182,6 +184,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
         getDescendants,
         getUserData,
         getFirstUsers,
+        withdrawClaims,
     }
 })
 

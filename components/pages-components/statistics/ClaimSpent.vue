@@ -1,7 +1,7 @@
 <template lang="pug">
 h3 ClaimSpent
 .wrapper(v-if="events.length > 0")
-  h4 Your claims was spent
+  h4 Your claim funds was spent
   table.table.table-success.table-striped
     thead
       tr

@@ -11,17 +11,7 @@
         .col-10 Amount of BNB debited from withdrawal
         .col-2.text-end 42
   .col
-    .my-rewards__form.mt-3.mt-md-0
-      .row.mb-2
-        .col-10.mb-3 Account balance
-        .col-2.text-end 42
-        br
-        form
-          label.form-label(for="rewards") Rewards
-          input.form-control.mb-4(name="rewards" id="rewards")
-          .row
-            .col
-              button.btn.btn-outline-light.personal-account__button.w-100 Claim BNB
+    my-rewards-claim-form
 </template>
 
 <script setup>
@@ -29,6 +19,7 @@ import MyRewardsReferrals from '~/components/pages-components/main/MyRewardsRefe
 import MyRewardsClaims from '~/components/pages-components/main/MyRewardsClaims.vue'
 import MyRewardsBelowTwo from "~/components/pages-components/main/MyRewardsBelowTwo.vue";
 import MyRewardsClaimsReferrals from "~/components/pages-components/main/MyRewardsClaimsReferrals.vue";
+import MyRewardsClaimForm from "~/components/pages-components/main/MyRewardsClaimForm.vue";
 </script>
 
 <style lang="sass">
@@ -47,8 +38,4 @@ import MyRewardsClaimsReferrals from "~/components/pages-components/main/MyRewar
     line-height: 24px
     margin-bottom: 24px
     color: white
-  &__form
-    background-color: #1C1A2E
-    padding: 10px
-    border-radius: .5rem
 </style>

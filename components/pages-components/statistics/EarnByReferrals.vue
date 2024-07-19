@@ -1,7 +1,7 @@
 <template lang="pug">
 h3 EarnByReferrals
 .wrapper(v-if="events.length > 0")
-  h4 Your claims earned by descendants
+  h4 Your claim balance top up by descendants
   table.table.table-success.table-striped
     thead
       tr
