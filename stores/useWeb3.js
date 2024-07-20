@@ -1,4 +1,5 @@
 import {defineStore} from "pinia";
+import {core} from "web3";
 
 export const useWeb3Store = defineStore('web3_store', () => {
     const { $B } = useNuxtApp()
@@ -15,9 +16,6 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const connectWallet = async () => {
-
-        console.info('connectWallet.!? 2')
-
         await $B.connect()
         await checkConnected()
     }
@@ -44,10 +42,6 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getWhoseOfUser = async () => {
-
-        console.info("$B.Wallet.value")
-        console.log($B.Wallet.value)
-
         if ($B.Wallet.value) {
             const resp = await $B.getWhoseOfUser()
             if (resp) {
@@ -169,6 +163,16 @@ export const useWeb3Store = defineStore('web3_store', () => {
 
     const withdrawClaims = async amount => await withdrawClaims(amount)
 
+    const getCoreUserClaimBalance = async () => {
+        if (coreUser) {
+            return coreUser ? coreUser : false
+        }
+
+        // getting coreUser from SC
+        const coreUserLocal = await $B.getUserFromCore()
+        return coreUserLocal.claims
+    }
+
     return {
         connectWallet,
         checkRegister,
@@ -185,6 +189,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
         getUserData,
         getFirstUsers,
         withdrawClaims,
+        getCoreUserClaimBalance,
     }
 })
 
