@@ -7,9 +7,7 @@
       my-rewards-below-two
       my-rewards-claims
       my-rewards-claims-referrals
-      .row.mb-2
-        .col-10 Amount of BNB debited from withdrawal
-        .col-2.text-end 42
+      my-rewards-withdraws
   .col
     my-rewards-claim-form
 </template>
@@ -20,6 +18,7 @@ import MyRewardsClaims from '~/components/pages-components/main/MyRewardsClaims.
 import MyRewardsBelowTwo from "~/components/pages-components/main/MyRewardsBelowTwo.vue";
 import MyRewardsClaimsReferrals from "~/components/pages-components/main/MyRewardsClaimsReferrals.vue";
 import MyRewardsClaimForm from "~/components/pages-components/main/MyRewardsClaimForm.vue";
+import MyRewardsWithdraws from "~/components/pages-components/main/MyRewardsWithdraws.vue";
 </script>
 
 <style lang="sass">

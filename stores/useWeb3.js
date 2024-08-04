@@ -173,6 +173,16 @@ export const useWeb3Store = defineStore('web3_store', () => {
         return coreUserLocal.claims
     }
 
+    const getWithdraws = async () => {
+        if ($B.Wallet.value) {
+            const resp = await $B.getWithdraws()
+            if (resp) {
+                return resp
+            }
+            return false
+        }
+    }
+
     return {
         connectWallet,
         checkRegister,
@@ -190,6 +200,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
         getFirstUsers,
         withdrawClaims,
         getCoreUserClaimBalance,
+        getWithdraws,
     }
 })
 
