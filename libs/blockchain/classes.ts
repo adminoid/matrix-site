@@ -5,7 +5,7 @@ import type {
   ICommon, IExternal, INetwork
 } from '@/libs/blockchain/types'
 
-import CoreJson from '~/artifacts/contracts/Core.sol/Core.json'
+import CoreJson from '~/artifacts/contracts/Core.json'
 
 class Config {
   private static _instance: any
@@ -349,6 +349,11 @@ export class External extends Network implements IExternal {
       fromBlock: 0,
       toBlock: 'latest',
     })
+  }
+
+  async getTotalFromMatrix (matrixIndex: number) {
+    return  await this.Core.methods.getTotalFromMatrix(matrixIndex)
+        .call({from: this.Wallet.value})
   }
 
   async GetCoreUserByMatrixPosition (level: number | string, userIndex: number | string): Promise<void|boolean> {

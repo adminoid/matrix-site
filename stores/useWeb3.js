@@ -183,6 +183,14 @@ export const useWeb3Store = defineStore('web3_store', () => {
         }
     }
 
+    const getTotalFromMatrix = async (matrixIndex) => {
+        const resp = await $B.getTotalFromMatrix(matrixIndex)
+        if (resp) {
+            return resp
+        }
+        return false
+    }
+
     return {
         connectWallet,
         checkRegister,
@@ -201,6 +209,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
         withdrawClaims,
         getCoreUserClaimBalance,
         getWithdraws,
+        getTotalFromMatrix,
     }
 })
 

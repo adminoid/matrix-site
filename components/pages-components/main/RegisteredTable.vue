@@ -13,6 +13,17 @@
           .pink-num {{ k }}
 </template>
 
+<script setup>
+const web3Store = useWeb3Store()
+onMounted(async () => {
+  console.info('bef cycle')
+  for (const index in [...Array(20).keys()]) {
+    const total = await web3Store.getTotalFromMatrix(index)
+    console.log(index, '). ', Number(total))
+  }
+})
+</script>
+
 <style lang="sass">
 .registered-table
   &__header
