@@ -118,23 +118,82 @@ export const useWeb3Store = defineStore('web3_store', () => {
         // parent: 0n
         // plateau: 1n
         const matrixData = []
-        if (coreUser) {
-            const maxLevel = Number(coreUser.level)
-            for (let i = 0; i < maxLevel; i++) {
-                // response from getMatrixUser() contains user and total
-                const matrixReceivedData = await $B.getMatrixUser(i)
-                matrixData[i] = {
-                    user: {
-                        index: Number(matrixReceivedData.user.index),
-                        isRight: matrixReceivedData.user.isRight,
-                        isValue: matrixReceivedData.user.isValue,
-                        parent: Number(matrixReceivedData.user.parent),
-                        plateau: Number(matrixReceivedData.user.plateau),
-                    },
-                    total: Number(matrixReceivedData.total),
+        if (!coreUser) {
+            await checkRegister()
+        }
+
+        const maxLevel = Number(coreUser.level)
+
+        // todo -- check i <= maxLevel
+        for (let i = 0; i < maxLevel; i++) {
+            // response from getMatrixUser() contains user and total
+            const matrixReceivedData = await $B.getMatrixUser(i)
+
+            const userIndex = Number(matrixReceivedData?.user.index)
+            console.info("userIndex", userIndex) // 7
+
+            const lastIndex = Number(matrixReceivedData?.total) - 1
+            console.info("lastIndex", lastIndex) // 80
+
+            // todo: calc down * 2 children, repeat levelsDown times
+            // calculate child level left (first) item
+            // (X*2)+1=Y [(9*2)+1=19] (left/first)
+
+            console.group('LOOP')
+
+            let leftChild = (userIndex * 2) + 1
+            let rightChild = (userIndex * 2) + 2
+            console.info('leftChild Start', leftChild)
+            console.info('rightChild Start', rightChild)
+
+            const levels = []
+            levels.push({
+                left: leftChild,
+                right: rightChild,
+            })
+            while (rightChild < lastIndex) {
+
+                leftChild = (leftChild * 2) + 1
+                rightChild = (rightChild * 2) + 2
+
+                // todo: check right is more or less lastIndex
+                //  if less than lastIndex, use lastIndex as right border
+                //  if more than lastIndex go to next iteration
+
+                if (rightChild >= lastIndex) {
+                    rightChild = lastIndex
+                }
+
+                console.warn(leftChild, '<', lastIndex)
+                console.warn(leftChild < lastIndex)
+
+                if (leftChild < lastIndex) {
+                    levels.push({
+                        left: leftChild,
+                        right: rightChild,
+                    })
                 }
             }
+
+            // console.info('leftChild, rightChild')
+            // console.log(leftChild, rightChild)
+            console.log(levels)
+
+            console.groupEnd()
+            console.info('while ended..')
+
+            matrixData[i] = {
+                user: {
+                    index: Number(matrixReceivedData?.user.index),
+                    isRight: matrixReceivedData?.user.isRight,
+                    isValue: matrixReceivedData?.user.isValue,
+                    parent: Number(matrixReceivedData?.user.parent),
+                    plateau: Number(matrixReceivedData?.user.plateau),
+                },
+                total: Number(matrixReceivedData?.total),
+            }
         }
+
         return matrixData
     }
 
@@ -144,9 +203,13 @@ export const useWeb3Store = defineStore('web3_store', () => {
         if (coreUser) {
             const matrixUser = await $B.getMatrixUser(0)
             if (matrixUser) {
+
+                console.info('maxLevel is.2.')
+                console.log(matrixUser)
+
                 return {
                     core: coreUser,
-                    matrix: matrixUser.user,
+                    matrix: matrixUser?.user,
                 }
             }
         }

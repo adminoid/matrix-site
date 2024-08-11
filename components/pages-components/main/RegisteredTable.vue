@@ -14,13 +14,17 @@
 </template>
 
 <script setup>
+
+// TODO:
+//  1. getting connected wallet id from each matrix
+//  2. getting last user in matrix that lower than id
+//  3. calculate each (of 5) level filled with last user id
+
 const web3Store = useWeb3Store()
 onMounted(async () => {
-  console.info('bef cycle')
-  for (const index in [...Array(20).keys()]) {
-    const total = await web3Store.getTotalFromMatrix(index)
-    console.log(index, '). ', Number(total))
-  }
+  console.warn('onMounted RegisteredTable')
+  const data = await web3Store.getDescendants()
+  console.log(data)
 })
 </script>
 
