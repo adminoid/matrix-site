@@ -129,11 +129,13 @@ export const useWeb3Store = defineStore('web3_store', () => {
             // response from getMatrixUser() contains user and total
             const matrixReceivedData = await $B.getMatrixUser(i)
 
-            const userIndex = Number(matrixReceivedData?.user.index)
+            // const userIndex = Number(matrixReceivedData?.user.index)
+            const userIndex = 8
             console.info("userIndex", userIndex) // 7
 
-            const lastIndex = Number(matrixReceivedData?.total) - 1
-            console.info("lastIndex", lastIndex) // 80
+            // const lastIndex = Number(matrixReceivedData?.total) - 1
+            const lastIndex = 75
+            console.info("lastIndex", lastIndex) // 80 - 1
 
             // todo: calc down * 2 children, repeat levelsDown times
             // calculate child level left (first) item
@@ -143,13 +145,16 @@ export const useWeb3Store = defineStore('web3_store', () => {
 
             let leftChild = (userIndex * 2) + 1
             let rightChild = (userIndex * 2) + 2
-            console.info('leftChild Start', leftChild)
-            console.info('rightChild Start', rightChild)
+            // console.info('leftChild Start', leftChild)
+            // console.info('rightChild Start', rightChild)
 
             const levels = []
+            const levelsChildCount = rightChild - leftChild + 1
+            // console.info('levelsChildCount0', levelsChildCount)
             levels.push({
                 left: leftChild,
                 right: rightChild,
+                count: levelsChildCount,
             })
             while (rightChild < lastIndex) {
 
@@ -160,17 +165,21 @@ export const useWeb3Store = defineStore('web3_store', () => {
                 //  if less than lastIndex, use lastIndex as right border
                 //  if more than lastIndex go to next iteration
 
-                if (rightChild >= lastIndex) {
+                if (rightChild > lastIndex) {
                     rightChild = lastIndex
                 }
 
-                console.warn(leftChild, '<', lastIndex)
-                console.warn(leftChild < lastIndex)
+                // console.warn(leftChild, '<=', lastIndex)
+                // console.warn(leftChild <= lastIndex)
 
-                if (leftChild < lastIndex) {
+                if (leftChild <= lastIndex) {
+                    const levelsChildCount = rightChild - leftChild + 1
+                    console.info('levelsChildCount1', levelsChildCount)
+
                     levels.push({
                         left: leftChild,
                         right: rightChild,
+                        count: levelsChildCount,
                     })
                 }
             }
