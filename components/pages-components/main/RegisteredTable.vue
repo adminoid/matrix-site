@@ -1,7 +1,10 @@
 <template lang="pug">
 .registered-table.table-responsive
   .registered-table__header Accounts registered in the structure
-  table.table-spec.table.table-responsive.table-spec_strip.table-dark.table-hover.table-spec__body-table
+  table.table-spec__body-table(
+    class="table-spec table table-responsive table-spec_strip table-dark table-hover"
+    v-if="isLoaded"
+  )
     thead.table-spec__thead
       tr
         th(scope="col") Matrix
@@ -10,7 +13,9 @@
       tr(v-for="j in 5" :key="j")
         td lvl {{ j }}
         td(v-for="k in 20")
-          .pink-num {{ k }}
+          .pink-num(v-if="tableData[k - 1]?.levels") {{ tableData[k - 1]?.levels[j - 1]?.count }}
+          .pink-num(v-else)
+  div(v-else) Loading...
 </template>
 
 <script setup>
@@ -20,11 +25,23 @@
 //  2. getting last user in matrix that lower than id
 //  3. calculate each (of 5) level filled with last user id
 
+import {useStorage} from "@vueuse/core";
+
+const isLoaded = ref(false)
+const fillUserTable = async () => {
+  tableData.value = await web3Store.getDescendants()
+  isLoaded.value = true
+}
+
 const web3Store = useWeb3Store()
+const tableData = ref([])
 onMounted(async () => {
-  console.warn('onMounted RegisteredTable')
-  const data = await web3Store.getDescendants()
-  console.log(data)
+  await fillUserTable()
+})
+
+const storage = useStorage('connected-wallet', '')
+watch(storage, async () => {
+  await fillUserTable()
 })
 </script>
 

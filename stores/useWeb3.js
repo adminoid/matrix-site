@@ -123,35 +123,28 @@ export const useWeb3Store = defineStore('web3_store', () => {
         }
 
         const maxLevel = Number(coreUser.level)
-
         // todo -- check i <= maxLevel
         for (let i = 0; i < maxLevel; i++) {
             // response from getMatrixUser() contains user and total
             const matrixReceivedData = await $B.getMatrixUser(i)
-
-            // const userIndex = Number(matrixReceivedData?.user.index)
-            const userIndex = 8
-            console.info("userIndex", userIndex) // 7
-
-            // const lastIndex = Number(matrixReceivedData?.total) - 1
-            const lastIndex = 75
-            console.info("lastIndex", lastIndex) // 80 - 1
+            const userIndex = Number(matrixReceivedData?.user.index)
+            const lastIndex = Number(matrixReceivedData?.total) - 1
 
             // todo: calc down * 2 children, repeat levelsDown times
             // calculate child level left (first) item
             // (X*2)+1=Y [(9*2)+1=19] (left/first)
 
-            console.group('LOOP')
-
             let leftChild = (userIndex * 2) + 1
             let rightChild = (userIndex * 2) + 2
-            // console.info('leftChild Start', leftChild)
-            // console.info('rightChild Start', rightChild)
 
-            const levels = []
+            const matrixDataLevels = {
+                matrixIndex: i,
+                userIndex,
+                lastIndex,
+                levels: [],
+            }
             const levelsChildCount = rightChild - leftChild + 1
-            // console.info('levelsChildCount0', levelsChildCount)
-            levels.push({
+            matrixDataLevels.levels.push({
                 left: leftChild,
                 right: rightChild,
                 count: levelsChildCount,
@@ -161,7 +154,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
                 leftChild = (leftChild * 2) + 1
                 rightChild = (rightChild * 2) + 2
 
-                // todo: check right is more or less lastIndex
+                // check right is more or less lastIndex
                 //  if less than lastIndex, use lastIndex as right border
                 //  if more than lastIndex go to next iteration
 
@@ -169,14 +162,9 @@ export const useWeb3Store = defineStore('web3_store', () => {
                     rightChild = lastIndex
                 }
 
-                // console.warn(leftChild, '<=', lastIndex)
-                // console.warn(leftChild <= lastIndex)
-
                 if (leftChild <= lastIndex) {
                     const levelsChildCount = rightChild - leftChild + 1
-                    console.info('levelsChildCount1', levelsChildCount)
-
-                    levels.push({
+                    matrixDataLevels.levels.push({
                         left: leftChild,
                         right: rightChild,
                         count: levelsChildCount,
@@ -184,38 +172,16 @@ export const useWeb3Store = defineStore('web3_store', () => {
                 }
             }
 
-            // console.info('leftChild, rightChild')
-            // console.log(leftChild, rightChild)
-            console.log(levels)
-
-            console.groupEnd()
-            console.info('while ended..')
-
-            matrixData[i] = {
-                user: {
-                    index: Number(matrixReceivedData?.user.index),
-                    isRight: matrixReceivedData?.user.isRight,
-                    isValue: matrixReceivedData?.user.isValue,
-                    parent: Number(matrixReceivedData?.user.parent),
-                    plateau: Number(matrixReceivedData?.user.plateau),
-                },
-                total: Number(matrixReceivedData?.total),
-            }
+            matrixData[i] = matrixDataLevels
         }
 
         return matrixData
     }
 
-    // todo -- add getUserFromCore and same with mat
-
     const getUserData = async () => {
         if (coreUser) {
             const matrixUser = await $B.getMatrixUser(0)
             if (matrixUser) {
-
-                console.info('maxLevel is.2.')
-                console.log(matrixUser)
-
                 return {
                     core: coreUser,
                     matrix: matrixUser?.user,
