@@ -231,7 +231,6 @@ export class External extends Network implements IExternal {
   }
 
   async getMatrixUser(level: number | string): Promise<void | boolean> {
-    console.info("getMatrixUser for level: " + level + " and wallet: " + this.Wallet.value)
     try {
       this.EmitDisabled(`getMatrixUser`, true)
       if (!this.Core || !this.Wallet.value) {
@@ -306,6 +305,16 @@ export class External extends Network implements IExternal {
       filter: {
         receiver: this.Wallet.value,
       },
+      fromBlock: 0,
+      toBlock: 'latest',
+    })
+  }
+
+  async getDirectTransfers () {
+    return await this.Core.getPastEvents('DirectTransfer', {
+      // filter: {
+      //   sender: this.Wallet.value,
+      // },
       fromBlock: 0,
       toBlock: 'latest',
     })

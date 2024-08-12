@@ -38,9 +38,6 @@ import ContractAddress from '~/components/ContractAddress.vue'
 
 const disabled = useDisabled()
 const { $B } = useNuxtApp()
-
-console.log($B)
-
 const amountValue = ref('')
 const error = ref('')
 watch(amountValue, async (newValue) => {

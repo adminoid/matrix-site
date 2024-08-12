@@ -53,10 +53,6 @@ const fillEvents = async () => {
   if (eventsAccruedFound.length > 0) {
     for (const eventIndex in eventsAccruedFound) {
       if (eventsAccruedFound[eventIndex]) {
-        console.info('events.value[eventIndex]events.value[eventIndex]events.value[eventIndex]')
-        console.log(eventIndex)
-        // console.log(events.value)
-        // console.log(events.value[eventIndex])
         events.value[eventIndex] = {
           isAccrued: true,
           isSpent: false,
