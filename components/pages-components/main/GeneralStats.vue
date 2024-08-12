@@ -2,10 +2,7 @@
 .general-stats.container
   .row.row-cols-1.row-cols-md-3
     .col.col-md-3
-      main-banner(
-        header="Registered accounts"
-        footer="24"
-      )
+      general-stats-accounts
     .col.col-md-6
       main-banner(
         header="Amount of BNB entered to the system"
@@ -32,4 +29,5 @@
 
 <script setup>
 import MainBanner from '~/components/pages-components/main/MainBanner.vue'
+import GeneralStatsAccounts from '~/components/pages-components/main/GeneralStatsAccounts.vue'
 </script>

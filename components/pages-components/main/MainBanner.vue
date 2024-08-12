@@ -16,7 +16,7 @@ import ContractAddress from '~/components/ContractAddress.vue'
 const props = defineProps({
   header: String,
   link: Boolean,
-  footer: String,
+  footer: Number | String,
   columns: {
     type: Array,
     required: false,
