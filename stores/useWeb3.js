@@ -81,10 +81,12 @@ export const useWeb3Store = defineStore('web3_store', () => {
         }
     }
 
+    let totalBnb
     const getDirectTransfers = async () => {
         if ($B.Wallet.value) {
             const resp = await $B.getDirectTransfers()
             if (resp) {
+                totalBnb = resp
                 return resp
             }
             return false
@@ -248,6 +250,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
         getReferralEarn,
         getClaimsAppear,
         getBelowTwoAppear,
+        totalBnb,
         getDirectTransfers,
         getClaimSpent,
         getGiftsAccrued,

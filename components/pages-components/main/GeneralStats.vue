@@ -3,13 +3,7 @@
   .row.row-cols-1.row-cols-md-3
     .col.col-md-3
       general-stats-accounts
-    .col.col-md-6
-      general-stats-transfers
-    .col.col-md-3
-      main-banner(
-        header="BTC equivalent of sent BNB that entered to the system"
-        footer="0.034"
-      )
+    general-stats-transfers
   .row.row-cols-1.row-cols-md-2
     .col
       main-banner(
