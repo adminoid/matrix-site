@@ -1,8 +1,9 @@
 <template lang="pug">
 .col
   main-banner(
+    v-if="isLoaded"
     header="Amount of BNB sent to farming and staking"
-    footer="0.034"
+    :footer="totalForId0"
   )
 </template>
 
@@ -24,6 +25,9 @@ const getTotalForId0 = async () => {
   console.warn(cnf.public.ID_ADDRESS_0)
 
   totalForId0.value = await web3Store.getIncomesForId(cnf.public.ID_ADDRESS_0)
+
+  console.warn(totalForId0.value)
+
   isLoaded.value = true
 }
 

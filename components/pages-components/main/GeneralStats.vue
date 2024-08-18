@@ -10,7 +10,7 @@
     .col
       main-banner(
         header="Amount of BTCB profit from farming and staking"
-        footer="0.034"
+        footer="0.000"
       )
 </template>
 

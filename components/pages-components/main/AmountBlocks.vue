@@ -11,12 +11,12 @@
       main-banner(
         header="Amount of BNB received from donation to help animals"
         link=true
-        footer="0.034"
+        footer="0.000"
       )
     .col
       main-banner(
         header="Amount of BNB sent to help animals"
-        :columns="[{ amount: 0.034, title: 'From a wallet id1'}, { amount: 0.034, title: 'From a wallet for donation'}]"
+        :columns="[{ amount: '0.000', title: 'From a wallet id1'}, { amount: '0.000', title: 'From a wallet for donation'}]"
       )
 </template>
 

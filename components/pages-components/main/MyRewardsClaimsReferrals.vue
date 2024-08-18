@@ -15,7 +15,7 @@ const fillEvents = async () => {
   const eventsFound = await web3Store.getReferralEarn()
   let amount = 0n
   for (const evt of eventsFound) {
-    amount += evt?.returnValues.amount
+    amount += evt?.returnValues.newValue
   }
   totalBnb.value = Number(amount) / 10**18
   isLoaded.value = true

@@ -30,7 +30,7 @@ const fillEvents = async () => {
   for (const eventFound of eventsFound) {
     events.value.push({
       user: eventFound.returnValues.user,
-      amount: eventFound.returnValues.amount,
+      amount: eventFound.returnValues.newValue,
     })
   }
 }

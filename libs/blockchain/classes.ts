@@ -326,7 +326,7 @@ export class External extends Network implements IExternal {
    */
   async getIncomesForId (wallet: string) {
 
-    console.warn('belowTwoEvents', wallet)
+    console.warn('belowTwoEvents wallet', wallet)
 
     const belowTwoEvents = await this.Core.getPastEvents('BelowTwoAppear', {
       filter: {
@@ -336,62 +336,47 @@ export class External extends Network implements IExternal {
       toBlock: 'latest',
     })
 
-    // const claimsAppearEvents = await this.Core.getPastEvents('ClaimsAppear', {
-    //   filter: {
-    //     owner: wallet,
-    //   },
-    //   fromBlock: 0,
-    //   toBlock: 'latest',
-    // })
-    //
-    // const claimsReferralEvents = await this.Core.getPastEvents('ReferralEarn', {
-    //   filter: {
-    //     user: wallet,
-    //   },
-    //   fromBlock: 0,
-    //   toBlock: 'latest',
-    // })
+    // todo: getting latest block number
+    // const latestBlock = await this.Web3.eth.getBlockNumber()
 
-    // todo: sum up belowTwoEvents + claimsAppearEvents amounts
-    console.log('belowTwoEvents:', belowTwoEvents) // todo: sum all
-    // console.log('claimsAppearEvents:', claimsAppearEvents) // todo: rewrite next by previous
-    // console.log('claimsReferralEvents:', claimsReferralEvents) // todo: rewrite next by previous
+    const claimsAppearEvents = await this.Core.getPastEvents('ClaimsAppear', {
+      filter: {
+        owner: wallet,
+      },
+      fromBlock: 0,
+      toBlock: 'latest',
+    })
+
+    const claimsReferralEvents = await this.Core.getPastEvents('ReferralEarn', {
+      filter: {
+        user: wallet,
+      },
+      fromBlock: 0,
+      toBlock: 'latest',
+    })
 
     const initialValue = 0n
+
     let sumBelowTwoAmount = (belowTwoEvents.length > 0)
-        ? belowTwoEvents.reduce((accumulator: any, current: any) => {
+        ? belowTwoEvents.reduce((accumulator: any, current: any) => BigInt(accumulator) + current?.returnValues?.amount, initialValue) : 0n
 
-          // console.info('sumBelowTwoAmount')
-          // console.info(current.returnValues.amount)
-          // console.info('matrixIndex;', current.returnValues.matrixIndex)
-          console.log('accumulator..', typeof accumulator, accumulator)
+    let sumClaimsAppearAmount = (claimsAppearEvents.length > 0)
+        ? claimsAppearEvents[claimsAppearEvents.length - 1]?.returnValues?.newValue
+        : 0n
 
-          console.log(typeof current.returnValues.amount, current.returnValues.amount)
-          return BigInt(accumulator) + current?.returnValues?.amount
-        }, initialValue) : 0n
+    let sumClaimsReferralAmount = (claimsReferralEvents.length > 0)
+        ? claimsReferralEvents[claimsReferralEvents.length - 1]?.returnValues?.newValue
+        : 0n
 
-    console.info('sumBelowTwoAmount', Number(sumBelowTwoAmount) / 10**18)
+    // console.log("uu", Number(sumBelowTwoAmount) / 10**18)
+    // console.log("yy", Number(sumClaimsAppearAmount) / 10**18)
+    // console.log("zz", Number(sumClaimsReferralAmount) / 10**18)
 
-    // let sumClaimsAppearAmount = (claimsAppearEvents.length > 0)
-    //     ? claimsAppearEvents.reduce((_: any, current: any) => {
-    //   console.info('claimsAppearEvents')
-    //   console.info(current.returnValues.newValue)
-    //   return current.returnValues.newValue;
-    // }) : false
-    //
-    // // todo: get last element
-    // let sumClaimsReferralAmount = (claimsReferralEvents.length > 0)
-    //     ? claimsReferralEvents.reduce((accumulator: any, current: any) => {
-    //   console.info('claimsReferralEvents')
-    //   console.info(current.returnValues.amount)
-    //   return current.returnValues.amount
-    // }) : false
-
-    console.log(sumBelowTwoAmount)
-    // console.log(sumClaimsAppearAmount)
-    // console.log(sumClaimsReferralAmount)
-
-    return 0
+    return Number(
+        sumBelowTwoAmount
+        + sumClaimsAppearAmount
+        + sumClaimsReferralAmount
+    ) / 10**18
   }
 
   async getClaimSpent () {
