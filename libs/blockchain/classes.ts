@@ -10,6 +10,7 @@ import CoreJson from '~/artifacts/contracts/Core.json'
 class Config {
   private static _instance: any
   CONTRACT_ADDRESS: string = ""
+  ID_ADDRESS_0: string = ""
   CHAIN_ID: string = ""
   CHAIN_NAME!: string
   RPC_URL!: string
@@ -318,6 +319,70 @@ export class External extends Network implements IExternal {
       fromBlock: 0,
       toBlock: 'latest',
     })
+  }
+
+  /**
+   * @param wallet - wallet address of id0, id1 or another
+   */
+  async getIncomesForId (wallet: string) {
+
+    const belowTwoEvents = await this.Core.getPastEvents('BelowTwoAppear', {
+      filter: {
+        receiver: wallet,
+      },
+      fromBlock: 'latest',
+      toBlock: 'latest',
+    })
+
+    const claimsAppearEvents = await this.Core.getPastEvents('ClaimsAppear', {
+      filter: {
+        owner: wallet,
+      },
+      fromBlock: 0,
+      toBlock: 'latest',
+    })
+
+    const claimsReferralEvents = await this.Core.getPastEvents('ReferralEarn', {
+      filter: {
+        user: wallet,
+      },
+      fromBlock: 0,
+      toBlock: 'latest',
+    })
+
+    // todo: sum up belowTwoEvents + claimsAppearEvents amounts
+    console.warn('belowTwoEvents + claimsAppearEvents + claimsReferralEvents')
+    console.log('belowTwoEvents:', belowTwoEvents) // todo: sum all
+    console.log('claimsAppearEvents:', claimsAppearEvents) // todo: rewrite next by previous
+    console.log('claimsReferralEvents:', claimsReferralEvents) // todo: rewrite next by previous
+
+    let sumBelowTwoAmount = (belowTwoEvents.length > 0)
+        ? belowTwoEvents.reduce((accumulator: any, current: any) => {
+          console.info('sumBelowTwoAmount')
+          console.info(current.returnValues.amount)
+          return current.returnValues.amount + accumulator
+        }) : 0
+
+    let sumClaimsAppearAmount = (claimsAppearEvents.length > 0)
+        ? claimsAppearEvents.reduce((_: any, current: any) => {
+      console.info('claimsAppearEvents')
+      console.info(current.returnValues.newValue)
+      return current.returnValues.newValue;
+    }) : false
+
+    // todo: get last element
+    let sumClaimsReferralAmount = (claimsReferralEvents.length > 0)
+        ? claimsReferralEvents.reduce((accumulator: any, current: any) => {
+      console.info('claimsReferralEvents')
+      console.info(current.returnValues.amount)
+      return current.returnValues.amount
+    }) : false
+
+    console.log(sumBelowTwoAmount)
+    console.log(sumClaimsAppearAmount)
+    console.log(sumClaimsReferralAmount)
+
+    return 0
   }
 
   async getClaimSpent () {
