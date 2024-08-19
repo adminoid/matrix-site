@@ -20,14 +20,8 @@ const web3Store = useWeb3Store()
 const totalForId0 = ref(0)
 const isLoaded = ref(false)
 const getTotalForId0 = async () => {
-
   const cnf = useRuntimeConfig()
-  console.warn(cnf.public.ID_ADDRESS_0)
-
   totalForId0.value = await web3Store.getIncomesForId(cnf.public.ID_ADDRESS_0)
-
-  console.warn(totalForId0.value)
-
   isLoaded.value = true
 }
 

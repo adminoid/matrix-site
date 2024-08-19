@@ -31,6 +31,10 @@ export default () => ({
             (process.env.ID_ADDRESS_0)
                 ? process.env.ID_ADDRESS_0
                 : '0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65',
+        ID_ADDRESS_1:
+            (process.env.ID_ADDRESS_1)
+                ? process.env.ID_ADDRESS_1
+                : '0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc',
         CURRENCY_NAME:
             (process.env.CURRENCY_NAME)
                 ? process.env.CURRENCY_NAME
