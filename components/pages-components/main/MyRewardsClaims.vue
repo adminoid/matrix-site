@@ -18,7 +18,7 @@ const fillEvents = async () => {
     lastAmount = evt.returnValues.newValue
   }
   lastAmount = Number(lastAmount) / 10**18
-  totalBnb.value = lastAmount
+  totalBnb.value = lastAmount || 0
   isLoaded.value = true
 }
 
