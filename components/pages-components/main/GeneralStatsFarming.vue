@@ -1,7 +1,7 @@
 <template lang="pug">
 .col
   main-banner(
-    v-if="isLoaded"
+    :isShowed="isLoaded"
     header="Amount of BNB sent to farming and staking"
     :footer="totalForId0"
   )

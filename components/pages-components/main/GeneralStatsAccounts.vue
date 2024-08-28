@@ -1,10 +1,9 @@
 <template lang="pug">
 main-banner(
-  v-if="isLoaded"
+  :isShowed="isLoaded"
   header="Registered accounts"
   :footer="totalRegisteredAccounts"
 )
-div(v-else) Loading...
 </template>
 
 <script setup>

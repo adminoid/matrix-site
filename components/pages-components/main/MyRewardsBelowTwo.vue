@@ -2,7 +2,7 @@
 .my-rewards-referrals.row.mb-2
   .col-10 Amount of BNB received to the wallet
   .col-2.text-end(v-if="isLoaded") {{ totalBnb }}
-  .col-2.text-end(v-else) Loading...
+  .col-2.text-end(v-else) <i>Loading...</i>
 </template>
 
 <script setup>

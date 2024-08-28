@@ -1,6 +1,6 @@
 <template lang="pug">
 main-banner(
-  v-if="isLoaded"
+  :isShowed="isLoaded"
   header="Amount of BNB received from id1 to help animals"
   link=true
   :footer="totalForId1"

@@ -325,9 +325,6 @@ export class External extends Network implements IExternal {
    * @param wallet - wallet address of id0, id1 or another
    */
   async getIncomesForId (wallet: string) {
-
-    console.warn('belowTwoEvents wallet', wallet)
-
     const belowTwoEvents = await this.Core.getPastEvents('BelowTwoAppear', {
       filter: {
         receiver: wallet,
@@ -414,7 +411,7 @@ export class External extends Network implements IExternal {
       filter: {
         owner: this.Wallet.value,
       },
-      fromBlock: 0,
+      fromBlock: 43177620,
       toBlock: 'latest',
     })
   }

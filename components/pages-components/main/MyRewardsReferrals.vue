@@ -2,7 +2,7 @@
 .my-rewards-referrals.row.mb-2
   .col-10 Accounts are connected via referral link
   .col-2.text-end(v-if="isLoaded") {{ total }}
-  .col-2.text-end(v-else) Loading...
+  .col-2.text-end(v-else) <i>Loading...</i>
 </template>
 
 <script setup>

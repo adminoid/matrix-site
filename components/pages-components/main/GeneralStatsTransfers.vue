@@ -1,17 +1,17 @@
 <template lang="pug">
-template(v-if="isLoaded")
-  .col.col-md-6
-    main-banner(
-      header="Amount of BNB entered to the system"
-      link=true
-      :footer="totalAmountBnb + ' BNB'"
-    )
-  .col.col-md-3
-    main-banner(
-      header="BTC equivalent of sent BNB that entered to the system"
-      :footer="totalAmountBtc + ' BTC'"
-    )
-div(v-else) Loading...
+.col.col-md-6
+  main-banner(
+    :isShowed="isLoaded"
+    header="Amount of BNB entered to the system"
+    link=true
+    :footer="totalAmountBnb + ' BNB'"
+  )
+.col.col-md-3
+  main-banner(
+    :isShowed="isLoaded"
+    header="BTC equivalent of sent BNB that entered to the system"
+    :footer="totalAmountBtc + ' BTC'"
+  )
 </template>
 
 <script setup>

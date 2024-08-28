@@ -22,11 +22,13 @@
         template(v-else)
           td {{ stages.accrued_and_spent }}
           td {{ event.spender }}
-  div(v-else) Loading data...
+  div(v-else) <i>Is loading...</i>
 </template>
 
 <script setup>
 import { useStorage } from '@vueuse/core'
+
+// TODO: add placeholder to .referrals__link-text content and pass wallet address there
 
 const web3Store = useWeb3Store()
 const stages = {

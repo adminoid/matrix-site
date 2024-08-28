@@ -3,17 +3,19 @@
   .main-banner__header(v-if="isHasHeader") {{ header }}
   .main-banner__link(v-if="isHasLink")
     contract-address
-  .main-banner__footer(v-if="isHasFooter") {{ footer }}
-  .main-banner__columns(v-if="isHasColumns")
+  .main-banner__footer(v-if="isShowed && isHasFooter") {{ footer }}
+  .main-banner__columns(v-if="isShowed && isHasColumns")
     .row
       .col.px-4.d-flex.justify-content-between.flex-column(v-for="col in columns")
         .main-banner__columns-title.row {{ col.title }}
         .main-banner__columns-amount.row {{ col.amount }}
+  .main-banner__columns <i>Is loading...</i>
 </template>
 
 <script setup>
 import ContractAddress from '~/components/ContractAddress.vue'
 const props = defineProps({
+  isShowed: Boolean,
   header: String,
   link: Boolean,
   footer: Number | String,
