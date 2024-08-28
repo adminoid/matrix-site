@@ -1,5 +1,5 @@
 <template lang="pug">
-.personal-account
+.personal-account.ps-0
   form
     .personal-account__frame
       .personal-account__form
