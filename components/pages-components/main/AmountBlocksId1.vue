@@ -24,6 +24,7 @@ onMounted(async () => {
   await getTotalForId1()
 })
 
+// TODO replace storage
 const storage = useStorage('connected-wallet', '')
 watch(storage, async () => {
   await getTotalForId1()

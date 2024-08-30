@@ -6,8 +6,10 @@ button.btn.btn-cpink.main-button(
 </template>
 
 <script setup>
-import {useWeb3Store} from "~/stores/useWeb3.js";
-import { useStorage } from '@vueuse/core'
+import {useWeb3Store} from "~/stores/useWeb3.vue.js";
+// import { useStorage } from '@vueuse/core'
+
+// TODO remove useWeb3Store() everywhere, leave only in pages/main.vue
 
 const web3Store = useWeb3Store()
 const buttonText = ref('Connect')
@@ -16,6 +18,7 @@ const connectWallet = () => {
   // const storage = useStorage('connected-wallet', '')
 
   console.info('connectWallet.!? -1')
+  console.warn(web3Store)
 
   // console.log(storage.value)
   // if (storage.value) {

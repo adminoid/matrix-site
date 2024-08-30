@@ -80,7 +80,7 @@ import FirstUsers from '~/components/pages-components/statistics/FirstUsers.vue'
 import RegisterForm from '~/components/pages-components/statistics/RegisterForm.vue'
 import RegisterWhoseForm from '~/components/pages-components/statistics/RegisterWhoseForm.vue'
 
-import {useWeb3Store} from "~/stores/useWeb3.js";
+import {useWeb3Store} from "~/stores/useWeb3.vue.js";
 
 const web3Store = useWeb3Store()
 const isRegistered = ref(false)

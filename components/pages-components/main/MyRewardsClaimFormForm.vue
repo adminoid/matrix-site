@@ -23,7 +23,7 @@ const amountValue = ref(0)
 const error = ref('')
 
 const disabled = useDisabled()
-const { $B } = useNuxtApp()
+// const { $B } = useNuxtApp()
 
 watch(amountValue, async (newValue) => {
   await validateValue(newValue)

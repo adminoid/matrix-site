@@ -1,3 +1,7 @@
+/**
+ * What do I have?..
+ *  - 1.
+ */
 import Web3 from 'web3'
 
 import type {
@@ -46,9 +50,9 @@ class Common implements ICommon {
   Config: any
   Core: any
   Wallet: any
-  constructor (nuxt: any, storage: any) {
+  constructor (nuxt: any, walletData: any) {
     this.Nuxt = nuxt
-    this.Wallet = storage
+    this.Wallet = walletData
   }
   async init(globalThis: any) {
     if (!globalThis['ethereum']) {
@@ -104,8 +108,8 @@ class Common implements ICommon {
 }
 
 class Network extends Common implements INetwork {
-  constructor (nuxt: any, storage: any) {
-    super(nuxt, storage)
+  constructor (nuxt: any, walletData: any) {
+    super(nuxt, walletData)
   }
   private checkInstalledMetamask (): boolean {
     return Boolean(this.Ethereum && this.Ethereum.isMetaMask);
@@ -152,8 +156,8 @@ class Network extends Common implements INetwork {
 }
 
 export class External extends Network implements IExternal {
-  constructor (nuxt: any, storage: any) {
-    super(nuxt, storage)
+  constructor (nuxt: any, walletData: any) {
+    super(nuxt, walletData)
   }
 
   async connect (): Promise<void> {

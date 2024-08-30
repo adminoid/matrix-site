@@ -1,29 +1,46 @@
-import {defineStore} from "pinia";
+import {getGlobalThis} from "@vue/shared"
+import { External } from '~/libs/blockchain/classes'
 
-export const useWeb3Store = defineStore('web3_store', () => {
-    const { $B } = useNuxtApp()
-    // const connectedWallet = ref('')
+export const useWeb3Store = (() => {
+
+    const connectedWallet = ref('')
+    const coreUser = ref({})
+
+    watch(connectedWallet, async (newWallet) => {
+        console.info('watch connectedWallet -> newWallet')
+        console.log(newWallet)
+
+        // TODO: set walletData to coreUser and connected wallet address
+        // todo -- maybe move it in useWeb3Store?
+        const walletData = '0x0ABC...'
+        const $BC = new External(useNuxtApp(), walletData)
+        const glob = getGlobalThis()
+        await $BC.init(glob)
+    })
+
+    console.info('connectedWallet.11', connectedWallet.value)
+
     const checkConnected = async () => {
         // if mm is not installed
-        if (!$B.Ethereum) {
-            $B.Nuxt.$emit('disabled', {
+        if (!$BC.Ethereum) {
+            $BC.Nuxt.$emit('disabled', {
                 cause: 'Please install Metamask and reload the page 0',
                 status: true,
             })
         }
-        $B.Nuxt.$emit('update-whose')
+        $BC.Nuxt.$emit('update-whose')
     }
 
+    // todo: move to level up component
     const connectWallet = async () => {
-        await $B.connect()
+        await $BC.connect()
         await checkConnected()
     }
 
-    let coreUser
     const checkRegister = async () => {
-        if ($B.Wallet.value) {
-            coreUser = await $B.getUserFromCore()
-            if (coreUser) {
+        if ($BC.Wallet.value) {
+            coreUser.value = await $BC.getUserFromCore()
+            if (coreUser.value) {
                 return true
             }
         }
@@ -31,8 +48,8 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getAddressesGlobalTotal = async () => {
-        if ($B.Wallet.value) {
-            const resp = await $B.getAddressesGlobalTotal()
+        if ($BC.Wallet.value) {
+            const resp = await $BC.getAddressesGlobalTotal()
             if (resp) {
                 return resp
             }
@@ -41,8 +58,8 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getWhoseOfUser = async () => {
-        if ($B.Wallet.value) {
-            const resp = await $B.getWhoseOfUser()
+        if ($BC.Wallet.value) {
+            const resp = await $BC.getWhoseOfUser()
             if (resp) {
                 return resp
             }
@@ -51,8 +68,8 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getReferralEarn = async () => {
-        if ($B.Wallet.value) {
-            const resp = await $B.getReferralEarn()
+        if ($BC.Wallet.value) {
+            const resp = await $BC.getReferralEarn()
             if (resp) {
                 return resp
             }
@@ -61,8 +78,8 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getClaimsAppear = async () => {
-        if ($B.Wallet.value) {
-            const resp = await $B.getClaimsAppear()
+        if ($BC.Wallet.value) {
+            const resp = await $BC.getClaimsAppear()
             if (resp) {
                 return resp
             }
@@ -71,8 +88,8 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getBelowTwoAppear = async () => {
-        if ($B.Wallet.value) {
-            const resp = await $B.getBelowTwoAppear()
+        if ($BC.Wallet.value) {
+            const resp = await $BC.getBelowTwoAppear()
             if (resp) {
                 return resp
             }
@@ -82,8 +99,8 @@ export const useWeb3Store = defineStore('web3_store', () => {
 
     let totalBnb
     const getDirectTransfers = async () => {
-        if ($B.Wallet.value) {
-            const resp = await $B.getDirectTransfers()
+        if ($BC.Wallet.value) {
+            const resp = await $BC.getDirectTransfers()
             if (resp) {
                 totalBnb = resp
                 return resp
@@ -93,8 +110,8 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getClaimSpent = async () => {
-        if ($B.Wallet.value) {
-            const resp = await $B.getClaimSpent()
+        if ($BC.Wallet.value) {
+            const resp = await $BC.getClaimSpent()
             if (resp) {
                 return resp
             }
@@ -103,8 +120,8 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getGiftsAccrued = async () => {
-        if ($B.Wallet.value) {
-            const resp = await $B.getGiftsAccrued()
+        if ($BC.Wallet.value) {
+            const resp = await $BC.getGiftsAccrued()
             if (resp) {
                 return resp
             }
@@ -113,8 +130,8 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getIncomesForId = async (wallet) => {
-        if ($B.Wallet.value) {
-            const amount = await $B.getIncomesForId(wallet)
+        if ($BC.Wallet.value) {
+            const amount = await $BC.getIncomesForId(wallet)
             if (amount) {
                 return amount
             }
@@ -123,8 +140,8 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getGiftsSpent = async () => {
-        if ($B.Wallet.value) {
-            const resp = await $B.getGiftsSpent()
+        if ($BC.Wallet.value) {
+            const resp = await $BC.getGiftsSpent()
             if (resp) {
                 return resp
             }
@@ -133,21 +150,26 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getDescendants = async () => {
+
+        if (!connectedWallet.value) {
+            return false
+        }
         // index: 0n
         // isRight: false
         // isValue: true
         // parent: 0n
         // plateau: 1n
         const matrixData = []
-        if (!coreUser) {
-            await checkRegister()
-        }
+        // if (!coreUser.value) {
+        //     // todo: remove this. Get user data from store
+        //     await checkRegister()
+        // }
 
-        const maxLevel = Number(coreUser.level)
+        const maxLevel = Number(coreUser.value.level)
         // todo -- check i <= maxLevel
         for (let i = 0; i < maxLevel; i++) {
             // response from getMatrixUser() contains user and total
-            const matrixReceivedData = await $B.getMatrixUser(i)
+            const matrixReceivedData = await $BC.getMatrixUser(i)
             const userIndex = Number(matrixReceivedData?.user.index)
             const lastIndex = Number(matrixReceivedData?.total) - 1
 
@@ -200,11 +222,11 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getUserData = async () => {
-        if (coreUser) {
-            const matrixUser = await $B.getMatrixUser(0)
+        if (coreUser.value) {
+            const matrixUser = await $BC.getMatrixUser(0)
             if (matrixUser) {
                 return {
-                    core: coreUser,
+                    core: coreUser.value,
                     matrix: matrixUser?.user,
                 }
             }
@@ -215,7 +237,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
     const getFirstUsers = async (total) => {
         const wallets = []
         for (let i = 0; i < total; i++) {
-            wallets.push(await $B.getWalletByIndexFromMatrix(0, i))
+            wallets.push(await $BC.getWalletByIndexFromMatrix(0, i))
         }
         return wallets
     }
@@ -223,18 +245,19 @@ export const useWeb3Store = defineStore('web3_store', () => {
     const withdrawClaims = async amount => await withdrawClaims(amount)
 
     const getCoreUserClaimBalance = async () => {
-        if (coreUser) {
-            return coreUser ? coreUser : false
+        if (coreUser.value) {
+            return coreUser.value ? coreUser.value : false
         }
 
         // getting coreUser from SC
-        const coreUserLocal = await $B.getUserFromCore()
+        // todo: remove method, get user data from store in checkRegister() method in this file
+        const coreUserLocal = await $BC.getUserFromCore()
         return coreUserLocal.claims
     }
 
     const getWithdraws = async () => {
-        if ($B.Wallet.value) {
-            const resp = await $B.getWithdraws()
+        if ($BC.Wallet.value) {
+            const resp = await $BC.getWithdraws()
             if (resp) {
                 return resp
             }
@@ -243,7 +266,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     const getTotalFromMatrix = async (matrixIndex) => {
-        const resp = await $B.getTotalFromMatrix(matrixIndex)
+        const resp = await $BC.getTotalFromMatrix(matrixIndex)
         if (resp) {
             return resp
         }
@@ -251,6 +274,9 @@ export const useWeb3Store = defineStore('web3_store', () => {
     }
 
     return {
+        $BC,
+        coreUser,
+        connectedWallet,
         connectWallet,
         checkRegister,
         checkConnected,
@@ -274,5 +300,7 @@ export const useWeb3Store = defineStore('web3_store', () => {
         getIncomesForId,
     }
 })
+
+export default useWeb3Store
 
 // todo: when going to auth protected page - need to run authorization

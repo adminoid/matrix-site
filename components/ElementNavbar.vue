@@ -70,7 +70,7 @@ nav.navbar.navbar-cpink.navbar-expand-lg.bg-transparent
 
 <script setup>
 import { vOnClickOutside } from '@vueuse/components'
-import { useLayoutStore } from '~/stores/useLayout.js'
+import { useLayoutStore } from '~/stores/useLayout.pinia.js'
 import {
   breakpointsBootstrapV5,
   useBreakpoints,

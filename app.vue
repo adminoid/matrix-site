@@ -12,7 +12,7 @@ import {
   breakpointsBootstrapV5,
   useBreakpoints,
 } from '@vueuse/core'
-import { useLayoutStore } from '~/stores/useLayout.js'
+import { useLayoutStore } from '~/stores/useLayout.pinia.js'
 import { useRoute } from 'vue-router'
 import AlertModal from '~/components/AlertModal.vue'
 
