@@ -46,9 +46,9 @@ class Common implements ICommon {
   Config: any
   Core: any
   Wallet: any
-  constructor (nuxt: any, storage: any) {
+  constructor (nuxt: any, wallet: string) {
     this.Nuxt = nuxt
-    this.Wallet = storage
+    this.Wallet = wallet
   }
   async init(globalThis: any) {
     if (!globalThis['ethereum']) {
@@ -104,8 +104,8 @@ class Common implements ICommon {
 }
 
 class Network extends Common implements INetwork {
-  constructor (nuxt: any, storage: any) {
-    super(nuxt, storage)
+  constructor (nuxt: any, wallet: string) {
+    super(nuxt, wallet)
   }
   private checkInstalledMetamask (): boolean {
     return Boolean(this.Ethereum && this.Ethereum.isMetaMask);
@@ -152,8 +152,8 @@ class Network extends Common implements INetwork {
 }
 
 export class External extends Network implements IExternal {
-  constructor (nuxt: any, storage: any) {
-    super(nuxt, storage)
+  constructor (nuxt: any, wallet: string) {
+    super(nuxt, wallet)
   }
 
   async connect (): Promise<void> {
@@ -177,6 +177,9 @@ export class External extends Network implements IExternal {
   }
 
   async getUserFromCore (): Promise<void | boolean> {
+    console.info('getUserFromCore classes.ts')
+    console.log('this.Wallet.value -> ', this.Wallet.value)
+
     if (!this.Wallet.value) {
       this.ThrowAlert('danger', 'Please connect Metamask')
     } else {

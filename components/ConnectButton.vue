@@ -7,23 +7,22 @@ button.btn.btn-cpink.main-button(
 
 <script setup>
 import {useWeb3Store} from "~/stores/useWeb3.js";
-import { useStorage } from '@vueuse/core'
 
 const web3Store = useWeb3Store()
 const buttonText = ref('Connect')
 
-const connectWallet = () => {
+const connectWallet = async () => {
   // const storage = useStorage('connected-wallet', '')
 
-  console.info('connectWallet.!? -1')
+  const cr = await web3Store.checkRegister()
 
-  // console.log(storage.value)
+  console.warn('crCR')
+  console.log(cr.value)
+
   // if (storage.value) {
-    console.info('connectWallet.!? 1')
-    web3Store.connectWallet().then(() => {
-      console.info('connectWallet.!? 0')
-      buttonText.value = 'Connected'
-    })
+  web3Store.connectWallet().then(() => {
+    buttonText.value = 'Connected'
+  })
   // }
 }
 </script>

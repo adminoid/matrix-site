@@ -11,6 +11,10 @@ const web3Store = useWeb3Store()
 const claimsBalanceDecimal = ref(0)
 const getData = async () => {
   const claimsBalance = await web3Store.getCoreUserClaimBalance()
+
+  console.info('claimsBalance.1.1..1..')
+  console.log(claimsBalance)
+
   if (claimsBalance) {
     claimsBalanceDecimal.value = Number(claimsBalance) / 10**18
   }
