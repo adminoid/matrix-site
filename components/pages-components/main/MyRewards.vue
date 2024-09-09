@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import MyRewardsReferrals from '~/components/pages-components/main/MyRewardsReferrals.vue'
+import MyRewardsReferrals from '~/components/pages-components/main/MyRewardsReferrals.client.vue'
 import MyRewardsClaims from '~/components/pages-components/main/MyRewardsClaims.vue'
 import MyRewardsBelowTwo from "~/components/pages-components/main/MyRewardsBelowTwo.vue";
 import MyRewardsClaimsReferrals from "~/components/pages-components/main/MyRewardsClaimsReferrals.vue";

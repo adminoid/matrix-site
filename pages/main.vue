@@ -29,6 +29,7 @@ import DonationBlock from '~/components/pages-components/main/DonationBlock.vue'
 const {
   $B
 } = useNuxtApp()
+
 const route = useRoute()
 const W = route.params.w
 

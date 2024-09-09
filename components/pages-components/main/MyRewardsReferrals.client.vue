@@ -6,13 +6,16 @@
 </template>
 
 <script setup>
+// TODO: remove useStorage from here
 import { useStorage } from '@vueuse/core'
+import { useWeb3Store } from '~/stores/useWeb3.js'
 
-const web3Store = useWeb3Store()
+const BC = await useWeb3Store()
+
 const total = ref(0)
 const isLoaded = ref(false)
 const fillEvents = async () => {
-  const eventsFound = await web3Store.getWhoseOfUser()
+  const eventsFound = await BC.value.getWhoseOfUser()
   total.value = eventsFound.length
   isLoaded.value = true
 }

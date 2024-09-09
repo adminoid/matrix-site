@@ -27,19 +27,21 @@
 
 <script setup>
 import { useStorage } from '@vueuse/core'
+import {getGiftsAccruedProxy} from "~/stores/useWeb3.js";
 
 // TODO: add placeholder to .referrals__link-text content and pass wallet address there
 
-const web3Store = useWeb3Store()
+const web3Store = await useWeb3Store()
 const stages = {
   not_accrued: 'Not accrued yet',
   accrued_not_spent: 'Already accrued, but not spent',
   accrued_and_spent: 'Already spent',
 }
+
 const events = ref([])
 const isDataLoaded = ref(false)
 const fillEvents = async () => {
-  const [eventsAccruedFound, eventsSpentFound] = await Promise.all([web3Store.getGiftsAccrued(), web3Store.getGiftsSpent()])
+  const [eventsAccruedFound, eventsSpentFound] = await Promise.all([getGiftsAccruedProxy(), web3Store.getGiftsSpent()])
   isDataLoaded.value = true
   events.value = [
     {
