@@ -1,13 +1,17 @@
 <template lang="pug">
-.my-rewards-claim-form.mt-3.mt-md-0
-  .row.mb-2
-    my-rewards-claim-form-balance
-    my-rewards-claim-form-form
+client-only
+  .my-rewards-claim-form.mt-3.mt-md-0(v-if="BC.isConnected && BC.isRegistered")
+    .row.mb-2
+      my-rewards-claim-form-balance
+      my-rewards-claim-form-form
 </template>
 
 <script setup>
 import MyRewardsClaimFormBalance from "~/components/pages-components/main/MyRewardsClaimFormBalance.vue";
 import MyRewardsClaimFormForm from "~/components/pages-components/main/MyRewardsClaimFormForm.vue";
+import {getBC} from "~/stores/useWeb3.js";
+
+const BC = await getBC()
 </script>
 
 <style lang="sass">

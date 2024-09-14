@@ -16,15 +16,14 @@
 
 <script setup>
 import MainBanner from '~/components/pages-components/main/MainBanner.vue'
-import {useStorage} from "@vueuse/core"
-// import axios from "axios"
+import {getBC} from '~/stores/useWeb3.js'
 
-const web3Store = useWeb3Store()
+const BC = await getBC()
 const totalAmountBnb = ref(0)
 const totalAmountBtc = ref(0)
 const isLoaded = ref(false)
 const getTotalAccounts = async () => {
-  const eventsFound = await web3Store.getDirectTransfers()
+  const eventsFound = await BC.value.getDirectTransfers()
   const amount = eventsFound.reduce(
       (accumulator, currentValue) => accumulator + Number(currentValue.returnValues.amount),
       0,
@@ -86,8 +85,7 @@ onMounted(async () => {
   await getTotalAccounts()
 })
 
-const storage = useStorage('connected-wallet', '')
-watch(storage, async () => {
+useNuxtApp().$on('wallet-updated', async () => {
   await getTotalAccounts()
 })
 </script>

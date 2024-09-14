@@ -9,14 +9,19 @@ main-banner(
 
 <script setup>
 import MainBanner from '~/components/pages-components/main/MainBanner.vue'
-import {useStorage} from "@vueuse/core"
+import {getBC} from '~/stores/useWeb3.js'
+import {useNuxtApp} from "#app";
 
-const web3Store = useWeb3Store()
+const BC = await getBC()
+
 const totalForId1 = ref(0)
 const isLoaded = ref(false)
 const getTotalForId1 = async () => {
   const cnf = useRuntimeConfig()
-  totalForId1.value = await web3Store.getIncomesForId(cnf.public.ID_ADDRESS_1)
+  const amount = await BC.value.getIncomesForId(cnf.public.ID_ADDRESS_1)
+  if (amount) {
+    totalForId1.value = amount
+  }
   isLoaded.value = true
 }
 
@@ -24,8 +29,7 @@ onMounted(async () => {
   await getTotalForId1()
 })
 
-const storage = useStorage('connected-wallet', '')
-watch(storage, async () => {
+useNuxtApp().$on('wallet-updated', async () => {
   await getTotalForId1()
 })
 </script>

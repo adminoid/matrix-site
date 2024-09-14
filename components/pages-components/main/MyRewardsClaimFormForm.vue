@@ -19,11 +19,13 @@ form
 </template>
 
 <script setup>
+import {getBC} from "~/stores/useWeb3.js";
+
 const amountValue = ref(0)
 const error = ref('')
 
 const disabled = useDisabled()
-const { $B } = useNuxtApp()
+const { BC } = await getBC()
 
 watch(amountValue, async (newValue) => {
   await validateValue(newValue)
@@ -33,8 +35,10 @@ const validateValue = async (value) => {
 
   // console.warn(value)
 
-  const accounts = await $B.Web3.eth.getAccounts();
-  if (!accounts || !$B.Wallet) {
+  // TODO: CHECK THIS MESS...
+
+  const accounts = await BC.value.Web3.eth.getAccounts();
+  if (!accounts || !BC.value.Wallet) {
     error.value = 'Please connect your wallet first'
   } else {
     const valueStr = String(value)
@@ -65,7 +69,7 @@ const validateValue = async (value) => {
 const withdrawClaim = async () => {
   await validateValue(amountValue.value)
   if (!error.value) {
-    await $B.withdrawClaim(String(amountValue.value))
+    await BC.value.withdrawClaim(String(amountValue.value))
   }
 }
 </script>

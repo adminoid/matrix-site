@@ -25,28 +25,19 @@ import RegisteredGlobalTable from '~/components/pages-components/main/Registered
 import PhilanthropistBanner from '~/components/pages-components/main/PhilanthropistBanner.vue'
 import AmountBlocks from '~/components/pages-components/main/AmountBlocks.vue'
 import DonationBlock from '~/components/pages-components/main/DonationBlock.vue'
+import {getBC} from "~/stores/useWeb3.js";
 
-const {
-  $B
-} = useNuxtApp()
+const BC = await getBC()
 
 const route = useRoute()
 const W = route.params.w
 
 onMounted(async () => {
-  // console.log('ddd', $B.Web3)
-  // console.log('www', W)
-  // console.log('www', $B.Web3.utils.isAddress(W))
-
-  if ('Web3' in $B && $B.Web3.utils.isAddress(W)) {
+  if ('Web3' in BC.value && BC.value.Web3.utils.isAddress(W)) {
     localStorage.setItem('whose_param', W)
   }
   if (route.name !== 'read') {
     await navigateTo({ path: '/' })
   }
-
 })
-
-// TODO: set storage by useStorage for wallet (rename) and whose
-
 </script>

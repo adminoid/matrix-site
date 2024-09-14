@@ -1,5 +1,5 @@
 <template lang="pug">
-.registered-table.table-responsive
+.registered-table.table-responsive(v-if="BC.value?.Wallet")
   .registered-table__header Accounts registered in the structure
   table.table-spec__body-table(
     class="table-spec table table-responsive table-spec_strip table-dark table-hover"
@@ -20,27 +20,25 @@
 
 <script setup>
 
-// TODO:
 //  1. getting connected wallet id from each matrix
 //  2. getting last user in matrix that lower than id
 //  3. calculate each (of 5) level filled with last user id
 
-import {useStorage} from "@vueuse/core";
+import {getDescendantsProxy} from '~/stores/useWeb3.js'
 
+const BC = await getBC()
 const isLoaded = ref(false)
 const fillUserTable = async () => {
-  tableData.value = await web3Store.getDescendants()
+  tableData.value = await getDescendantsProxy()
   isLoaded.value = true
 }
 
-const web3Store = useWeb3Store()
 const tableData = ref([])
 onMounted(async () => {
   await fillUserTable()
 })
 
-const storage = useStorage('connected-wallet', '')
-watch(storage, async () => {
+useNuxtApp().$on('wallet-updated', async () => {
   await fillUserTable()
 })
 </script>

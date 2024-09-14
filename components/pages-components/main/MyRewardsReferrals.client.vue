@@ -6,11 +6,9 @@
 </template>
 
 <script setup>
-// TODO: remove useStorage from here
-import { useStorage } from '@vueuse/core'
-import { useWeb3Store } from '~/stores/useWeb3.js'
+import {getBC} from '~/stores/useWeb3.js'
 
-const BC = await useWeb3Store()
+const BC = await getBC()
 
 const total = ref(0)
 const isLoaded = ref(false)
@@ -24,8 +22,7 @@ onMounted(async () => {
   await fillEvents()
 })
 
-const storage = useStorage('connected-wallet', '')
-watch(storage, async () => {
+useNuxtApp().$on('wallet-updated', async () => {
   await fillEvents()
 })
 </script>

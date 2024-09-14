@@ -32,23 +32,23 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-import { useNuxtApp } from '#app'
 import { useDisabled } from '~/composables/useDisabled'
 import ContractAddress from '~/components/ContractAddress.vue'
 
 const disabled = useDisabled()
-const { $B } = useNuxtApp()
+const BC = await getBC()
 const amountValue = ref('')
 const error = ref('')
+
 watch(amountValue, async (newValue) => {
   await validateValue(newValue)
 })
 
 const validateValue = async (value: any) => {
   // @ts-ignore
-  const accounts = await $B.Web3.eth.getAccounts();
+  const accounts = await BC.value.Web3.eth.getAccounts();
   // @ts-ignore
-  if (!accounts || !$B.Wallet) {
+  if (!accounts || !BC.value.Wallet) {
     error.value = 'Please connect your wallet first'
   } else {
     if (String(value).includes(',')) {
@@ -69,7 +69,7 @@ const sendAmount = async () => {
   await validateValue(amountValue.value)
   if (!error.value) {
     // @ts-ignore
-    await $B.sendAmount(String(amountValue.value))
+    await BC.value.sendAmount(String(amountValue.value))
   }
 }
 </script>

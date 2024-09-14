@@ -6,11 +6,15 @@ import type {
 } from '@/libs/blockchain/types'
 
 import CoreJson from '~/artifacts/contracts/Core.json'
+import {useStorage} from "@vueuse/core";
+
+const walletStorage = useStorage('connected-wallet')
 
 class Config {
   private static _instance: any
   CONTRACT_ADDRESS: string = ""
   ID_ADDRESS_0: string = ""
+  ID_ADDRESS_1: string = ""
   CHAIN_ID: string = ""
   CHAIN_NAME!: string
   RPC_URL!: string
@@ -40,25 +44,28 @@ class CoreContract {
 }
 
 class Common implements ICommon {
-  Nuxt: any
+
+  Emit: any
   Ethereum: any
   Web3: any
   Config: any
   Core: any
   Wallet: any
-  constructor (nuxt: any, wallet: string) {
-    this.Nuxt = nuxt
-    this.Wallet = wallet
+  CoreUser: any
+
+  constructor (emitFn: any) {
+    this.Emit = emitFn
   }
+
   async init(globalThis: any) {
     if (!globalThis['ethereum']) {
       this.ThrowAlert('danger', 'Please install Metamask and reload the page 1')
     } else {
       this.Ethereum = globalThis['ethereum']
       this.Ethereum.on('accountsChanged', (accounts: any[]) => {
-        console.info('accounts on accountsChanged', accounts)
-        console.info('accounts on accountsChanged', accounts[0])
         this.Wallet = accounts[0]
+        this.Emit('wallet-updated', this.Wallet)
+        walletStorage.value = this.Wallet
       })
 
       const publicConfig = new Config()
@@ -72,14 +79,16 @@ class Common implements ICommon {
       this.EmitDisabled('connect', true)
     }
   }
+
   EmitDisabled (cause: string, status: boolean) {
-    if (this.Nuxt.$emit) {
-      this.Nuxt.$emit('disabled', {
+    if (this.Emit) {
+      this.Emit('disabled', {
         cause,
         status,
       })
     }
   }
+
   ThrowAlert (type: string, error: any) {
     let message: any = error
     // only for error messages
@@ -94,8 +103,8 @@ class Common implements ICommon {
       // "message":"Nonce too high. Expected nonce to be 0 but got 4. Note that transactions can't be queued when auto mining."
       message = error.match(/"message":"([^"]+)"/)[1]
     }
-    if (this.Nuxt.$emit) {
-      this.Nuxt.$emit('alert', {
+    if (this.Emit) {
+      this.Emit('alert', {
         type,
         message,
       })
@@ -106,15 +115,20 @@ class Common implements ICommon {
 }
 
 class Network extends Common implements INetwork {
-  constructor (nuxt: any, wallet: string) {
-    super(nuxt, wallet)
+  constructor (emitFn: any) {
+    super(emitFn)
   }
+
   private checkInstalledMetamask (): boolean {
     return Boolean(this.Ethereum && this.Ethereum.isMetaMask);
   }
+
   async setNetwork (): Promise<void | boolean> {
     if (!this.checkInstalledMetamask() || !this.Ethereum) {
-      this.Wallet = ''
+      this.Wallet = ""
+      this.Emit('wallet-updated', this.Wallet)
+      walletStorage.value = this.Wallet
+
       return this.ThrowAlert('danger', 'Metamask is not installed!')
     } else {
       try {
@@ -154,24 +168,38 @@ class Network extends Common implements INetwork {
 }
 
 export class External extends Network implements IExternal {
-  constructor (nuxt: any, wallet: string) {
-    console.info('the wallet is when init', wallet)
-    super(nuxt, wallet)
+  constructor (emitFn: any) {
+    super(emitFn)
   }
 
+  // TODO: use these props
+  isConnected = false
+  isRegistered = false
+  /**
+   * I have over there two stages.
+   * 1) check window.Ethereum, set network etc.
+   * 2) get connected wallet and save it in this.Wallet
+   */
   async connect (): Promise<void> {
     this.EmitDisabled('connect', true)
-    const res = await this.setNetwork()
+    await this.setNetwork()
     try {
       if (!this.Web3 || !this.Ethereum) {
         // metamask is not installed
         this.Wallet = ""
+        this.Emit('wallet-updated', this.Wallet)
+        walletStorage.value = this.Wallet
+
         this.EmitDisabled('connect', true)
       } else {
         // metamask installed
-        // TODO: check eth_requestAccounts query for duplicates
         const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
         this.Wallet = accounts[0]
+        this.Emit('wallet-updated', this.Wallet)
+        walletStorage.value = this.Wallet
+
+        this.CoreUser = await this.getUserFromCore()
+        this.isConnected = true
       }
     } catch (e: any) {
       this.ThrowAlert('danger', e.message)
@@ -200,6 +228,7 @@ export class External extends Network implements IExternal {
           // this.ThrowAlert('primary', msg)
           return false
         } else {
+          this.isRegistered = true
           return resp
         }
       } catch (e: any) {
@@ -275,7 +304,6 @@ export class External extends Network implements IExternal {
   }
 
   async getWhoseOfUser () {
-
     return await this.Core.getPastEvents('WhoseRegistered', {
       filter: {
         whose: this.Wallet,
@@ -407,12 +435,12 @@ export class External extends Network implements IExternal {
     })
   }
 
-  async getWithdraws () {
+  async getWithdrawals () {
     return await this.Core.getPastEvents('ClaimsWithdraw', {
       filter: {
         owner: this.Wallet,
       },
-      fromBlock: 43177620,
+      fromBlock: 43177620, // set latest block number that has no events
       toBlock: 'latest',
     })
   }

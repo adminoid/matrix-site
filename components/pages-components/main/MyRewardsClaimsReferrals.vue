@@ -6,13 +6,13 @@
 </template>
 
 <script setup>
-import { useStorage } from '@vueuse/core'
+import {getBC} from '~/stores/useWeb3.js'
 
-const web3Store = useWeb3Store()
+const BC = await getBC()
 const totalBnb = ref(0)
 const isLoaded = ref(false)
 const fillEvents = async () => {
-  const eventsFound = await web3Store.getReferralEarn()
+  const eventsFound = await BC.value.getReferralEarn()
   let amount = 0n
   for (const evt of eventsFound) {
     amount += evt?.returnValues.newValue
@@ -25,8 +25,7 @@ onMounted(async () => {
   await fillEvents()
 })
 
-const storage = useStorage('connected-wallet', '')
-watch(storage, async () => {
+useNuxtApp().$on('wallet-updated', async () => {
   await fillEvents()
 })
 </script>
