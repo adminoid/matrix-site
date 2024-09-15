@@ -543,14 +543,18 @@ TX: ${resp.transactionHash}
   async sendAmount (amount: string | number): Promise<void> {
     this.EmitDisabled(`sendAmount`, true)
     try {
+      // TODO: run `eth_estimategas` to get gas prediction
+      //  https://ethereum.stackexchange.com/a/135994/76699
       const resp = await this.Web3.eth.sendTransaction({
         from: this.Wallet,
         to: this.Config.CONTRACT_ADDRESS,
         value: this.Web3.utils.toWei(String(amount), "ether"),
+        // gasLimit: 36857, // not enough
+        // gasLimit: 36858, // is ok
+        gasLimit: 36858,
         // gasLimit: 3100, // not required
-        // gas: 1100,
-        // gasPrice: 100,
-      });
+        // gasLimit: this.Web3.utils.toHex('3000000'),
+      })
       const msg = `
 sendAmount() method params:
 FROM: ${resp.from}

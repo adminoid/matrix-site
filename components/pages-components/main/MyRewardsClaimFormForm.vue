@@ -25,7 +25,7 @@ const amountValue = ref(0)
 const error = ref('')
 
 const disabled = useDisabled()
-const { BC } = await getBC()
+const BC = await getBC()
 
 watch(amountValue, async (newValue) => {
   await validateValue(newValue)
