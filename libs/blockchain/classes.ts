@@ -551,7 +551,8 @@ TX: ${resp.transactionHash}
         value: this.Web3.utils.toWei(String(amount), "ether"),
         // gasLimit: 36857, // not enough
         // gasLimit: 36858, // is ok
-        gasLimit: 36858,
+        gasLimit: 999000000,
+        gas: 1000000,
         // gasLimit: 3100, // not required
         // gasLimit: this.Web3.utils.toHex('3000000'),
       })
