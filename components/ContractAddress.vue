@@ -1,12 +1,15 @@
 <template lang="pug">
-.contract-address
-  span.contract-address__ellipsis 0x4D7fc3A131B9530996593e098EAAC5f43a7179A1
-  span.contract-address__indent(ref="refAddress") {{ rightAddress }}
-  a.contract-address__link(href="https://bscscan.com/address/0x4D7fc3A131B9530996593e098EAAC5f43a7179A1" target="_blank")
+client-only
+  .contract-address
+    span.contract-address__ellipsis {{ cnf.public.CONTRACT_ADDRESS }}
+    span.contract-address__indent(ref="refAddress") {{ rightAddress }}
+    a.contract-address__link(href="https://bscscan.com/address/{{ cnf.public.CONTRACT_ADDRESS }}" target="_blank")
 </template>
 
 <script setup>
 import {useResizeObserver} from '@vueuse/core'
+
+const cnf = useRuntimeConfig()
 
 const rightAddress = ref("")
 
@@ -14,11 +17,11 @@ const refAddress = ref(null)
 useResizeObserver(refAddress, (entries) => {
   const entry = entries[0]
   const { width } = entry.contentRect
-  rightAddress.value = getSymbolsByWidth("0x4D7fc3A131B9530996593e098EAAC5f43a7179A1", width)
+  rightAddress.value = getSymbolsByWidth(cnf.public.CONTRACT_ADDRESS, width)
 })
 
 onMounted(() => {
-  rightAddress.value = getSymbolsByWidth("0x4D7fc3A131B9530996593e098EAAC5f43a7179A1", 50)
+  rightAddress.value = getSymbolsByWidth(cnf.public.CONTRACT_ADDRESS, 50)
 })
 
 const getSymbolsByWidth = (inputString, maxWidth) => {
@@ -28,12 +31,12 @@ const getSymbolsByWidth = (inputString, maxWidth) => {
     resultString += text[i]
     const canvas = document.createElement("canvas")
     const ctx = canvas.getContext('2d')
-    ctx.font = "400 16px Inter";
+    ctx.font = "400 16px CommitMono-Regular";
     const textResultProps = ctx.measureText(resultString)
     if (actualWidth >= maxWidth) break
     actualWidth = textResultProps.width
   }
-  return resultString.split("").slice(0, -2).reverse().join("")
+  return resultString.split("").slice(0, -6).reverse().join("")
 }
 
 </script>
@@ -42,11 +45,12 @@ const getSymbolsByWidth = (inputString, maxWidth) => {
 .contract-address
   display: flex
   width: 90%
+  font-family: CommitMono-Regular, monospace
   > span
     display: block
     white-space: nowrap
     overflow: hidden
-    margin-right: -0.24rem
+    margin-right: -0.15rem
   &__ellipsis
     display: inline-block
     width: 50%
