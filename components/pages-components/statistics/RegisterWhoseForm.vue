@@ -55,7 +55,7 @@ watch(registerWhoseAddr, async (newValue) => {
   await validateValue(newValue)
 })
 const clearWhose = () => {
-  localStorage.removeItem('whose_param')
+  localStorage.removeItem('whose-param')
   registerWhoseAddr.value = ''
 }
 </script>

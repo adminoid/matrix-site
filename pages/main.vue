@@ -27,6 +27,12 @@ import AmountBlocks from '~/components/pages-components/main/AmountBlocks.vue'
 import DonationBlock from '~/components/pages-components/main/DonationBlock.vue'
 import {getBC} from "~/stores/useWeb3.js";
 
+useHead({
+  bodyAttrs: {
+    class: 'is-main-page',
+  },
+})
+
 const BC = await getBC()
 
 const route = useRoute()
@@ -34,7 +40,7 @@ const W = route.params.w
 
 onMounted(async () => {
   if ('Web3' in BC.value && BC.value.Web3.utils.isAddress(W)) {
-    localStorage.setItem('whose_param', W)
+    localStorage.setItem('whose-param', W)
   }
   if (route.name !== 'read') {
     await navigateTo({ path: '/' })

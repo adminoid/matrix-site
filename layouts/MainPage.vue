@@ -11,11 +11,3 @@ footer
   .container
     footer-layout
 </template>
-
-<script setup>
-useHead({
-  bodyAttrs: {
-    class: 'is-main-page',
-  },
-})
-</script>
