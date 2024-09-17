@@ -1,5 +1,6 @@
 <template lang="pug">
 main-intro.row.mb-4
+whose-register-form.row.mb-4
 h5.centered-header Personal account
 .row.row-cols-1.row-cols-md-2.mb-4
   smart-contract-send.col
@@ -16,6 +17,7 @@ donation-block.mb-4
 
 <script setup>
 import MainIntro from '~/components/pages-components/main/MainIntro.vue'
+import WhoseRegisterForm from '~/components/pages-components/main/WhoseRegisterForm.client.vue'
 import SmartContractSend from '~/components/pages-components/main/SmartContractSend.vue'
 import Referrals from '~/components/pages-components/main/Referrals.vue'
 import MyRewards from '~/components/pages-components/main/MyRewards.vue'
