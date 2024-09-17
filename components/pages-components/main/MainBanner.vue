@@ -1,15 +1,15 @@
 <template lang="pug">
 .main-banner
-  .main-banner__header(v-if="isHasHeader") {{ header }}
-  .main-banner__link(v-if="isHasLink")
+  .main-banner__header(v-if="!!props.header") {{ header }}
+  .main-banner__link(v-if="!!props.link")
     contract-address
-  .main-banner__footer(v-if="isShowed && isHasFooter") {{ footer }}
-  .main-banner__columns(v-if="isShowed && isHasColumns")
+  .main-banner__footer(v-if="isShowed && !!props.footer") {{ footer }}
+  .main-banner__columns(v-else) <i>Is loading... 1</i>
+  .main-banner__columns(v-if="isShowed && !!props.columns && props.columns.length > 1")
     .row
       .col.px-4.d-flex.justify-content-between.flex-column(v-for="col in columns")
         .main-banner__columns-title.row {{ col.title }}
         .main-banner__columns-amount.row {{ col.amount }}
-  .main-banner__columns <i>Is loading...</i>
 </template>
 
 <script setup>
@@ -23,17 +23,6 @@ const props = defineProps({
     type: Array,
     required: false,
   },
-})
-const isHasHeader = ref(false)
-const isHasLink = ref(false)
-const isHasFooter = ref(false)
-const isHasColumns = ref(false)
-
-onMounted(() => {
-  isHasHeader.value = !!props.header
-  isHasLink.value = !!props.link
-  isHasFooter.value = !!props.footer
-  isHasColumns.value = !!props.columns && props.columns.length > 1
 })
 </script>
 
