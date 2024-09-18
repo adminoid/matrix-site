@@ -1,6 +1,6 @@
 <template lang="pug">
-.register-whose.ps-0
-  form
+.register-whose.p-0
+  form.p-0
     .register-whose__frame
       .register-whose__form
         .register-whose__amount.pb-3

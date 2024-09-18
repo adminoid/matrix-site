@@ -76,6 +76,7 @@ class Common implements ICommon {
     }
     if (!this.Web3 || !this.Ethereum) {
       // metamask is not installed
+      this.isInstalled = false
       this.EmitDisabled('connect', true)
     }
   }
@@ -172,9 +173,10 @@ export class External extends Network implements IExternal {
     super(emitFn)
   }
 
-  // TODO: use these props
+  isInstalled = true
   isConnected = false
   isRegistered = false
+
   /**
    * I have over there two stages.
    * 1) check window.Ethereum, set network etc.
@@ -189,6 +191,8 @@ export class External extends Network implements IExternal {
         this.Wallet = ""
         this.Emit('wallet-updated', this.Wallet)
         walletStorage.value = this.Wallet
+
+        this.isInstalled = false
 
         this.EmitDisabled('connect', true)
       } else {

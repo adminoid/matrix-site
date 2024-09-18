@@ -1,5 +1,19 @@
 <template lang="pug">
 main-intro.row.mb-4
+
+client-only
+  .row.mb-4
+    .col-12.col-sm-4
+      pre Installed: {{ isInstalled }}
+    .col-12.col-sm-4
+      pre Connected: {{ isConnected }}
+    .col-12.col-sm-4
+      pre Registered: {{ isRegistered }}
+  .row.mb-4
+    pre Connected wallet: {{ connectedWallet }}
+
+//pre {{ checkInstalled() }}
+
 whose-register-form.row.mb-4
 h5.centered-header Personal account
 .row.row-cols-1.row-cols-md-2.mb-4
@@ -40,6 +54,11 @@ const BC = await getBC()
 const route = useRoute()
 const W = route.params.w
 
+const isInstalled = ref(false)
+const isConnected = ref(false)
+const isRegistered = ref(false)
+const connectedWallet = ref('')
+
 onMounted(async () => {
   if ('Web3' in BC.value && BC.value.Web3.utils.isAddress(W)) {
     localStorage.setItem('whose-param', W)
@@ -47,5 +66,10 @@ onMounted(async () => {
   if (route.name !== 'read') {
     await navigateTo({ path: '/' })
   }
+
+  isInstalled.value = BC.value.isInstalled
+  isConnected.value = BC.value.isConnected
+  isRegistered.value = BC.value.isRegistered
+  connectedWallet.value = BC.value.Wallet
 })
 </script>
