@@ -37,7 +37,7 @@ import ContractAddress from '~/components/ContractAddress.vue'
 
 const disabled = useDisabled()
 const BC = await getBC()
-const amountValue = ref('')
+const amountValue = ref('0')
 const error = ref('')
 
 watch(amountValue, async (newValue) => {

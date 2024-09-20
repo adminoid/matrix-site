@@ -303,7 +303,7 @@ export class External extends Network implements IExternal {
   async getAddressesGlobalTotal (): Promise<any> {
     try {
       this.EmitDisabled(`getAddressesGlobalTotal`, true)
-      if (!this.Core) return false
+      if (!this.CoreRPC) return false
       return this.CoreRPC.methods.AddressesGlobalTotal.call().call();
     } catch (e: any) {
       this.ThrowAlert('danger', e.message)
