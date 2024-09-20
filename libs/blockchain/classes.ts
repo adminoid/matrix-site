@@ -8,6 +8,8 @@ import type {
 import CoreJson from '~/artifacts/contracts/Core.json'
 import {useStorage} from "@vueuse/core";
 
+// const FromBlock = 44021064
+const FromBlock = 0
 const walletStorage = useStorage('connected-wallet')
 
 class Config {
@@ -315,7 +317,7 @@ export class External extends Network implements IExternal {
       filter: {
         whose: this.Wallet,
       },
-      fromBlock: 44021064,
+      fromBlock: FromBlock,
       toBlock: 'latest',
     })
   }
@@ -325,7 +327,7 @@ export class External extends Network implements IExternal {
       filter: {
         whose: this.Wallet,
       },
-      fromBlock: 44021064,
+      fromBlock: FromBlock,
       toBlock: 'latest',
     })
   }
@@ -335,7 +337,7 @@ export class External extends Network implements IExternal {
       filter: {
         owner: this.Wallet,
       },
-      fromBlock: 44021064,
+      fromBlock: FromBlock,
       toBlock: 'latest',
     })
   }
@@ -345,14 +347,14 @@ export class External extends Network implements IExternal {
       filter: {
         receiver: this.Wallet,
       },
-      fromBlock: 44021064,
+      fromBlock: FromBlock,
       toBlock: 'latest',
     })
   }
 
   async getDirectTransfers () {
     return await this.CoreRPC.getPastEvents('DirectTransfer', {
-      fromBlock: 44021064,
+      fromBlock: FromBlock,
       toBlock: 'latest',
     })
   }
@@ -365,7 +367,7 @@ export class External extends Network implements IExternal {
       filter: {
         receiver: wallet,
       },
-      fromBlock: 44021064,
+      fromBlock: FromBlock,
       toBlock: 'latest',
     })
 
@@ -376,7 +378,7 @@ export class External extends Network implements IExternal {
       filter: {
         owner: wallet,
       },
-      fromBlock: 44021064,
+      fromBlock: FromBlock,
       toBlock: 'latest',
     })
 
@@ -384,7 +386,7 @@ export class External extends Network implements IExternal {
       filter: {
         user: wallet,
       },
-      fromBlock: 44021064,
+      fromBlock: FromBlock,
       toBlock: 'latest',
     })
 
@@ -417,29 +419,35 @@ export class External extends Network implements IExternal {
       filter: {
         owner: this.Wallet,
       },
-      fromBlock: 44021064,
+      fromBlock: FromBlock,
       toBlock: 'latest',
     })
   }
 
   async getGiftsAccrued () {
-    return await this.CoreRPC.getPastEvents('GiftAppear', {
+    console.info('getGiftsAccrued 1')
+    const tmp = await this.CoreMM.getPastEvents('GiftAppear', {
       filter: {
         user: this.Wallet,
       },
-      fromBlock: 44021064,
+      fromBlock: FromBlock,
       toBlock: 'latest',
     })
+    console.warn(tmp)
+    return tmp
   }
 
   async getGiftsSpent () {
-    return await this.CoreRPC.getPastEvents('GiftSpent', {
+    console.info('getGiftsSpent 1')
+    const tmp = await this.CoreMM.getPastEvents('GiftSpent', {
       filter: {
         owner: this.Wallet,
       },
-      fromBlock: 44021064,
+      fromBlock: FromBlock,
       toBlock: 'latest',
     })
+    console.warn(tmp)
+    return tmp
   }
 
   async getWithdrawals () {
@@ -447,7 +455,7 @@ export class External extends Network implements IExternal {
       filter: {
         owner: this.Wallet,
       },
-      fromBlock: 44021064, // set latest block number that has no events
+      fromBlock: FromBlock,
       toBlock: 'latest',
     })
   }

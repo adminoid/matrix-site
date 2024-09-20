@@ -3,7 +3,7 @@ client-only
   .referrals.mt-4.mt-md-0
     .referrals__header Your referral link
     .referrals__link
-      .referrals__link-text https://givedream.io/?referrer=8fisnba4TMygvDTQsFAbHGEHTEs
+      .referrals__link-text https://givedream.io/{{ BC.Wallet }}
       .referrals__link-copy
     .referrals__header.referrals__header_big Referrals
     //pre {{ events }}
