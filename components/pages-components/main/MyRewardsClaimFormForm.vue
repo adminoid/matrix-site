@@ -37,7 +37,7 @@ const validateValue = async (value) => {
 
   // TODO: CHECK THIS MESS...
 
-  const accounts = await BC.value.Web3.eth.getAccounts();
+  const accounts = await BC.value.Web3MM.eth.getAccounts();
   if (!accounts || !BC.value.Wallet) {
     error.value = 'Please connect your wallet first'
   } else {

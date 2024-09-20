@@ -38,11 +38,11 @@ onMounted(async () => {
 const registerWhoseAddr = ref('')
 const error = ref('')
 const validateValue = async (value) => {
-  const accounts = await $B.Web3.eth.getAccounts();
+  const accounts = await $B.Web3MM.eth.getAccounts();
   if (!accounts || !$B.Wallet) {
     error.value = 'Please connect your wallet first'
   } else {
-    if (!$B.Web3.utils.isAddress(value)) {
+    if (!$B.Web3MM.utils.isAddress(value)) {
       error.value = 'please enter valid ethereum address'
     } else if (value.toLowerCase() === $B.Wallet.toLowerCase()) {
       error.value = 'Is not possible to be whose to yourself'

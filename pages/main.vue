@@ -60,7 +60,7 @@ const isRegistered = ref(false)
 const connectedWallet = ref('')
 
 onMounted(async () => {
-  if ('Web3' in BC.value && BC.value.Web3.utils.isAddress(W)) {
+  if ('Web3MM' in BC.value && BC.value.Web3MM.utils.isAddress(W)) {
     localStorage.setItem('whose-param', W)
   }
   if (route.name !== 'read') {

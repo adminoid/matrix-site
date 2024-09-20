@@ -46,7 +46,7 @@ watch(amountValue, async (newValue) => {
 
 const validateValue = async (value: any) => {
   // @ts-ignore
-  const accounts = await BC.value.Web3.eth.getAccounts();
+  const accounts = await BC.value.Web3MM.eth.getAccounts();
   // @ts-ignore
   if (!accounts || !BC.value.Wallet) {
     error.value = 'Please connect your wallet first'

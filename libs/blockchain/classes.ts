@@ -47,9 +47,11 @@ class Common implements ICommon {
 
   Emit: any
   Ethereum: any
-  Web3: any
   Config: any
-  Core: any
+  Web3MM: any
+  Web3RPC: any
+  CoreMM: any
+  CoreRPC: any
   Wallet: any
   CoreUser: any
 
@@ -70,11 +72,12 @@ class Common implements ICommon {
 
       const publicConfig = new Config()
       this.Config = publicConfig['public']
-      // this.Web3 = new Web3(this.Ethereum)
-      this.Web3 = new Web3(this.Config.RPC_URL)
-      this.Core = new CoreContract(this.Web3, this.Config.CONTRACT_ADDRESS)
+      this.Web3MM = new Web3(this.Ethereum)
+      this.Web3RPC = new Web3(this.Config.RPC_URL)
+      this.CoreMM = new CoreContract(this.Web3MM, this.Config.CONTRACT_ADDRESS)
+      this.CoreRPC = new CoreContract(this.Web3RPC, this.Config.CONTRACT_ADDRESS)
     }
-    if (!this.Web3 || !this.Ethereum) {
+    if (!this.Web3MM || !this.Ethereum) {
       // metamask is not installed
       this.isInstalled = false
       this.EmitDisabled('connect', true)
@@ -186,11 +189,11 @@ export class External extends Network implements IExternal {
     this.EmitDisabled('connect', true)
     await this.setNetwork()
     try {
-      if (!this.Web3 || !this.Ethereum) {
+      if (!this.Web3MM || !this.Ethereum) {
         // metamask is not installed
         this.Wallet = ""
+        walletStorage.value = ""
         this.Emit('wallet-updated', this.Wallet)
-        walletStorage.value = this.Wallet
 
         this.isInstalled = false
 
@@ -218,10 +221,10 @@ export class External extends Network implements IExternal {
     } else {
       try {
         this.EmitDisabled(`getUserFromCore`, true)
-        if (!this.Core || !this.Wallet) {
+        if (!this.CoreRPC || !this.Wallet) {
           return false
         }
-        const resp = await this.Core
+        const resp = await this.CoreRPC
           .methods.getUserFromCore(this.Wallet)
           .call({
             from: this.Wallet,
@@ -299,7 +302,7 @@ export class External extends Network implements IExternal {
     try {
       this.EmitDisabled(`getAddressesGlobalTotal`, true)
       if (!this.Core) return false
-      return this.Core.methods.AddressesGlobalTotal.call().call();
+      return this.CoreRPC.methods.AddressesGlobalTotal.call().call();
     } catch (e: any) {
       this.ThrowAlert('danger', e.message)
     } finally {
@@ -308,48 +311,48 @@ export class External extends Network implements IExternal {
   }
 
   async getWhoseOfUser () {
-    return await this.Core.getPastEvents('WhoseRegistered', {
+    return await this.CoreRPC.getPastEvents('WhoseRegistered', {
       filter: {
         whose: this.Wallet,
       },
-      fromBlock: 0,
+      fromBlock: 44021064,
       toBlock: 'latest',
     })
   }
 
   async getReferralEarn () {
-    return await this.Core.getPastEvents('ReferralEarn', {
+    return await this.CoreRPC.getPastEvents('ReferralEarn', {
       filter: {
         whose: this.Wallet,
       },
-      fromBlock: 0,
+      fromBlock: 44021064,
       toBlock: 'latest',
     })
   }
 
   async getClaimsAppear () {
-    return await this.Core.getPastEvents('ClaimsAppear', {
+    return await this.CoreRPC.getPastEvents('ClaimsAppear', {
       filter: {
         owner: this.Wallet,
       },
-      fromBlock: 0,
+      fromBlock: 44021064,
       toBlock: 'latest',
     })
   }
 
   async getBelowTwoAppear () {
-    return await this.Core.getPastEvents('BelowTwoAppear', {
+    return await this.CoreRPC.getPastEvents('BelowTwoAppear', {
       filter: {
         receiver: this.Wallet,
       },
-      fromBlock: 0,
+      fromBlock: 44021064,
       toBlock: 'latest',
     })
   }
 
   async getDirectTransfers () {
-    return await this.Core.getPastEvents('DirectTransfer', {
-      fromBlock: 0,
+    return await this.CoreRPC.getPastEvents('DirectTransfer', {
+      fromBlock: 44021064,
       toBlock: 'latest',
     })
   }
@@ -358,30 +361,30 @@ export class External extends Network implements IExternal {
    * @param wallet - wallet address of id0, id1 or another
    */
   async getIncomesForId (wallet: string) {
-    const belowTwoEvents = await this.Core.getPastEvents('BelowTwoAppear', {
+    const belowTwoEvents = await this.CoreRPC.getPastEvents('BelowTwoAppear', {
       filter: {
         receiver: wallet,
       },
-      fromBlock: 0,
+      fromBlock: 44021064,
       toBlock: 'latest',
     })
 
     // todo: getting latest block number
     // const latestBlock = await this.Web3.eth.getBlockNumber()
 
-    const claimsAppearEvents = await this.Core.getPastEvents('ClaimsAppear', {
+    const claimsAppearEvents = await this.CoreRPC.getPastEvents('ClaimsAppear', {
       filter: {
         owner: wallet,
       },
-      fromBlock: 0,
+      fromBlock: 44021064,
       toBlock: 'latest',
     })
 
-    const claimsReferralEvents = await this.Core.getPastEvents('ReferralEarn', {
+    const claimsReferralEvents = await this.CoreRPC.getPastEvents('ReferralEarn', {
       filter: {
         user: wallet,
       },
-      fromBlock: 0,
+      fromBlock: 44021064,
       toBlock: 'latest',
     })
 
@@ -410,55 +413,55 @@ export class External extends Network implements IExternal {
   }
 
   async getClaimSpent () {
-    return await this.Core.getPastEvents('ClaimsSpent', {
+    return await this.CoreRPC.getPastEvents('ClaimsSpent', {
       filter: {
         owner: this.Wallet,
       },
-      fromBlock: 0,
+      fromBlock: 44021064,
       toBlock: 'latest',
     })
   }
 
   async getGiftsAccrued () {
-    return await this.Core.getPastEvents('GiftAppear', {
+    return await this.CoreRPC.getPastEvents('GiftAppear', {
       filter: {
         user: this.Wallet,
       },
-      fromBlock: 0,
+      fromBlock: 44021064,
       toBlock: 'latest',
     })
   }
 
   async getGiftsSpent () {
-    return await this.Core.getPastEvents('GiftSpent', {
+    return await this.CoreRPC.getPastEvents('GiftSpent', {
       filter: {
         owner: this.Wallet,
       },
-      fromBlock: 0,
+      fromBlock: 44021064,
       toBlock: 'latest',
     })
   }
 
   async getWithdrawals () {
-    return await this.Core.getPastEvents('ClaimsWithdraw', {
+    return await this.CoreRPC.getPastEvents('ClaimsWithdraw', {
       filter: {
         owner: this.Wallet,
       },
-      fromBlock: 43177620, // set latest block number that has no events
+      fromBlock: 44021064, // set latest block number that has no events
       toBlock: 'latest',
     })
   }
 
   async getTotalFromMatrix (matrixIndex: number) {
-    return  await this.Core.methods.getTotalFromMatrix(matrixIndex)
+    return  await this.CoreRPC.methods.getTotalFromMatrix(matrixIndex)
         .call({from: this.Wallet})
   }
 
   async GetCoreUserByMatrixPosition (level: number | string, userIndex: number | string): Promise<void|boolean> {
     try {
       this.EmitDisabled(`GetCoreUserByMatrixPosition`, true)
-      if (!this.Core) return false
-      const resp = await this.Core
+      if (!this.CoreRPC) return false
+      const resp = await this.CoreRPC
         .methods.getCoreUserByMatrixPosition(level, userIndex)
         .call({
           from: this.Wallet,
@@ -471,8 +474,8 @@ export class External extends Network implements IExternal {
         msg = `
 GetCoreUserByMatrixPosition() method response:
 address: ${resp.userAddress}
-claims: ${this.Web3.utils.fromWei(resp.user.claims, "ether")} BNB
-gifts: ${this.Web3.utils.fromWei(resp.user.gifts, "ether")} BNB
+claims: ${this.CoreRPC.utils.fromWei(resp.user.claims, "ether")} BNB
+gifts: ${this.CoreRPC.utils.fromWei(resp.user.gifts, "ether")} BNB
 level: ${resp.user.level}
 whose: ${resp.user.whose}
 `
@@ -493,8 +496,8 @@ whose: ${resp.user.whose}
       //   .call({
       //     from: this.Wallet,
       //   });
-      if (!this.Core) return false
-      const resp = await this.Core
+      if (!this.CoreMM) return false
+      const resp = await this.CoreMM
       .methods.register(whose).send({
         from: this.Wallet,
         value: 10000000000000000,
@@ -520,9 +523,9 @@ TX: ${resp.transactionHash}
   async withdrawClaim (amount: number | string): Promise<void|boolean> {
     this.EmitDisabled(`withdrawClaim`, true)
     try {
-      if (!this.Core) return false
-      const resp = await this.Core.methods
-        .withdrawClaim(this.Web3.utils.toWei(String(amount), "ether"))
+      if (!this.CoreMM) return false
+      const resp = await this.CoreMM.methods
+        .withdrawClaim(this.Web3MM.utils.toWei(String(amount), "ether"))
         .send({
           from: this.Wallet,
           gasLimit: 310000, // not required
@@ -547,19 +550,19 @@ TX: ${resp.transactionHash}
   async sendAmount (amount: string | number): Promise<void> {
     this.EmitDisabled(`sendAmount`, true)
     try {
-      // TODO: run `eth_estimategas` to get gas prediction
-      //  https://ethereum.stackexchange.com/a/135994/76699
-      const resp = await this.Web3.eth.sendTransaction({
+      const resp = await this.Web3MM.eth.sendTransaction({
         from: this.Wallet,
         to: this.Config.CONTRACT_ADDRESS,
-        value: this.Web3.utils.toWei(String(amount), "ether"),
+        value: this.Web3MM.utils.toWei(String(amount), "ether"),
         // gasLimit: 36857, // not enough
         // gasLimit: 36858, // is ok
-        gasLimit: 999000000,
-        gas: 1000000,
+        gasLimit: 450000,
+        // gas: 1000000,
         // gasLimit: 3100, // not required
-        // gasLimit: this.Web3.utils.toHex('3000000'),
+        // gasLimit: this.Web3MM.utils.toHex('300000000000000000'),
+        // gas: estimatedGas,
       })
+
       const msg = `
 sendAmount() method params:
 FROM: ${resp.from}
@@ -578,8 +581,8 @@ TX: ${resp.transactionHash}
   async withdrawTen (): Promise<void|boolean> {
     this.EmitDisabled(`withdrawTen`, true)
     try {
-      if (!this.Core) return false
-      await this.Core.methods
+      if (!this.CoreMM) return false
+      await this.CoreMM.methods
         .getTenPercentOnceYear()
         .send({
           from: this.Wallet,

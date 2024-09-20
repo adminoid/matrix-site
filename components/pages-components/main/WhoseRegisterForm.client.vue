@@ -53,7 +53,7 @@ watch(whoseAddress, async (newValue) => {
 
 const validateValue = async (value) => {
   if (!!value) {
-    if (!BC.value.Web3.utils.isAddress(value)) {
+    if (!BC.value.Web3MM.utils.isAddress(value)) {
       error.value = 'please enter valid ethereum address'
     } else if (value.toLowerCase() === BC.value.Wallet.toLowerCase()) {
       error.value = 'Is not possible to be whose to yourself'
