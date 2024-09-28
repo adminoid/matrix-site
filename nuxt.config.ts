@@ -20,6 +20,14 @@ export default defineNuxtConfig({
     storesDirs: ['./stores/**'],
   },
 
+  nitro: {
+    esbuild: {
+      options: {
+        target: 'esnext'
+      }
+    }
+  },
+
   runtimeConfig: getRuntimeConfig(),
   compatibilityDate: '2024-07-04',
 })

@@ -8,7 +8,7 @@ import type {
 import CoreJson from '~/artifacts/contracts/Core.json'
 import {useStorage} from "@vueuse/core";
 
-// const FromBlock = 44021064
+// const FromBlock = 44087437
 const FromBlock = 0
 const walletStorage = useStorage('connected-wallet')
 
