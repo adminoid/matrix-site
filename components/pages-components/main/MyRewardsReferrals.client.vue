@@ -13,8 +13,10 @@ const BC = await getBC()
 const total = ref(0)
 const isLoaded = ref(false)
 const fillEvents = async () => {
-  const eventsFound = await BC.value.getWhoseOfUser()
-  total.value = eventsFound.length
+  // todo => restore mark
+  // const eventsFound = await BC.value.getWhoseOfUser()
+  // total.value = eventsFound.length
+  total.value = 3
   isLoaded.value = true
 }
 

@@ -13,7 +13,8 @@ const BC = await getBC()
 const totalRegisteredAccounts = ref(0)
 const isLoaded = ref(false)
 const getTotalAccounts = async () => {
-  totalRegisteredAccounts.value = await BC.value.getAddressesGlobalTotal()
+  // todo => restore mark
+  // totalRegisteredAccounts.value = await BC.value.getAddressesGlobalTotal()
   isLoaded.value = true
 }
 

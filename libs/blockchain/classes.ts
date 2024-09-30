@@ -31,17 +31,28 @@ class Config {
 }
 
 class CoreContract {
-  private static _instance: any
+  private static _instance_rpc: any
+  private static _instance_mm: any
   methods: any
-  constructor(web3: any, contractAddress: string) {
-    if (!CoreContract._instance) {
+  // todo: change to two instances for CoreMM and CoreRPC
+  constructor(instanceType: string, web3: any, contractAddress: string) {
+    if (instanceType == "RPC" && !CoreContract._instance_rpc) {
       web3.eth.handleRevert = true
-      CoreContract._instance = new web3.eth.Contract(
+      CoreContract._instance_rpc = new web3.eth.Contract(
         CoreJson.abi,
         contractAddress,
       )
+      return CoreContract._instance_rpc
     }
-    return CoreContract._instance
+
+    if (instanceType == "MM" && !CoreContract._instance_mm) {
+      web3.eth.handleRevert = true
+      CoreContract._instance_mm = new web3.eth.Contract(
+          CoreJson.abi,
+          contractAddress,
+      )
+      return CoreContract._instance_mm
+    }
   }
 }
 
@@ -222,15 +233,22 @@ export class External extends Network implements IExternal {
       this.ThrowAlert('danger', 'Please connect Metamask')
     } else {
       try {
+        const coreName = 'CoreRPC'
+        // const coreName = 'CoreMM'
+
         this.EmitDisabled(`getUserFromCore`, true)
-        if (!this.CoreRPC || !this.Wallet) {
+        if (!this[coreName] || !this.Wallet) {
           return false
         }
-        const resp = await this.CoreRPC
+
+        const resp = await this[coreName]
           .methods.getUserFromCore(this.Wallet)
           .call({
             from: this.Wallet,
+            // to: this.Config.CONTRACT_ADDRESS,
+            // gasLimit: 5000000,
           })
+
         // display resp in web interface
         if (!resp.isValue) {
           // msg = `111 user ${this.Wallet} is not registered`
@@ -254,10 +272,10 @@ export class External extends Network implements IExternal {
     } else {
       try {
         this.EmitDisabled(`getWalletsByIndexFromMatrix`, true)
-        if (!this.Core || !this.Wallet) {
+        if (!this.CoreRPC || !this.Wallet) {
           return false
         }
-        const resp = await this.Core
+        const resp = await this.CoreRPC
             .methods.getWalletByIndexFromMatrix(level, index)
             .call({
               from: this.Wallet,
@@ -276,10 +294,10 @@ export class External extends Network implements IExternal {
   async getMatrixUser(level: number | string): Promise<void | boolean> {
     try {
       this.EmitDisabled(`getMatrixUser`, true)
-      if (!this.Core || !this.Wallet) {
+      if (!this.CoreRPC || !this.Wallet) {
         return false
       }
-      const resp = await this.Core
+      const resp = await this.CoreRPC
         .methods.getUserFromMatrix(level, this.Wallet)
         .call({
           from: this.Wallet,
@@ -499,11 +517,13 @@ whose: ${resp.user.whose}
   async registerWhose (whose: string): Promise<void|boolean> {
     try {
       this.EmitDisabled(`registerWhose`, true)
+
       // const value = await this.Core.methods
       //   .payUnit()
       //   .call({
       //     from: this.Wallet,
       //   });
+
       if (!this.CoreMM) return false
       const resp = await this.CoreMM
       .methods.register(whose).send({

@@ -19,8 +19,9 @@ const BC = await getBC()
 const totalForId0 = ref(0)
 const isLoaded = ref(false)
 const getTotalForId0 = async () => {
-  const cnf = useRuntimeConfig()
-  totalForId0.value = await BC.value.getIncomesForId(cnf.public.ID_ADDRESS_0)
+  // todo => restore mark
+  // const cnf = useRuntimeConfig()
+  // totalForId0.value = await BC.value.getIncomesForId(cnf.public.ID_ADDRESS_0)
   isLoaded.value = true
 }
 

@@ -35,6 +35,7 @@
 <script lang="js" setup>
 import { ref, watch } from 'vue'
 import { useDisabled } from '~/composables/useDisabled'
+import Web3 from 'web3'
 
 const disabled = useDisabled()
 const BC = await getBC()
@@ -80,6 +81,16 @@ const registerWhose = async () => {
 const clearWhose = () => {
   localStorage.removeItem('whose-param')
   whoseAddress.value = ''
+
+  // https://docs.infura.io/api/networks/ethereum/json-rpc-methods/eth_getlogs
+  // https://www.infura.io/blog/post/ethereum-rpcs-methods
+
+  // todo => restore mark
+
+  console.warn(Web3.utils.sha3('ReferralEarn(address,uint,address)'))
+  // DirectTransfer(address,uint) 0xc6398e1bde585d1973c9edda3b218d746ed1b543b16b0cc0857a8b079cd8cc1c
+  // WhoseRegistered(address,address,uint) 0x1333050ac156b5c3886709073d1ccdc3f5cd6a330b397ff13c244ec98707b97a
+  // ReferralEarn(address,uint,address) 0x5976cd6bfffc8c9c8f4d388f817bbe1c30e48adf9f3d36cf9bc2444321063def
 }
 </script>
 

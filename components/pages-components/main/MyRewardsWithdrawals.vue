@@ -17,12 +17,13 @@ const fillEvents = async () => {
   // todo: issue description: https://github.com/bnb-chain/bsc/issues/113
   // todo: infura bsc endpoints: https://docs.infura.io/api/network-endpoints#binance-smart-chain
 
-  const eventsFound = await BC.value.getWithdrawals()
-  let lastAmount = 0n
-  for (const evt of eventsFound) {
-    lastAmount += evt?.returnValues?.amount
-  }
-  totalBnb.value = Number(lastAmount) / 10**18
+  // todo => restore mark
+  // const eventsFound = await BC.value.getWithdrawals()
+  // let lastAmount = 0n
+  // for (const evt of eventsFound) {
+  //   lastAmount += evt?.returnValues?.amount
+  // }
+  // totalBnb.value = Number(lastAmount) / 10**18
   isLoaded.value = true
 }
 

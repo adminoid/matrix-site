@@ -13,17 +13,18 @@ const BC = await getBC()
 const totalBnb = ref(0)
 const isLoaded = ref(false)
 const fillEvents = async () => {
-  const eventsFound = await BC.value.getBelowTwoAppear()
-  let amount = 0n
-  if (eventsFound.length > 0) {
-    for (const evt of eventsFound) {
-      amount = amount + evt?.returnValues.amount
-    }
-  } else {
-    amount = 0
-  }
-
-  totalBnb.value = Number(amount) / 10**18
+  // todo => restore mark
+  // const eventsFound = await BC.value.getBelowTwoAppear()
+  // let amount = 0n
+  // if (eventsFound.length > 0) {
+  //   for (const evt of eventsFound) {
+  //     amount = amount + evt?.returnValues.amount
+  //   }
+  // } else {
+  //   amount = 0
+  // }
+  //
+  // totalBnb.value = Number(amount) / 10**18
   isLoaded.value = true
 }
 

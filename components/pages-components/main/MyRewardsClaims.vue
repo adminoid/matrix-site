@@ -13,13 +13,14 @@ const BC = await getBC()
 const totalBnb = ref(0)
 const isLoaded = ref(false)
 const fillEvents = async () => {
-  const eventsFound = await BC.value.getClaimsAppear()
-  let lastAmount
-  for (const evt of eventsFound) {
-    lastAmount = evt.returnValues.newValue
-  }
-  lastAmount = Number(lastAmount) / 10**18
-  totalBnb.value = lastAmount || 0
+  // todo => restore mark
+  // const eventsFound = await BC.value.getClaimsAppear()
+  // let lastAmount
+  // for (const evt of eventsFound) {
+  //   lastAmount = evt.returnValues.newValue
+  // }
+  // lastAmount = Number(lastAmount) / 10**18
+  // totalBnb.value = lastAmount || 0
   isLoaded.value = true
 }
 

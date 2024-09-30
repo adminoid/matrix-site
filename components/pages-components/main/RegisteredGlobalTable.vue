@@ -38,13 +38,14 @@ const isLoaded = ref(false)
 const levels = ref([])
 
 const fillGlobalTable = async () => {
-  if (isClient) {
-    for (const index in [...Array(20).keys()]) {
-      const total = await BC.value.getTotalFromMatrix(index)
-      levels.value.push(Number(total))
-      isLoaded.value = true
-    }
-  }
+  // todo => restore mark
+  // if (isClient) {
+  //   for (const index in [...Array(20).keys()]) {
+  //     const total = await BC.value.getTotalFromMatrix(index)
+  //     levels.value.push(Number(total))
+  //     isLoaded.value = true
+  //   }
+  // }
 }
 onMounted(async () => {
   await fillGlobalTable()

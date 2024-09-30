@@ -2,6 +2,7 @@ import {External} from "~/libs/blockchain/classes"
 import {useNuxtApp} from "#app"
 import {getGlobalThis} from "@vue/shared"
 import {isClient} from "@vueuse/core"
+
 let BC = ref({})
 
 // todo: init External class based on connected wallet, save as singleton
@@ -11,6 +12,7 @@ let BC = ref({})
 
 /**
  * This is must be the only one entry point to create External() instance
+ * Must run once at site loading
  * @returns {Promise<void>}
  * @constructor
  */
@@ -21,12 +23,15 @@ export const InitializeExternal = async () => {
 
     // todo: where is from wallet can be come here?
 
-    // make instance of External class
-    const B = new External(useNuxtApp().$emit)
-    const glob = getGlobalThis()
-    await B.init(glob)
-    await B.connect()
-    BC.value = B
+    if (Object.keys(BC.value).length === 0) {
+        console.info('make instance of External class')
+        // make instance of External class
+        const B = new External(useNuxtApp().$emit)
+        const glob = getGlobalThis()
+        await B.init(glob)
+        await B.connect()
+        BC.value = B
+    }
 }
 
 export const getBC = async () => {

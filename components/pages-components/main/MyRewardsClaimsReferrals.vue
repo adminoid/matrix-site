@@ -12,12 +12,13 @@ const BC = await getBC()
 const totalBnb = ref(0)
 const isLoaded = ref(false)
 const fillEvents = async () => {
-  const eventsFound = await BC.value.getReferralEarn()
-  let amount = 0n
-  for (const evt of eventsFound) {
-    amount += evt?.returnValues.newValue
-  }
-  totalBnb.value = Number(amount) / 10**18
+  // todo => restore mark
+  // const eventsFound = await BC.value.getReferralEarn()
+  // let amount = 0n
+  // for (const evt of eventsFound) {
+  //   amount += evt?.returnValues.newValue
+  // }
+  // totalBnb.value = Number(amount) / 10**18
   isLoaded.value = true
 }
 
