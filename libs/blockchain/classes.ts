@@ -36,7 +36,7 @@ class CoreContract {
   methods: any
   // todo: change to two instances for CoreMM and CoreRPC
   constructor(instanceType: string, web3: any, contractAddress: string) {
-    if (instanceType == "RPC" && !CoreContract._instance_rpc) {
+    if (instanceType === "RPC" && !CoreContract._instance_rpc) {
       web3.eth.handleRevert = true
       CoreContract._instance_rpc = new web3.eth.Contract(
         CoreJson.abi,
@@ -45,7 +45,7 @@ class CoreContract {
       return CoreContract._instance_rpc
     }
 
-    if (instanceType == "MM" && !CoreContract._instance_mm) {
+    if (instanceType === "MM" && !CoreContract._instance_mm) {
       web3.eth.handleRevert = true
       CoreContract._instance_mm = new web3.eth.Contract(
           CoreJson.abi,
@@ -87,8 +87,8 @@ class Common implements ICommon {
       this.Config = publicConfig['public']
       this.Web3MM = new Web3(this.Ethereum)
       this.Web3RPC = new Web3(this.Config.RPC_URL)
-      this.CoreMM = new CoreContract(this.Web3MM, this.Config.CONTRACT_ADDRESS)
-      this.CoreRPC = new CoreContract(this.Web3RPC, this.Config.CONTRACT_ADDRESS)
+      this.CoreMM = new CoreContract('MM', this.Web3MM, this.Config.CONTRACT_ADDRESS)
+      this.CoreRPC = new CoreContract('RPC', this.Web3RPC, this.Config.CONTRACT_ADDRESS)
     }
     if (!this.Web3MM || !this.Ethereum) {
       // metamask is not installed
