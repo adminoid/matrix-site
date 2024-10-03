@@ -57,7 +57,10 @@ const W = route.params.w
 const isInstalled = ref(false)
 
 const isConnected = ref(false)
+
+// TODO: watch for changing status
 const isRegistered = ref(false)
+
 const connectedWallet = ref('')
 
 let BC
