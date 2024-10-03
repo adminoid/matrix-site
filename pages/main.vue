@@ -41,7 +41,9 @@ import RegisteredGlobalTable from '~/components/pages-components/main/Registered
 import PhilanthropistBanner from '~/components/pages-components/main/PhilanthropistBanner.vue'
 import AmountBlocks from '~/components/pages-components/main/AmountBlocks.vue'
 import DonationBlock from '~/components/pages-components/main/DonationBlock.vue'
-import {getBC} from "~/stores/useWeb3.js";
+import { checkInstalled, initBC } from "~/stores/useWeb3.js";
+import { useStorage } from '@vueuse/core'
+
 
 useHead({
   bodyAttrs: {
@@ -49,27 +51,54 @@ useHead({
   },
 })
 
-const BC = await getBC()
-
 const route = useRoute()
 const W = route.params.w
 
 const isInstalled = ref(false)
+
 const isConnected = ref(false)
 const isRegistered = ref(false)
 const connectedWallet = ref('')
 
+let BC
 onMounted(async () => {
-  if ('Web3MM' in BC.value && BC.value.Web3MM.utils.isAddress(W)) {
-    localStorage.setItem('whose-param', W)
-  }
-  if (route.name !== 'read') {
-    await navigateTo({ path: '/' })
+
+
+  // check localStorage wallet and connect if exist
+  const walletStorage = useStorage('connected-wallet', '')
+  if (walletStorage.value) {
+    BC = await initBC()
   }
 
-  isInstalled.value = BC.value.isInstalled
-  isConnected.value = BC.value.isConnected
-  isRegistered.value = BC.value.isRegistered
-  connectedWallet.value = BC.value.Wallet
+
+
+  // TODO: tidy up below code
+  // 1. is BC loaded already?
+
+  // console.info(route)
+
+  if (BC && BC.value) {
+    // checking address proper
+    if ('Web3MM' in BC.value && BC.value.Web3MM.utils.isAddress(W)) {
+      localStorage.setItem('whose-param', W)
+      if (route.name !== 'main') {
+        await navigateTo({ path: '/' })
+      }
+    }
+
+    // isInstalled.value = BC.value.isInstalled
+    isConnected.value = BC.value.isConnected
+    isRegistered.value = BC.value.isRegistered
+    connectedWallet.value = BC.value.Wallet
+  }
+
+  isInstalled.value = checkInstalled() || BC.value.isInstalled
 })
+
+/// todo -- there BC can be undefined initially
+// watch(BC.value.isInstalled, (fr, to) => {
+//   console.info("watch(BC.value.isInstalled)")
+//   console.log(fr)
+//   console.log(to)
+// })
 </script>

@@ -215,11 +215,18 @@ export class External extends Network implements IExternal {
         // metamask installed
         const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
         this.Wallet = accounts[0]
+        if (this.Wallet) {
+          this.isConnected = true
+        }
+
         this.Emit('wallet-updated', this.Wallet)
         walletStorage.value = this.Wallet
 
         this.CoreUser = await this.getUserFromCore()
-        this.isConnected = true
+        if (this.CoreUser) {
+          this.isRegistered = true
+        }
+
       }
     } catch (e: any) {
       this.ThrowAlert('danger', e.message)

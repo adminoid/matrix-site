@@ -6,24 +6,14 @@ button.btn.btn-cpink.main-button(
 </template>
 
 <script setup>
-import { getBC } from "~/stores/useWeb3.js";
-import { useStorage } from '@vueuse/core'
+import { initBC } from "~/stores/useWeb3.js";
 
 const buttonText = ref('Connect')
-
 let BC
-onMounted(async () => {
-  const walletStorage = useStorage('connected-wallet', '')
-  if (walletStorage.value) {
-    BC = await getBC()
-  }
-})
-
-// TODO: check localStorage wallet and connect if exist
 
 // todo => restore mark
-// const connectWallet = async () => {
-//   BC = await getBC()
-// }
+const connectWallet = async () => {
+  BC = await initBC()
+}
 
 </script>

@@ -35,6 +35,19 @@ export const InitializeExternal = async () => {
 }
 
 export const getBC = async () => {
+    if (Object.keys(BC.value).length === 0) {
+        return false
+    }
+    return isClient ? BC : false
+}
+
+// todo: check metamask installed
+export const checkInstalled = () => {
+    const glob = getGlobalThis()
+    return !!glob['ethereum']
+}
+
+export const initBC = async () => {
     if (
         Object.keys(BC.value).length === 0
         && isClient
