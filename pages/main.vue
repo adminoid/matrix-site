@@ -101,4 +101,14 @@ onMounted(async () => {
 //   console.log(fr)
 //   console.log(to)
 // })
+
+useNuxtApp().$on('wallet-updated', async (wallet) => {
+  console.info('wallet-updated.........')
+  console.log(wallet)
+  // if (BC) {
+  //   console.log(BC.value.Wallet)
+  // }
+  connectedWallet.value = wallet
+})
+
 </script>

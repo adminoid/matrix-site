@@ -79,6 +79,9 @@ class Common implements ICommon {
       this.Ethereum = globalThis['ethereum']
       this.Ethereum.on('accountsChanged', (accounts: any[]) => {
         this.Wallet = accounts[0]
+
+        console.warn('wallet-updated-wallet-updated-wallet-updated')
+
         this.Emit('wallet-updated', this.Wallet)
         walletStorage.value = this.Wallet
       })
@@ -189,7 +192,7 @@ export class External extends Network implements IExternal {
     super(emitFn)
   }
 
-  isInstalled = true
+  isInstalled = false
   isConnected = false
   isRegistered = false
 
