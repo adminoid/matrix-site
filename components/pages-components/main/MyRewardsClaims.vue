@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { useStorage } from '@vueuse/core'
+import {isClient, useStorage} from '@vueuse/core'
 import {getBC, isInitialized} from '~/stores/useWeb3.js'
 import {GetEvents} from "~/libs/events-infura/abi-events.js";
 
@@ -14,16 +14,18 @@ const BC = await getBC()
 const totalBnb = ref(0)
 const isLoaded = ref(false)
 const fillEvents = async () => {
-  // todo => restore mark
-  // const eventsFound = await BC.value.getClaimsAppear()
-  const eventsFound = await GetEvents('ClaimsAppear')
-  let lastAmount
-  for (const evt of eventsFound) {
-    lastAmount = evt.returnValues.newValue
-  }
-  lastAmount = Number(lastAmount) / 10**18
-  totalBnb.value = lastAmount || 0
-  isLoaded.value = true
+  if (!isClient) return;
+
+  setTimeout(async () => {
+    const eventsFound = await GetEvents('ClaimsAppear')
+    let lastAmount
+    for (const evt of eventsFound) {
+      lastAmount = evt.returnValues.newValue
+    }
+    lastAmount = Number(lastAmount) / 10**18
+    totalBnb.value = lastAmount || 0
+    isLoaded.value = true
+  }, 1500)
 }
 
 watch(isInitialized, (nv) => {

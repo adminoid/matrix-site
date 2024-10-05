@@ -9,7 +9,6 @@ export interface IExternal {
   getMatrixUser(level: number | string, wallet: string): Promise<void | boolean>
 
   getAddressesGlobalTotal(): Promise<any>
-  getReferralEarn(): Promise<any>
 
 // interaction methods
   registerWhose(whose: string): Promise<void|boolean>
