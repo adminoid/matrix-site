@@ -27,9 +27,10 @@ client-only
 </template>
 
 <script setup>
-// import {getGiftsAccruedProxy, getBC} from "~/stores/useWeb3.js";
 import {getBC, isInitialized} from "~/stores/useWeb3.js";
 import {useNuxtApp} from "#app";
+import {isClient} from "@vueuse/core";
+import {GetEvents} from "~/libs/events-infura/abi-events.js";
 
 // TODO: add placeholder to .referrals__link-text content and pass wallet address there
 
@@ -51,42 +52,44 @@ const events = ref([])
 const isDataLoaded = ref(false)
 const fillEvents = async () => {
   // TODO: Check this
-  // const [eventsAccruedFound, eventsSpentFound] = await Promise.all([getGiftsAccruedProxy(), BC.value.getGiftsSpent()])
-  // const eventsAccruedFound = await getGiftsAccruedProxy()
-  // console.log(eventsAccruedFound)
+
+  if (!isClient) return;
+
+  const [eventsAccruedFound, eventsSpentFound] = await Promise.all([await GetEvents('GiftAppear'), await GetEvents('GiftSpent')])
+
+  // todo => restore mark
+  events.value = [
+    {
+      isAccrued: false,
+      isSpent: false,
+    },
+    {
+      isAccrued: false,
+      isSpent: false,
+    }
+  ]
+
+  if (eventsAccruedFound.length > 0) {
+    for (const eventIndex in eventsAccruedFound) {
+      if (eventsAccruedFound[eventIndex]) {
+        events.value[eventIndex] = {
+          isAccrued: true,
+          isSpent: false,
+          accrued: eventsAccruedFound[eventIndex]?.returnValues?.amount.toString()
+        }
+
+        if (eventsSpentFound[eventIndex]) {
+          events.value[eventIndex] = {
+            isAccrued: true,
+            isSpent: true,
+            spender: eventsSpentFound[eventIndex]?.returnValues?.spender
+          }
+        }
+      }
+    }
+  }
 
   isDataLoaded.value = true
-  // todo => restore mark
-  // events.value = [
-  //   {
-  //     isAccrued: false,
-  //     isSpent: false,
-  //   },
-  //   {
-  //     isAccrued: false,
-  //     isSpent: false,
-  //   }
-  // ]
-  //
-  // if (eventsAccruedFound.length > 0) {
-  //   for (const eventIndex in eventsAccruedFound) {
-  //     if (eventsAccruedFound[eventIndex]) {
-  //       events.value[eventIndex] = {
-  //         isAccrued: true,
-  //         isSpent: false,
-  //         accrued: eventsAccruedFound[eventIndex]?.returnValues?.amount.toString()
-  //       }
-  //
-  //       if (eventsSpentFound[eventIndex]) {
-  //         events.value[eventIndex] = {
-  //           isAccrued: true,
-  //           isSpent: true,
-  //           spender: eventsSpentFound[eventIndex]?.returnValues?.spender
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
 }
 
 useNuxtApp().$on('wallet-updated', async () => {

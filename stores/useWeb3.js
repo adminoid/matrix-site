@@ -61,19 +61,6 @@ export const initBC = async () => {
     return isClient ? BC : false
 }
 
-const giftsAccrued = ref([])
-// TODO: here is PROXY
-export async function getGiftsAccruedProxy() {
-    console.warn('this is the getGiftsAccruedProxy')
-    if (
-        isClient
-        && Object.keys(BC.value).length > 0
-    ) {
-        return await BC.value.getGiftsAccrued()
-    }
-    return giftsAccrued
-}
-
 export const getDescendantsProxy = async () => {
     const matrixData = []
     const maxLevel = Number(BC.value.CoreUser)

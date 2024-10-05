@@ -35,8 +35,6 @@
 <script lang="js" setup>
 import { ref, watch } from 'vue'
 import { useDisabled } from '~/composables/useDisabled'
-import {GetEvents} from "~/libs/events/abi-events.js";
-import {isClient} from "@vueuse/core";
 
 const disabled = useDisabled()
 const BC = await getBC()
@@ -82,19 +80,6 @@ const registerWhose = async () => {
 const clearWhose = async () => {
   localStorage.removeItem('whose-param')
   whoseAddress.value = ''
-
-  // https://docs.infura.io/api/networks/ethereum/json-rpc-methods/eth_getlogs
-  // https://www.infura.io/blog/post/ethereum-rpcs-methods
-
-  // todo => restore mark
-
-  // TODO: move this stuff to Referrals.vue
-  if (isClient) {
-    // const r1 = await GetEvents('GiftAppear')
-    const r1 = await GetEvents('DirectTransfer')
-    console.log(r1)
-  }
-
 }
 </script>
 

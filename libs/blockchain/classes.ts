@@ -450,35 +450,6 @@ export class External extends Network implements IExternal {
     })
   }
 
-  async getGiftsAccrued () {
-    console.info('classes.ts -> getGiftsAccrued()')
-
-    // TODO: move here getting event on click clear button
-
-    // const tmp = await this.CoreMM.getPastEvents('GiftAppear', {
-    //   filter: {
-    //     user: this.Wallet,
-    //   },
-    //   fromBlock: FromBlock,
-    //   toBlock: 'latest',
-    // })
-    // console.warn(tmp)
-    // return tmp
-  }
-
-  async getGiftsSpent () {
-    console.info('getGiftsSpent 1')
-    const tmp = await this.CoreMM.getPastEvents('GiftSpent', {
-      filter: {
-        owner: this.Wallet,
-      },
-      fromBlock: FromBlock,
-      toBlock: 'latest',
-    })
-    console.warn(tmp)
-    return tmp
-  }
-
   async getWithdrawals () {
     return await this.CoreRPC.getPastEvents('ClaimsWithdraw', {
       filter: {
