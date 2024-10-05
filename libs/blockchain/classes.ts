@@ -348,15 +348,15 @@ export class External extends Network implements IExternal {
     })
   }
 
-  async getClaimsAppear () {
-    return await this.CoreRPC.getPastEvents('ClaimsAppear', {
-      filter: {
-        owner: this.Wallet,
-      },
-      fromBlock: FromBlock,
-      toBlock: 'latest',
-    })
-  }
+  // async getClaimsAppear () {
+  //   return await this.CoreRPC.getPastEvents('ClaimsAppear', {
+  //     filter: {
+  //       owner: this.Wallet,
+  //     },
+  //     fromBlock: FromBlock,
+  //     toBlock: 'latest',
+  //   })
+  // }
 
   async getBelowTwoAppear () {
     return await this.CoreRPC.getPastEvents('BelowTwoAppear', {
@@ -390,13 +390,13 @@ export class External extends Network implements IExternal {
     // todo: getting latest block number
     // const latestBlock = await this.Web3.eth.getBlockNumber()
 
-    const claimsAppearEvents = await this.CoreRPC.getPastEvents('ClaimsAppear', {
-      filter: {
-        owner: wallet,
-      },
-      fromBlock: FromBlock,
-      toBlock: 'latest',
-    })
+    // const claimsAppearEvents = await this.CoreRPC.getPastEvents('ClaimsAppear', {
+    //   filter: {
+    //     owner: wallet,
+    //   },
+    //   fromBlock: FromBlock,
+    //   toBlock: 'latest',
+    // })
 
     const claimsReferralEvents = await this.CoreRPC.getPastEvents('ReferralEarn', {
       filter: {

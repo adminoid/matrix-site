@@ -7,25 +7,29 @@
 
 <script setup>
 import { useStorage } from '@vueuse/core'
+import {getBC, isInitialized} from '~/stores/useWeb3.js'
+import {GetEvents} from "~/libs/events-infura/abi-events.js";
 
-import {getBC} from '~/stores/useWeb3.js'
 const BC = await getBC()
 const totalBnb = ref(0)
 const isLoaded = ref(false)
 const fillEvents = async () => {
   // todo => restore mark
   // const eventsFound = await BC.value.getClaimsAppear()
-  // let lastAmount
-  // for (const evt of eventsFound) {
-  //   lastAmount = evt.returnValues.newValue
-  // }
-  // lastAmount = Number(lastAmount) / 10**18
-  // totalBnb.value = lastAmount || 0
+  const eventsFound = await GetEvents('ClaimsAppear')
+  let lastAmount
+  for (const evt of eventsFound) {
+    lastAmount = evt.returnValues.newValue
+  }
+  lastAmount = Number(lastAmount) / 10**18
+  totalBnb.value = lastAmount || 0
   isLoaded.value = true
 }
 
-onMounted(async () => {
-  await fillEvents()
+watch(isInitialized, (nv) => {
+  if (nv) {
+    fillEvents()
+  }
 })
 
 useNuxtApp().$on('wallet-updated', async () => {
