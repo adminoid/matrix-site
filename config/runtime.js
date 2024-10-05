@@ -47,5 +47,9 @@ export default () => ({
             (process.env.CHAIN_ID)
                 ? process.env.CHAIN_ID
                 : '18',
+        INFURA_KEY:
+            (process.env.CHAIN_ID)
+                ? process.env.INFURA_KEY
+                : '',
     }
 })

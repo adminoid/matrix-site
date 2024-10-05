@@ -47,12 +47,15 @@ export const checkInstalled = () => {
     return !!glob['ethereum']
 }
 
+export const isInitialized = ref(false)
 export const initBC = async () => {
     if (
         Object.keys(BC.value).length === 0
         && isClient
     ) {
         await InitializeExternal()
+        // emit event about blockchain classes are initialized
+        isInitialized.value = true
     }
 
     return isClient ? BC : false
@@ -61,11 +64,14 @@ export const initBC = async () => {
 const giftsAccrued = ref([])
 // TODO: here is PROXY
 export async function getGiftsAccruedProxy() {
-    if (isClient && giftsAccrued.value.length === 0) {
-        return await BC?.value?.getGiftsAccrued()
-    } else {
-        return giftsAccrued
+    console.warn('this is the getGiftsAccruedProxy')
+    if (
+        isClient
+        && Object.keys(BC.value).length > 0
+    ) {
+        return await BC.value.getGiftsAccrued()
     }
+    return giftsAccrued
 }
 
 export const getDescendantsProxy = async () => {

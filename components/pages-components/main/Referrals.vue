@@ -28,10 +28,17 @@ client-only
 
 <script setup>
 // import {getGiftsAccruedProxy, getBC} from "~/stores/useWeb3.js";
-import {getBC} from "~/stores/useWeb3.js";
+import {getBC, isInitialized} from "~/stores/useWeb3.js";
 import {useNuxtApp} from "#app";
 
 // TODO: add placeholder to .referrals__link-text content and pass wallet address there
+
+// TODO: replace everywhere onMounted to this watcher
+watch(isInitialized, (nv) => {
+  if (nv) {
+    fillEvents()
+  }
+})
 
 const BC = await getBC()
 const stages = {
@@ -45,6 +52,9 @@ const isDataLoaded = ref(false)
 const fillEvents = async () => {
   // TODO: Check this
   // const [eventsAccruedFound, eventsSpentFound] = await Promise.all([getGiftsAccruedProxy(), BC.value.getGiftsSpent()])
+  // const eventsAccruedFound = await getGiftsAccruedProxy()
+  // console.log(eventsAccruedFound)
+
   isDataLoaded.value = true
   // todo => restore mark
   // events.value = [
@@ -78,10 +88,6 @@ const fillEvents = async () => {
   //   }
   // }
 }
-
-onMounted(() => {
-  fillEvents()
-})
 
 useNuxtApp().$on('wallet-updated', async () => {
   await fillEvents()

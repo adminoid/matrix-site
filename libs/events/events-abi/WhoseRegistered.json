@@ -1,0 +1,25 @@
+{
+  "anonymous": false,
+  "inputs": [
+    {
+      "indexed": true,
+      "internalType": "address",
+      "name": "user",
+      "type": "address"
+    },
+    {
+      "indexed": true,
+      "internalType": "address",
+      "name": "whose",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "change",
+      "type": "uint256"
+    }
+  ],
+  "name": "WhoseRegistered",
+  "type": "event"
+}

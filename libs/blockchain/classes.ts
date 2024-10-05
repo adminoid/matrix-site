@@ -15,8 +15,6 @@ const walletStorage = useStorage('connected-wallet')
 class Config {
   private static _instance: any
   CONTRACT_ADDRESS: string = ""
-  ID_ADDRESS_0: string = ""
-  ID_ADDRESS_1: string = ""
   CHAIN_ID: string = ""
   CHAIN_NAME!: string
   RPC_URL!: string
@@ -453,16 +451,19 @@ export class External extends Network implements IExternal {
   }
 
   async getGiftsAccrued () {
-    console.info('getGiftsAccrued 1')
-    const tmp = await this.CoreMM.getPastEvents('GiftAppear', {
-      filter: {
-        user: this.Wallet,
-      },
-      fromBlock: FromBlock,
-      toBlock: 'latest',
-    })
-    console.warn(tmp)
-    return tmp
+    console.info('classes.ts -> getGiftsAccrued()')
+
+    // TODO: move here getting event on click clear button
+
+    // const tmp = await this.CoreMM.getPastEvents('GiftAppear', {
+    //   filter: {
+    //     user: this.Wallet,
+    //   },
+    //   fromBlock: FromBlock,
+    //   toBlock: 'latest',
+    // })
+    // console.warn(tmp)
+    // return tmp
   }
 
   async getGiftsSpent () {
