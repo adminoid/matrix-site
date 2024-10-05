@@ -15,17 +15,14 @@ const totalBnb = ref(0)
 const isLoaded = ref(false)
 const fillEvents = async () => {
   if (!isClient) return;
-
-  setTimeout(async () => {
-    const eventsFound = await GetEvents('ClaimsAppear')
-    let lastAmount
-    for (const evt of eventsFound) {
-      lastAmount = evt.returnValues.newValue
-    }
-    lastAmount = Number(lastAmount) / 10**18
-    totalBnb.value = lastAmount || 0
-    isLoaded.value = true
-  }, 1500)
+  const eventsFound = await GetEvents('ClaimsAppear')
+  let lastAmount
+  for (const evt of eventsFound) {
+    lastAmount = evt.returnValues.newValue
+  }
+  lastAmount = Number(lastAmount) / 10**18
+  totalBnb.value = lastAmount || 0
+  isLoaded.value = true
 }
 
 watch(isInitialized, (nv) => {

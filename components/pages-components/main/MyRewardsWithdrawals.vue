@@ -19,18 +19,13 @@ const fillEvents = async () => {
   // todo: infura bsc endpoints: https://docs.infura.io/api/network-endpoints#binance-smart-chain
 
   if (!isClient) return;
-
-  setTimeout(async () => {
-    // const eventsFound = await BC.value.getWithdrawals()
-    const eventsFound = await GetEvents('ClaimsWithdraw')
-
-    let lastAmount = 0n
-    for (const evt of eventsFound) {
-      lastAmount += evt.amount
-    }
-    totalBnb.value = Number(lastAmount) / 10**18
-    isLoaded.value = true
-  }, 3500)
+  const eventsFound = await GetEvents('ClaimsWithdraw')
+  let lastAmount = 0n
+  for (const evt of eventsFound) {
+    lastAmount += evt.amount
+  }
+  totalBnb.value = Number(lastAmount) / 10**18
+  isLoaded.value = true
 }
 
 watch(isInitialized, (nv) => {

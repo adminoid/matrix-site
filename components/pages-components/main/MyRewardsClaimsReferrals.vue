@@ -18,15 +18,13 @@ const fillEvents = async () => {
   // const eventsFound = await BC.value.getReferralEarn()
   if (!isClient) return;
 
-  setTimeout(async () => {
-    const eventsFound = await GetEvents('ReferralEarn')
-    let amount = 0n
-    for (const evt of eventsFound) {
-      amount += evt?.returnValues.newValue
-    }
-    totalBnb.value = Number(amount) / 10**18
-    isLoaded.value = true
-  }, 4500)
+  const eventsFound = await GetEvents('ReferralEarn')
+  let amount = 0n
+  for (const evt of eventsFound) {
+    amount += evt?.returnValues.newValue
+  }
+  totalBnb.value = Number(amount) / 10**18
+  isLoaded.value = true
 }
 
 watch(isInitialized, (nv) => {
