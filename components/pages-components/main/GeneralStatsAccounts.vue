@@ -9,23 +9,29 @@ main-banner(
 <script setup>
 import MainBanner from '~/components/pages-components/main/MainBanner.vue'
 import {getBC} from '~/stores/useWeb3.js'
-const BC = await getBC()
+import {isClient} from "@vueuse/core";
 const totalRegisteredAccounts = ref(0)
 const isLoaded = ref(false)
+let BC
+
 const getTotalAccounts = async () => {
-  // todo => restore mark
-  // totalRegisteredAccounts.value = await BC.value.getAddressesGlobalTotal()
-  isLoaded.value = true
+  if (!isClient) return;
+  if (BC.value) {
+    totalRegisteredAccounts.value = await BC.value.getAddressesGlobalTotal()
+    isLoaded.value = true
+  }
 }
 
-onMounted(async () => {
-  await getTotalAccounts()
+watch(isInitialized, async (nv) => {
+  if (nv && !isLoaded.value) {
+    BC = getBC()
+    await getTotalAccounts()
+  }
 })
 
-useNuxtApp().$on('wallet-updated', async () => {
-  await getTotalAccounts()
+useNuxtApp().$on('wallet-updated', async (wallet) => {
+  if (wallet && BC && BC.value) {
+    await getTotalAccounts()
+  }
 })
-
-// TODO: remove all `useStorage('connected-wallet',`
-
 </script>
