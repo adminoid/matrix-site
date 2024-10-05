@@ -13,7 +13,6 @@ const totalBnb = ref(0)
 const isLoaded = ref(false)
 const fillEvents = async () => {
 
-  // todo: look for using alchemy
   // todo: issue description: https://github.com/bnb-chain/bsc/issues/113
   // todo: infura bsc endpoints: https://docs.infura.io/api/network-endpoints#binance-smart-chain
 

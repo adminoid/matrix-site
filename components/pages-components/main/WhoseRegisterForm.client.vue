@@ -88,13 +88,10 @@ const clearWhose = async () => {
 
   // todo => restore mark
 
-  // console.info('SHA')
-  // console.warn(BC.value.Web3MM.utils.sha3('WhoseRegistered(address,address,uint)'))
-  // console.warn(Web3.utils.sha3(''))
-
   // TODO: move this stuff to Referrals.vue
   if (isClient) {
-    const r1 = await GetEvents('GiftAppear')
+    // const r1 = await GetEvents('GiftAppear')
+    const r1 = await GetEvents('DirectTransfer')
     console.log(r1)
   }
 

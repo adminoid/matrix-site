@@ -30,31 +30,29 @@ export const EventMap = {
 }
 
 export const GetEvents = async (eventName) => {
-    console.log(EventMap[eventName])
     const config = useRuntimeConfig()
     const url = getInfuraUrl(config.public.INFURA_KEY)
     const body = createBody(config.public.CONTRACT_ADDRESS, [EventMap[eventName]])
-
     try {
         const response = await axios.post(
             url,
             body,
         )
-        console.info('response.data')
-        // console.log(response.data.result[0])
-        // todo: pass first topic to parseResult
-        return await parseResult(eventName, response.data.result[0])
+        // pass first topic to parseResult
+        return await parseResult(eventName, response.data.result)
     } catch (e) {
-        // console.warn(e.response.data)
         console.error(e)
     }
 }
 
-const parseResult = async (eventName, event) => {
-
-    // todo: get event abi from according json file
+const parseResult = async (eventName, events) => {
+    // get event abi from according json file
     const eventAbi = await import(`./events-abi/${eventName}.json`)
-
-    return (new Web3()).eth.abi.decodeLog(eventAbi.inputs, event.data, event.topics.slice(1))
-
+    const web3 = new Web3()
+    const decodedDataArray = []
+    for (const event of events) {
+        const data = web3.eth.abi.decodeLog(eventAbi.inputs, event.data, event.topics.slice(1))
+        decodedDataArray.push(data)
+    }
+    return decodedDataArray
 }
