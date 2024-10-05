@@ -338,16 +338,6 @@ export class External extends Network implements IExternal {
     }
   }
 
-  async getWhoseOfUser () {
-    return await this.CoreRPC.getPastEvents('WhoseRegistered', {
-      filter: {
-        whose: this.Wallet,
-      },
-      fromBlock: FromBlock,
-      toBlock: 'latest',
-    })
-  }
-
   async getReferralEarn () {
     return await this.CoreRPC.getPastEvents('ReferralEarn', {
       filter: {
