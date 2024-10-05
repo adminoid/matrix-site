@@ -24,11 +24,9 @@ const fillEvents = async () => {
     // const eventsFound = await BC.value.getWithdrawals()
     const eventsFound = await GetEvents('ClaimsWithdraw')
 
-    // console.warn('eventsFound', eventsFound)
-
     let lastAmount = 0n
     for (const evt of eventsFound) {
-      lastAmount += evt?.returnValues?.amount
+      lastAmount += evt.amount
     }
     totalBnb.value = Number(lastAmount) / 10**18
     isLoaded.value = true

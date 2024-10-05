@@ -8,22 +8,28 @@ br
 // TODO: Need to be updated after claim balance withdrawing
 import {getBC} from '~/stores/useWeb3.js'
 
-const BC = await getBC()
+const BC = getBC()
 
 const claimsBalanceDecimal = ref(0)
-const getData = async () => {
+const getData = () => {
   // TODO: make it singleton?
-  const claimsBalance = await BC.value.CoreUser.claims
+  const claimsBalance = BC.value.CoreUser.claims
   if (claimsBalance) {
     claimsBalanceDecimal.value = Number(claimsBalance) / 10**18
   }
 }
 
-onMounted(async () => {
-  await getData()
+if (isInitialized) {
+  getData()
+}
+
+watch(isInitialized, async (nv) => {
+  if (nv) {
+    getData()
+  }
 })
 
 useNuxtApp().$on('wallet-updated', async () => {
-  await getData()
+  getData()
 })
 </script>

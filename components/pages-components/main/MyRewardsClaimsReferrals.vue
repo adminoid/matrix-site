@@ -20,7 +20,6 @@ const fillEvents = async () => {
 
   setTimeout(async () => {
     const eventsFound = await GetEvents('ReferralEarn')
-    console.info('eventsFound', eventsFound)
     let amount = 0n
     for (const evt of eventsFound) {
       amount += evt?.returnValues.newValue

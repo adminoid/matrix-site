@@ -3,7 +3,7 @@ import {useNuxtApp} from "#app"
 import {getGlobalThis} from "@vue/shared"
 import {isClient} from "@vueuse/core"
 
-let BC = ref({})
+export let BC = ref({})
 
 // todo: init External class based on connected wallet, save as singleton
 //  check registered and save as singleton
@@ -34,7 +34,7 @@ export const InitializeExternal = async () => {
     }
 }
 
-export const getBC = async () => {
+export const getBC = () => {
     if (Object.keys(BC.value).length === 0) {
         return false
     }
@@ -47,6 +47,7 @@ export const checkInstalled = () => {
     return !!glob['ethereum']
 }
 
+// TODO: add reinitialization if wallet is updated
 export const isInitialized = ref(false)
 export const initBC = async () => {
     if (

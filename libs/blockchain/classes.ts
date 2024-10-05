@@ -227,7 +227,6 @@ export class External extends Network implements IExternal {
         if (this.CoreUser) {
           this.isRegistered = true
         }
-
       }
     } catch (e: any) {
       this.ThrowAlert('danger', e.message)
