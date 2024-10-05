@@ -440,15 +440,15 @@ export class External extends Network implements IExternal {
     })
   }
 
-  async getWithdrawals () {
-    return await this.CoreRPC.getPastEvents('ClaimsWithdraw', {
-      filter: {
-        owner: this.Wallet,
-      },
-      fromBlock: FromBlock,
-      toBlock: 'latest',
-    })
-  }
+  // async getWithdrawals () {
+  //   return await this.CoreRPC.getPastEvents('ClaimsWithdraw', {
+  //     filter: {
+  //       owner: this.Wallet,
+  //     },
+  //     fromBlock: FromBlock,
+  //     toBlock: 'latest',
+  //   })
+  // }
 
   async getTotalFromMatrix (matrixIndex: number) {
     return  await this.CoreRPC.methods.getTotalFromMatrix(matrixIndex)

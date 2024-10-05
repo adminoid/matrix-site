@@ -7,6 +7,8 @@
 
 <script setup>
 import {getBC} from '~/stores/useWeb3.js'
+import {isClient} from "@vueuse/core";
+import {GetEvents} from "~/libs/events-infura/abi-events.js";
 
 const BC = await getBC()
 const totalBnb = ref(0)
@@ -16,18 +18,27 @@ const fillEvents = async () => {
   // todo: issue description: https://github.com/bnb-chain/bsc/issues/113
   // todo: infura bsc endpoints: https://docs.infura.io/api/network-endpoints#binance-smart-chain
 
-  // todo => restore mark
-  // const eventsFound = await BC.value.getWithdrawals()
-  // let lastAmount = 0n
-  // for (const evt of eventsFound) {
-  //   lastAmount += evt?.returnValues?.amount
-  // }
-  // totalBnb.value = Number(lastAmount) / 10**18
-  isLoaded.value = true
+  if (!isClient) return;
+
+  setTimeout(async () => {
+    // const eventsFound = await BC.value.getWithdrawals()
+    const eventsFound = await GetEvents('ClaimsWithdraw')
+
+    // console.warn('eventsFound', eventsFound)
+
+    let lastAmount = 0n
+    for (const evt of eventsFound) {
+      lastAmount += evt?.returnValues?.amount
+    }
+    totalBnb.value = Number(lastAmount) / 10**18
+    isLoaded.value = true
+  }, 3500)
 }
 
-onMounted(async () => {
-  await fillEvents()
+watch(isInitialized, (nv) => {
+  if (nv) {
+    fillEvents()
+  }
 })
 
 useNuxtApp().$on('wallet-updated', async () => {
