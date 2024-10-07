@@ -11,26 +11,30 @@ main-banner(
 import MainBanner from '~/components/pages-components/main/MainBanner.vue'
 import {getBC} from '~/stores/useWeb3.js'
 import {useNuxtApp} from "#app";
+import {isClient} from "@vueuse/core";
 
-const BC = await getBC()
+let BC
 
-const totalForId1 = ref(0)
-const isLoaded = ref(false)
-const getTotalForId1 = async () => {
-  // todo => restore mark
-  // const cnf = useRuntimeConfig()
-  // const amount = await BC.value.getIncomesForId(cnf.public.ID_ADDRESS_1)
-  // if (amount) {
-  //   totalForId1.value = amount
-  // }
-  isLoaded.value = true
-}
-
-onMounted(async () => {
+useNuxtApp().$on('initialized', async () => {
   await getTotalForId1()
 })
 
 useNuxtApp().$on('wallet-updated', async () => {
   await getTotalForId1()
 })
+
+const totalForId1 = ref(0)
+const isLoaded = ref(false)
+const getTotalForId1 = async () => {
+  if (!isClient) return;
+  BC = getBC()
+  if (BC && BC.value) {
+    const cnf = useRuntimeConfig()
+    const amount = await BC.value.getIncomesForId(cnf.public.ID_ADDRESS_1)
+    if (amount) {
+      totalForId1.value = amount
+    }
+  }
+  isLoaded.value = true
+}
 </script>

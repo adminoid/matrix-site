@@ -4,7 +4,7 @@
   .main-banner__link(v-if="!!props.link")
     contract-address
   .main-banner__footer(v-if="isShowed && hasFooter") {{ footer }}
-  .main-banner__columns(v-else) <i>Is loading... 1</i>
+  .main-banner__columns(v-else-if="hasFooter") <i>Is loading... 1</i>
   .main-banner__columns(v-if="isShowed && !!props.columns && props.columns.length > 1")
     .row
       .col.px-4.d-flex.justify-content-between.flex-column(v-for="col in columns")

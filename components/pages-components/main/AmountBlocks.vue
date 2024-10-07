@@ -13,6 +13,7 @@
     .col
       main-banner(
         header="Amount of BNB sent to help animals"
+        :footer="false"
         :columns="[{ amount: '0.000', title: 'From a wallet id1'}, { amount: '0.000', title: 'From a wallet for donation'}]"
         :isShowed="true"
       )
