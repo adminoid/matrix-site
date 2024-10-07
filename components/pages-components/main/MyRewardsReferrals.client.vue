@@ -6,26 +6,31 @@
 </template>
 
 <script setup>
-import {getBC, isInitialized} from '~/stores/useWeb3.js'
+import {getBC} from '~/stores/useWeb3.js'
 import {GetEvents} from "~/libs/events-infura/abi-events.js";
+import {isClient} from "@vueuse/core";
 
-const BC = await getBC()
+let BC
 
-const total = ref(0)
-const isLoaded = ref(false)
-const fillEvents = async () => {
-  const eventsFound = await GetEvents('WhoseRegistered')
-  total.value = eventsFound.length
-  isLoaded.value = true
-}
-
-watch(isInitialized, (nv) => {
-  if (nv) {
-    fillEvents()
-  }
+useNuxtApp().$on('initialized', async () => {
+  await fillEvents()
 })
 
 useNuxtApp().$on('wallet-updated', async () => {
   await fillEvents()
 })
+
+const total = ref(0)
+const isLoaded = ref(false)
+const fillEvents = async () => {
+  if (!isClient) return
+  BC = getBC()
+  if (BC && BC.value) {
+    const eventsFound = await GetEvents('WhoseRegistered', BC.value.Wallet)
+    if (eventsFound && eventsFound.length > 0) {
+      total.value = eventsFound.length
+    }
+  }
+  isLoaded.value = true
+}
 </script>

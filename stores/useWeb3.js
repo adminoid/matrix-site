@@ -23,6 +23,8 @@ export const InitializeExternal = async () => {
 
     // todo: where is from wallet can be come here?
 
+    // console.error('InitializeExternal()()')
+
     if (Object.keys(BC.value).length === 0) {
         console.info('make instance of External class')
         // make instance of External class
@@ -31,6 +33,7 @@ export const InitializeExternal = async () => {
         await B.init(glob)
         await B.connect()
         BC.value = B
+        BC.value.Emit('initialized', true)
     }
 }
 
@@ -48,7 +51,7 @@ export const checkInstalled = () => {
 }
 
 // TODO: add reinitialization if wallet is updated
-export const isInitialized = ref(false)
+// export const isInitialized = ref(false)
 export const initBC = async () => {
     if (
         Object.keys(BC.value).length === 0
@@ -56,7 +59,7 @@ export const initBC = async () => {
     ) {
         await InitializeExternal()
         // emit event about blockchain classes are initialized
-        isInitialized.value = true
+        // isInitialized.value = true
     }
 
     return isClient ? BC : false

@@ -10,30 +10,33 @@ import {getBC} from '~/stores/useWeb3.js'
 import {GetEvents} from "~/libs/events-infura/abi-events.js";
 import {isClient} from "@vueuse/core";
 
-const BC = await getBC()
+let BC
+
+useNuxtApp().$on('initialized', async () => {
+  await fillEvents()
+})
+
+useNuxtApp().$on('wallet-updated', async () => {
+  await fillEvents()
+})
+
 const totalBnb = ref(0)
 const isLoaded = ref(false)
 const fillEvents = async () => {
   // todo => restore mark
   // const eventsFound = await BC.value.getReferralEarn()
   if (!isClient) return;
-
-  const eventsFound = await GetEvents('ReferralEarn')
-  let amount = 0n
-  for (const evt of eventsFound) {
-    amount += evt?.returnValues.newValue
+  BC = getBC()
+  if (BC && BC.value) {
+    const eventsFound = await GetEvents('ReferralEarn', BC.value.Wallet)
+    let amount = 0n
+    if (eventsFound && eventsFound.length > 0) {
+      for (const evt of eventsFound) {
+        amount += evt?.newValue
+      }
+    }
+    totalBnb.value = Number(amount) / 10**18
   }
-  totalBnb.value = Number(amount) / 10**18
   isLoaded.value = true
 }
-
-watch(isInitialized, (nv) => {
-  if (nv) {
-    fillEvents()
-  }
-})
-
-useNuxtApp().$on('wallet-updated', async () => {
-  await fillEvents()
-})
 </script>

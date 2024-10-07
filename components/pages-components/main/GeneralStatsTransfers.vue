@@ -18,25 +18,37 @@
 import MainBanner from '~/components/pages-components/main/MainBanner.vue'
 import {getBC} from '~/stores/useWeb3.js'
 import {GetEvents} from "~/libs/events-infura/abi-events.js";
+import {isClient} from "@vueuse/core";
 
-const BC = await getBC()
+let BC
+
+useNuxtApp().$on('initialized', async () => {
+  await getTotalAccounts()
+})
+
+useNuxtApp().$on('wallet-updated', async () => {
+  await getTotalAccounts()
+})
+
 const totalAmountBnb = ref(0)
 const totalAmountBtc = ref(0)
 const isLoaded = ref(false)
 const getTotalAccounts = async () => {
-  // const eventsFound = await BC.value.getDirectTransfers()
-  const eventsFound = await GetEvents('DirectTransfer')
-
-  console.warn('eventsFound')
-  console.log(eventsFound)
-
-  const amount = eventsFound.reduce(
-      (accumulator, currentValue) => accumulator + Number(currentValue.amount),
-      0,
-  )
-  totalAmountBnb.value = Number(amount) / 10**18
-  const rate = await getBtcRate()
-  totalAmountBtc.value = (totalAmountBnb.value / rate).toFixed(3)
+  if (!isClient) return;
+  BC = getBC()
+  if (BC && BC.value) {
+    // const eventsFound = await BC.value.getDirectTransfers()
+    const eventsFound = await GetEvents('DirectTransfer')
+    if (eventsFound && eventsFound.length > 0) {
+      const amount = eventsFound.reduce(
+          (accumulator, currentValue) => accumulator + Number(currentValue.amount),
+          0,
+      )
+      totalAmountBnb.value = Number(amount) / 10**18
+      const rate = await getBtcRate()
+      totalAmountBtc.value = (totalAmountBnb.value / rate).toFixed(8)
+    }
+  }
   isLoaded.value = true
 }
 
@@ -87,17 +99,5 @@ const getBtcRate = async () => {
   //       console.log(error);
   //     });
 }
-// onMounted(async () => {
-//   await getTotalAccounts()
-// })
 
-watch(isInitialized, async (nv) => {
-  if (nv) {
-    await getTotalAccounts()
-  }
-})
-
-useNuxtApp().$on('wallet-updated', async () => {
-  await getTotalAccounts()
-})
 </script>

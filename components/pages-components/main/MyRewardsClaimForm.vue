@@ -12,18 +12,26 @@ import MyRewardsClaimFormForm from "~/components/pages-components/main/MyRewards
 import {getBC} from "~/stores/useWeb3.js";
 import {isClient} from "@vueuse/core";
 
-const isReady = ref(false)
-
 let BC
 
-watch(isInitialized, async (nv) => {
-  if (nv) {
-    if (isClient) {
-      BC = await getBC()
-      isReady.value = BC.value.isConnected && BC.value.isRegistered
-    }
-  }
+useNuxtApp().$on('initialized', () => {
+  isRegistered()
 })
+
+useNuxtApp().$on('wallet-updated', () => {
+  isRegistered()
+})
+
+// TODO: check for necessity of hiding sub components (isReady)
+
+const isReady = ref(false)
+const isRegistered = () => {
+  if (!isClient) return
+  BC = getBC()
+  if (BC && BC.value) {
+    isReady.value = BC.value.isConnected && BC.value.isRegistered
+  }
+}
 </script>
 
 <style lang="sass">

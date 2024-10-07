@@ -7,6 +7,7 @@ import type {
 
 import CoreJson from '~/artifacts/contracts/Core.json'
 import {useStorage} from "@vueuse/core";
+import {GetEvents} from "~/libs/events-infura/abi-events";
 
 // const FromBlock = 44087437
 const FromBlock = 0
@@ -76,12 +77,11 @@ class Common implements ICommon {
     } else {
       this.Ethereum = globalThis['ethereum']
       this.Ethereum.on('accountsChanged', (accounts: any[]) => {
-        this.Wallet = accounts[0]
-
-        console.warn('wallet-updated-wallet-updated-wallet-updated')
-
-        this.Emit('wallet-updated', this.Wallet)
-        walletStorage.value = this.Wallet
+        if (this.Wallet !== accounts[0]) {
+          this.Wallet = accounts[0]
+          this.Emit('wallet-updated', this.Wallet)
+          walletStorage.value = this.Wallet
+        }
       })
 
       const publicConfig = new Config()
@@ -378,13 +378,7 @@ export class External extends Network implements IExternal {
    * @param wallet - wallet address of id0, id1 or another
    */
   async getIncomesForId (wallet: string) {
-    const belowTwoEvents = await this.CoreRPC.getPastEvents('BelowTwoAppear', {
-      filter: {
-        receiver: wallet,
-      },
-      fromBlock: FromBlock,
-      toBlock: 'latest',
-    })
+    const belowTwoEvents = await GetEvents('BelowTwoAppear', wallet)
 
     // todo: getting latest block number
     // const latestBlock = await this.Web3.eth.getBlockNumber()
@@ -396,26 +390,28 @@ export class External extends Network implements IExternal {
     //   fromBlock: FromBlock,
     //   toBlock: 'latest',
     // })
+    const claimsAppearEvents = await GetEvents('ClaimsAppear', wallet)
 
-    const claimsReferralEvents = await this.CoreRPC.getPastEvents('ReferralEarn', {
-      filter: {
-        user: wallet,
-      },
-      fromBlock: FromBlock,
-      toBlock: 'latest',
-    })
+    // const claimsReferralEvents = await this.CoreRPC.getPastEvents('ReferralEarn', {
+    //   filter: {
+    //     user: wallet,
+    //   },
+    //   fromBlock: FromBlock,
+    //   toBlock: 'latest',
+    // })
+    const claimsReferralEvents = await GetEvents('ReferralEarn', wallet)
 
     const initialValue = 0n
 
     let sumBelowTwoAmount = (belowTwoEvents.length > 0)
-        ? belowTwoEvents.reduce((accumulator: any, current: any) => BigInt(accumulator) + current?.returnValues?.amount, initialValue) : 0n
+        ? belowTwoEvents.reduce((accumulator: any, current: any) => BigInt(accumulator) + current.amount, initialValue) : 0n
 
     let sumClaimsAppearAmount = (claimsAppearEvents.length > 0)
-        ? claimsAppearEvents[claimsAppearEvents.length - 1]?.returnValues?.newValue
+        ? claimsAppearEvents[claimsAppearEvents.length - 1].newValue
         : 0n
 
     let sumClaimsReferralAmount = (claimsReferralEvents.length > 0)
-        ? claimsReferralEvents[claimsReferralEvents.length - 1]?.returnValues?.newValue
+        ? claimsReferralEvents[claimsReferralEvents.length - 1].newValue
         : 0n
 
     // console.log("uu", Number(sumBelowTwoAmount) / 10**18)

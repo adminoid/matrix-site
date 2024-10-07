@@ -3,10 +3,9 @@ client-only
   .referrals.mt-4.mt-md-0
     .referrals__header Your referral link
     .referrals__link
-      .referrals__link-text https://givedream.io/{{ BC.Wallet }}
+      .referrals__link-text https://givedream.io/{{ wallet }}
       .referrals__link-copy
     .referrals__header.referrals__header_big Referrals
-    //pre {{ events }}
     table.table-spec.table-dark.table-hover.table-spec__body-table(v-if="isDataLoaded")
       thead.table-spec__thead
         tr
@@ -27,21 +26,23 @@ client-only
 </template>
 
 <script setup>
-import {getBC, isInitialized} from "~/stores/useWeb3.js";
+import {getBC} from "~/stores/useWeb3.js";
 import {useNuxtApp} from "#app";
 import {isClient} from "@vueuse/core";
 import {GetEvents} from "~/libs/events-infura/abi-events.js";
 
-// TODO: add placeholder to .referrals__link-text content and pass wallet address there
+let BC
 
-// TODO: replace everywhere onMounted to this watcher
-watch(isInitialized, (nv) => {
-  if (nv) {
-    fillEvents()
-  }
+useNuxtApp().$on('initialized', async () => {
+  await fillEvents()
 })
 
-const BC = await getBC()
+useNuxtApp().$on('wallet-updated', async () => {
+  await fillEvents()
+})
+
+const wallet = ref('')
+
 const stages = {
   not_accrued: 'Not accrued yet',
   accrued_not_spent: 'Already accrued, but not spent',
@@ -51,48 +52,43 @@ const stages = {
 const events = ref([])
 const isDataLoaded = ref(false)
 const fillEvents = async () => {
-  // TODO: Check this
-
   if (!isClient) return;
+  BC = getBC()
+  if (BC && BC.value) {
+    wallet.value = BC.value.Wallet
 
-  const [eventsAccruedFound, eventsSpentFound] = await Promise.all([await GetEvents('GiftAppear'), await GetEvents('GiftSpent')])
+    const [eventsAccruedFound, eventsSpentFound] = await Promise.all([await GetEvents('GiftAppear', BC.value.Wallet), await GetEvents('GiftSpent', BC.value.Wallet)])
+    events.value = [
+      {
+        isAccrued: false,
+        isSpent: false,
+      },
+      {
+        isAccrued: false,
+        isSpent: false,
+      }
+    ]
 
-  // todo => restore mark
-  events.value = [
-    {
-      isAccrued: false,
-      isSpent: false,
-    },
-    {
-      isAccrued: false,
-      isSpent: false,
-    }
-  ]
-
-  if (eventsAccruedFound.length > 0) {
-    for (const eventIndex in eventsAccruedFound) {
-      if (eventsAccruedFound[eventIndex]) {
-        events.value[eventIndex] = {
-          isAccrued: true,
-          isSpent: false,
-          accrued: eventsAccruedFound[eventIndex]?.returnValues?.amount.toString()
-        }
-
-        if (eventsSpentFound[eventIndex]) {
+    if (eventsAccruedFound.length > 0) {
+      for (const eventIndex in eventsAccruedFound) {
+        if (eventsAccruedFound[eventIndex]) {
           events.value[eventIndex] = {
             isAccrued: true,
-            isSpent: true,
-            spender: eventsSpentFound[eventIndex]?.returnValues?.spender
+            isSpent: false,
+            accrued: eventsAccruedFound[eventIndex].amount.toString()
+          }
+
+          if (eventsSpentFound[eventIndex]) {
+            events.value[eventIndex] = {
+              isAccrued: true,
+              isSpent: true,
+              spender: eventsSpentFound[eventIndex].spender
+            }
           }
         }
       }
     }
   }
-
   isDataLoaded.value = true
 }
-
-useNuxtApp().$on('wallet-updated', async () => {
-  await fillEvents()
-})
 </script>

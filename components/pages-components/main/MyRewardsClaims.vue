@@ -6,32 +6,36 @@
 </template>
 
 <script setup>
-import {isClient, useStorage} from '@vueuse/core'
-import {getBC, isInitialized} from '~/stores/useWeb3.js'
+import {isClient} from '@vueuse/core'
+import {getBC} from '~/stores/useWeb3.js'
 import {GetEvents} from "~/libs/events-infura/abi-events.js";
 
-const BC = await getBC()
-const totalBnb = ref(0)
-const isLoaded = ref(false)
-const fillEvents = async () => {
-  if (!isClient) return;
-  const eventsFound = await GetEvents('ClaimsAppear')
-  let lastAmount
-  for (const evt of eventsFound) {
-    lastAmount = evt.returnValues.newValue
-  }
-  lastAmount = Number(lastAmount) / 10**18
-  totalBnb.value = lastAmount || 0
-  isLoaded.value = true
-}
+let BC
 
-watch(isInitialized, (nv) => {
-  if (nv) {
-    fillEvents()
-  }
+useNuxtApp().$on('initialized', async () => {
+  await fillEvents()
 })
 
 useNuxtApp().$on('wallet-updated', async () => {
   await fillEvents()
 })
+
+const totalBnb = ref(0)
+const isLoaded = ref(false)
+const fillEvents = async () => {
+  if (!isClient) return
+  BC = getBC()
+  if (BC && BC.value) {
+    const eventsFound = await GetEvents('ClaimsAppear', BC.value.Wallet)
+    let lastAmount
+    if (eventsFound && eventsFound.length > 0) {
+      for (const evt of eventsFound) {
+        lastAmount = evt.newValue
+      }
+    }
+    lastAmount = Number(lastAmount) / 10**18
+    totalBnb.value = lastAmount || 0
+  }
+  isLoaded.value = true
+}
 </script>

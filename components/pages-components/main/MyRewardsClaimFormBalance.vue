@@ -7,29 +7,27 @@ br
 <script setup>
 // TODO: Need to be updated after claim balance withdrawing
 import {getBC} from '~/stores/useWeb3.js'
+import {isClient} from "@vueuse/core";
 
-const BC = getBC()
+let BC
+
+useNuxtApp().$on('initialized', () => {
+  getData()
+})
+
+useNuxtApp().$on('wallet-updated', () => {
+  getData()
+})
 
 const claimsBalanceDecimal = ref(0)
 const getData = () => {
-  // TODO: make it singleton?
-  const claimsBalance = BC.value.CoreUser.claims
-  if (claimsBalance) {
-    claimsBalanceDecimal.value = Number(claimsBalance) / 10**18
+  if (!isClient) return
+  BC = getBC()
+  if (BC && BC.value) {
+    const claimsBalance = BC.value.CoreUser.claims
+    if (claimsBalance) {
+      claimsBalanceDecimal.value = Number(claimsBalance) / 10**18
+    }
   }
 }
-
-if (isInitialized) {
-  getData()
-}
-
-watch(isInitialized, async (nv) => {
-  if (nv) {
-    getData()
-  }
-})
-
-useNuxtApp().$on('wallet-updated', async () => {
-  getData()
-})
 </script>

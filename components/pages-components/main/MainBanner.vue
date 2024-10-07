@@ -3,7 +3,7 @@
   .main-banner__header(v-if="!!props.header") {{ header }}
   .main-banner__link(v-if="!!props.link")
     contract-address
-  .main-banner__footer(v-if="isShowed && !!props.footer") {{ footer }}
+  .main-banner__footer(v-if="isShowed && hasFooter") {{ footer }}
   .main-banner__columns(v-else) <i>Is loading... 1</i>
   .main-banner__columns(v-if="isShowed && !!props.columns && props.columns.length > 1")
     .row
@@ -24,6 +24,8 @@ const props = defineProps({
     required: false,
   },
 })
+
+const hasFooter = computed(() => props.footer || props.footer === 0)
 </script>
 
 <style lang="sass">

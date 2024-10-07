@@ -29,10 +29,26 @@ export const EventMap = {
     DirectTransfer: '0x455589ce42ffef071437b1cd8549f4989ab4ada16aa8132e13a4fdf75df577cf',
 }
 
-export const GetEvents = async (eventName) => {
+// todo -- https://community.infura.io/t/is-there-way-to-filter-logs-events-by-an-event-arguments/8405
+
+export const GetEvents = async (eventName, filterAddress) => {
     const config = useRuntimeConfig()
     const url = getInfuraUrl(config.public.INFURA_KEY)
-    const body = createBody(config.public.CONTRACT_ADDRESS, [EventMap[eventName]])
+
+    const topics =
+        (filterAddress)
+            ? [
+                EventMap[eventName],
+                makeAddressWord(filterAddress),
+            ]
+            : [
+                EventMap[eventName],
+            ]
+
+    const body = createBody(
+        config.public.CONTRACT_ADDRESS,
+        topics,
+    )
     try {
         const response = await axios.post(
             url,
@@ -55,4 +71,12 @@ const parseResult = async (eventName, events) => {
         decodedDataArray.push(data)
     }
     return decodedDataArray
+}
+
+const makeAddressWord = (address) => {
+    if (address.slice(0, 2) === '0x') address = address.slice(2)
+    else {
+        throw new Error("address must begins with 0x")
+    }
+    return `0x000000000000000000000000${address}`.toLowerCase()
 }
