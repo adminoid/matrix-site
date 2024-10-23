@@ -34,9 +34,11 @@
 import { ref, watch } from 'vue'
 import { useDisabled } from '~/composables/useDisabled'
 import ContractAddress from '~/components/ContractAddress.vue'
+import {isClient} from "@vueuse/core"
+
+let BC
 
 const disabled = useDisabled()
-const BC = await getBC()
 const amountValue = ref('0')
 const error = ref('')
 
@@ -45,22 +47,26 @@ watch(amountValue, async (newValue) => {
 })
 
 const validateValue = async (value: any) => {
-  // @ts-ignore
-  const accounts = await BC.value.Web3MM.eth.getAccounts();
-  // @ts-ignore
-  if (!accounts || !BC.value.Wallet) {
-    error.value = 'Please connect your wallet first'
-  } else {
-    if (String(value).includes(',')) {
-      value = String(value).replace(/,/g, '.')
-      amountValue.value = value
-    }
-    if (isNaN(Number(value))) {
-      error.value = 'please enter a valid number'
-    } else if (Number(value) <= 0) {
-      error.value = 'please enter a number > 0'
+  if (!isClient) return
+  BC = getBC()
+  if (BC && BC.value) {
+    // @ts-ignore
+    const accounts = await BC.value.Web3MM.eth.getAccounts();
+    // @ts-ignore
+    if (!accounts || !BC.value.Wallet) {
+      error.value = 'Please connect your wallet first'
     } else {
-      error.value = ''
+      if (String(value).includes(',')) {
+        value = String(value).replace(/,/g, '.')
+        amountValue.value = value
+      }
+      if (isNaN(Number(value))) {
+        error.value = 'please enter a valid number'
+      } else if (Number(value) <= 0) {
+        error.value = 'please enter a number > 0'
+      } else {
+        error.value = ''
+      }
     }
   }
 }
@@ -68,8 +74,12 @@ const validateValue = async (value: any) => {
 const sendAmount = async () => {
   await validateValue(amountValue.value)
   if (!error.value) {
-    // @ts-ignore
-    await BC.value.sendAmount(String(amountValue.value))
+    if (!isClient) return
+    BC = getBC()
+    if (BC && BC.value) {
+      // @ts-ignore
+      await BC.value.sendAmount(String(amountValue.value))
+    }
   }
 }
 </script>

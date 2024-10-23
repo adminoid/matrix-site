@@ -21,7 +21,7 @@ client-only
             td ...
           template(v-else)
             td {{ stages.accrued_and_spent }}
-            td {{ event.spender }}
+            td {{ event.owner }}
     div(v-else) <i>Is loading...</i>
 </template>
 
@@ -82,7 +82,7 @@ const fillEvents = async () => {
             events.value[eventIndex] = {
               isAccrued: true,
               isSpent: true,
-              spender: eventsSpentFound[eventIndex].spender
+              owner: eventsSpentFound[eventIndex].owner
             }
           }
         }

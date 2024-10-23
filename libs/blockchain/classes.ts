@@ -497,7 +497,7 @@ whose: ${resp.user.whose}
         from: this.Wallet,
         value: 10000000000000000,
         // gasLimit: 5000000, // not required
-        gas: 300000, // 274633
+        // gas: 300000, // 274633
       })
 
       // display resp in web interface

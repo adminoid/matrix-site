@@ -35,12 +35,11 @@
 <script lang="js" setup>
 import { ref, watch } from 'vue'
 import { useDisabled } from '~/composables/useDisabled'
+import {isClient} from "@vueuse/core";
 
-const disabled = useDisabled()
-const BC = await getBC()
+let BC
+
 const whoseAddress = ref('')
-const error = ref('')
-
 onMounted(async () => {
   const whoseInit = localStorage.getItem('whose-param')
   await validateValue(whoseInit)
@@ -51,29 +50,34 @@ watch(whoseAddress, async (newValue) => {
   await validateValue(newValue)
 })
 
+const disabled = useDisabled()
+const error = ref('')
 const validateValue = async (value) => {
-  if (BC.hasOwnProperty('value') && !!value) {
+  if (!isClient) return
+  BC = getBC()
+  if (BC && BC.value) {
     if (!BC.value.Web3MM.utils.isAddress(value)) {
       error.value = 'please enter valid ethereum address'
     } else if (value.toLowerCase() === BC.value.Wallet.toLowerCase()) {
       error.value = 'Is not possible to be whose to yourself'
+    } else {
+      error.value = ''
     }
-  }
-  else {
-    error.value = ''
   }
 }
 
 const registerWhose = async () => {
   await validateValue(whoseAddress.value)
+  if (!isClient) return
   if (!error.value) {
-
     if (!whoseAddress.value) {
       const cnf = useRuntimeConfig()
       whoseAddress.value = cnf.public.ID_ADDRESS_0
     }
-
-    await BC.value.registerWhose(whoseAddress.value)
+    BC = getBC()
+    if (BC && BC.value) {
+      await BC.value.registerWhose(whoseAddress.value)
+    }
   }
 }
 
