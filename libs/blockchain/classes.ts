@@ -550,17 +550,27 @@ TX: ${resp.transactionHash}
   async sendAmount (amount: string | number): Promise<void> {
     this.EmitDisabled(`sendAmount`, true)
     try {
+      const estimatedGas = await this.Web3MM.eth.estimateGas({
+        from: this.Wallet,
+        to: this.Config.CONTRACT_ADDRESS,
+        value: this.Web3MM.utils.toWei(String(amount), "ether"),
+      })
+      // console.log('.estimatedGas.')
+      // console.log(estimatedGas) // 40499n
+      // const estimatedGasWithReserve = BigInt(Math.round(Number(estimatedGas) * 1.1))
+      // console.log(estimatedGasWithReserve)
+
       const resp = await this.Web3MM.eth.sendTransaction({
         from: this.Wallet,
         to: this.Config.CONTRACT_ADDRESS,
         value: this.Web3MM.utils.toWei(String(amount), "ether"),
         // gasLimit: 36857, // not enough
         // gasLimit: 36858, // is ok
-        gasLimit: 450000,
+        // gasLimit: 450000,
         // gas: 1000000,
         // gasLimit: 3100, // not required
         // gasLimit: this.Web3MM.utils.toHex('300000000000000000'),
-        // gas: estimatedGas,
+        gas: estimatedGasWithReserve,
       })
 
       const msg = `
