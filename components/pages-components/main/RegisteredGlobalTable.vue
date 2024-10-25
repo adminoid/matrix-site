@@ -1,6 +1,6 @@
 <template lang="pug">
 client-only
-  .registered-table.table-responsive(v-if="BC.Wallet")
+  .registered-table.table-responsive
     .registered-table__header Registered accounts in the Global lines
     table.table-spec.table.table-responsive.table-spec_strip.table-dark.table-hover.table-spec__body-table
       tbody.table-spec__tbody.table-spec__tbody_strip
@@ -33,21 +33,24 @@ import {getBC} from '~/stores/useWeb3.js'
 import {isClient} from "@vueuse/core";
 import {useNuxtApp} from "#app";
 
-const BC = await getBC()
+let BC
 const isLoaded = ref(false)
-const levels = ref([])
 
 const fillGlobalTable = async () => {
-  // todo => restore mark
-  // if (isClient) {
-  //   for (const index in [...Array(20).keys()]) {
-  //     const total = await BC.value.getTotalFromMatrix(index)
-  //     levels.value.push(Number(total))
-  //     isLoaded.value = true
-  //   }
-  // }
+  if (!isClient) return
+  BC = getBC()
+  if (BC && BC.value) {
+    for (const index in [...Array(20).keys()]) {
+      const total = await BC.value.getTotalFromMatrix(Number(index))
+      levels.value.push(Number(total))
+      isLoaded.value = true
+    }
+  }
 }
-onMounted(async () => {
+
+const levels = ref([])
+
+useNuxtApp().$on('initialized', async () => {
   await fillGlobalTable()
 })
 
