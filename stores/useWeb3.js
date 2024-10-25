@@ -67,57 +67,65 @@ export const initBC = async () => {
 
 export const getDescendantsProxy = async () => {
     const matrixData = []
-    const maxLevel = Number(BC.value.CoreUser)
-    // todo -- check i <= maxLevel
-    for (let i = 0; i < maxLevel; i++) {
-        // response from getMatrixUser() contains user and total
-        const matrixReceivedData = await $B.getMatrixUser(i)
-        const userIndex = Number(matrixReceivedData?.user.index)
-        const lastIndex = Number(matrixReceivedData?.total) - 1
 
-        // todo: calc down * 2 children, repeat levelsDown times
-        // calculate child level left (first) item
-        // (X*2)+1=Y [(9*2)+1=19] (left/first)
+    if (Object.keys(BC.value).length > 0) {
+        const maxLevel = await BC.value.getMaxLevel()
 
-        let leftChild = (userIndex * 2) + 1
-        let rightChild = (userIndex * 2) + 2
+        // todo -- check i <= maxLevel
+        for (let i = 0; i < maxLevel; i++) {
+            // response from getMatrixUser() contains user and total
+            const matrixReceivedData = await BC.value.getMatrixUser(i)
+            let matrixDataLevels
+            if (matrixReceivedData) {
 
-        const matrixDataLevels = {
-            matrixIndex: i,
-            userIndex,
-            lastIndex,
-            levels: [],
-        }
-        const levelsChildCount = rightChild - leftChild + 1
-        matrixDataLevels.levels.push({
-            left: leftChild,
-            right: rightChild,
-            count: levelsChildCount,
-        })
-        while (rightChild < lastIndex) {
+                const userIndex = Number(matrixReceivedData?.user.index)
+                const lastIndex = Number(matrixReceivedData?.total) - 1
 
-            leftChild = (leftChild * 2) + 1
-            rightChild = (rightChild * 2) + 2
+                // todo: calc down * 2 children, repeat levelsDown times
+                // calculate child level left (first) item
+                // (X*2)+1=Y [(9*2)+1=19] (left/first)
 
-            // check right is more or less lastIndex
-            //  if less than lastIndex, use lastIndex as right border
-            //  if more than lastIndex go to next iteration
+                let leftChild = (userIndex * 2) + 1
+                let rightChild = (userIndex * 2) + 2
 
-            if (rightChild > lastIndex) {
-                rightChild = lastIndex
-            }
-
-            if (leftChild <= lastIndex) {
+                matrixDataLevels = {
+                    matrixIndex: i,
+                    userIndex,
+                    lastIndex,
+                    levels: [],
+                }
                 const levelsChildCount = rightChild - leftChild + 1
                 matrixDataLevels.levels.push({
                     left: leftChild,
                     right: rightChild,
                     count: levelsChildCount,
                 })
-            }
-        }
+                while (rightChild < lastIndex) {
 
-        matrixData[i] = matrixDataLevels
+                    leftChild = (leftChild * 2) + 1
+                    rightChild = (rightChild * 2) + 2
+
+                    // check right is more or less lastIndex
+                    //  if less than lastIndex, use lastIndex as right border
+                    //  if more than lastIndex go to next iteration
+
+                    if (rightChild > lastIndex) {
+                        rightChild = lastIndex
+                    }
+
+                    if (leftChild <= lastIndex) {
+                        const levelsChildCount = rightChild - leftChild + 1
+                        matrixDataLevels.levels.push({
+                            left: leftChild,
+                            right: rightChild,
+                            count: levelsChildCount,
+                        })
+                    }
+                }
+            }
+
+            matrixData[i] = matrixDataLevels
+        }
     }
 
     return matrixData

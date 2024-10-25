@@ -298,6 +298,10 @@ export class External extends Network implements IExternal {
     }
   }
 
+  async getMaxLevel(){
+    return Number(await this.CoreRPC.methods.maxLevel().call())
+  }
+
   async getMatrixUser(level: number | string): Promise<void | boolean> {
     try {
       this.EmitDisabled(`getMatrixUser`, true)

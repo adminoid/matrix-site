@@ -1,5 +1,5 @@
 <template lang="pug">
-.registered-table.table-responsive(v-if="BC.value?.Wallet")
+.registered-table.table-responsive
   .registered-table__header Accounts registered in the structure
   table.table-spec__body-table(
     class="table-spec table table-responsive table-spec_strip table-dark table-hover"
@@ -13,8 +13,8 @@
       tr(v-for="j in 5" :key="j")
         td lvl {{ j }}
         td(v-for="k in 20")
-          .pink-num(v-if="tableData[k - 1]?.levels") {{ tableData[k - 1]?.levels[j - 1]?.count }}
-          .pink-num(v-else)
+          .pink-num(v-if="tableData[k - 1]?.levels") {{ tableData[k - 1]?.levels[j - 1]?.count || '-' }}
+          .pink-num(v-else) -
   div(v-else) Loading...
 </template>
 
@@ -24,17 +24,23 @@
 //  2. getting last user in matrix that lower than id
 //  3. calculate each (of 5) level filled with last user id
 
-import {getDescendantsProxy} from '~/stores/useWeb3.js'
+import {getBC, getDescendantsProxy} from '~/stores/useWeb3.js'
+import {isClient} from "@vueuse/core";
 
-const BC = await getBC()
+let BC
 const isLoaded = ref(false)
 const fillUserTable = async () => {
-  tableData.value = await getDescendantsProxy()
+  if (!isClient) return
+  BC = getBC()
+  if (BC && BC.value) {
+    tableData.value = await getDescendantsProxy()
+  }
   isLoaded.value = true
 }
 
 const tableData = ref([])
-onMounted(async () => {
+
+useNuxtApp().$on('initialized', async () => {
   await fillUserTable()
 })
 
