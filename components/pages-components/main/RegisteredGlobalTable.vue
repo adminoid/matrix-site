@@ -51,13 +51,12 @@ const fillGlobalTable = async () => {
 const levels = ref([])
 
 // TODO: disable fillGlobalTable() for debugging
-
 useNuxtApp().$on('initialized', async () => {
-  // await fillGlobalTable()
+  await fillGlobalTable()
 })
 
 useNuxtApp().$on('wallet-updated', async () => {
-  // await fillGlobalTable()
+  await fillGlobalTable()
 })
 </script>
 
