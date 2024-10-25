@@ -494,13 +494,26 @@ whose: ${resp.user.whose}
       //   });
 
       if (!this.CoreMM) return false
+
+      const estimatedGas = await this.CoreMM
+          .methods
+          .register(whose)
+          .estimateGas({
+            from: this.Wallet,
+            value: 10000000000000000,
+          });
+      const estimatedGasWithReserve = BigInt(Math.round(Number(estimatedGas) * 1.1))
+
       const resp = await this.CoreMM
-      .methods.register(whose).send({
-        from: this.Wallet,
-        value: 10000000000000000,
-        // gasLimit: 5000000, // not required
-        // gas: 300000, // 274633
-      })
+          .methods
+          .register(whose)
+          .send({
+            from: this.Wallet,
+            value: 10000000000000000,
+            // gasLimit: 5000000, // not required
+            // gas: 300000, // 274633
+            gas: estimatedGasWithReserve,
+          })
 
       // display resp in web interface
       const msg = `
