@@ -122,6 +122,8 @@ export const getDescendantsProxy = async () => {
                         })
                     }
                 }
+            } else {
+                return matrixData
             }
 
             matrixData[i] = matrixDataLevels

@@ -318,7 +318,8 @@ export class External extends Network implements IExternal {
       let msg
       if (!resp.user.isValue) {
         msg = `user ${this.Wallet} is not registered`
-        this.ThrowAlert('primary', msg)
+        // this.ThrowAlert('primary', msg)
+        console.error(msg)
       } else {
         return resp
       }
