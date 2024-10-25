@@ -517,15 +517,24 @@ TX: ${resp.transactionHash}
       this.EmitDisabled(`registerWhose`, false)
     }
   }
+
   async withdrawClaim (amount: number | string): Promise<void|boolean> {
     this.EmitDisabled(`withdrawClaim`, true)
     try {
       if (!this.CoreMM) return false
+      const weiAmount = this.Web3MM.utils.toWei(String(amount), "ether")
+      const estimatedGas = await this.CoreMM.methods
+          .withdrawClaim(weiAmount)
+          .estimateGas({
+            from: this.Wallet,
+          });
+      const estimatedGasWithReserve = BigInt(Math.round(Number(estimatedGas) * 1.1))
       const resp = await this.CoreMM.methods
-        .withdrawClaim(this.Web3MM.utils.toWei(String(amount), "ether"))
+        .withdrawClaim(weiAmount)
         .send({
           from: this.Wallet,
-          gasLimit: 310000, // not required
+          gas: estimatedGasWithReserve,
+          // gasLimit: 310000, // not required
         });
       // from - address for withdrawing
       // gasUsed - used gas
@@ -552,10 +561,7 @@ TX: ${resp.transactionHash}
         to: this.Config.CONTRACT_ADDRESS,
         value: this.Web3MM.utils.toWei(String(amount), "ether"),
       })
-      // console.log('.estimatedGas.')
-      // console.log(estimatedGas) // 40499n
-      // const estimatedGasWithReserve = BigInt(Math.round(Number(estimatedGas) * 1.1))
-      // console.log(estimatedGasWithReserve)
+      const estimatedGasWithReserve = BigInt(Math.round(Number(estimatedGas) * 1.1))
 
       const resp = await this.Web3MM.eth.sendTransaction({
         from: this.Wallet,
