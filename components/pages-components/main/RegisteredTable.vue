@@ -40,12 +40,14 @@ const fillUserTable = async () => {
 
 const tableData = ref([])
 
+// TODO: disable fillUserTable() for debugging
+
 useNuxtApp().$on('initialized', async () => {
-  await fillUserTable()
+  // await fillUserTable()
 })
 
 useNuxtApp().$on('wallet-updated', async () => {
-  await fillUserTable()
+  // await fillUserTable()
 })
 </script>
 

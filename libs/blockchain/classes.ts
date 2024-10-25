@@ -282,14 +282,11 @@ export class External extends Network implements IExternal {
         if (!this.CoreRPC || !this.Wallet) {
           return false
         }
-        const resp = await this.CoreRPC
+        return await this.CoreRPC
             .methods.getWalletByIndexFromMatrix(level, index)
             .call({
               from: this.Wallet,
             })
-
-        // console.warn(resp)
-        return resp
       } catch (e: any) {
         this.ThrowAlert('danger', e.message)
       } finally {

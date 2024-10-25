@@ -1,6 +1,6 @@
 <template lang="pug">
 client-only
-  .registered-table.table-responsive
+  .registered-table.table-responsive(v-if="isLoaded")
     .registered-table__header Registered accounts in the Global lines
     table.table-spec.table.table-responsive.table-spec_strip.table-dark.table-hover.table-spec__body-table
       tbody.table-spec__tbody.table-spec__tbody_strip
@@ -43,19 +43,21 @@ const fillGlobalTable = async () => {
     for (const index in [...Array(20).keys()]) {
       const total = await BC.value.getTotalFromMatrix(Number(index))
       levels.value.push(Number(total))
-      isLoaded.value = true
     }
   }
+  isLoaded.value = true
 }
 
 const levels = ref([])
 
+// TODO: disable fillGlobalTable() for debugging
+
 useNuxtApp().$on('initialized', async () => {
-  await fillGlobalTable()
+  // await fillGlobalTable()
 })
 
 useNuxtApp().$on('wallet-updated', async () => {
-  await fillGlobalTable()
+  // await fillGlobalTable()
 })
 </script>
 

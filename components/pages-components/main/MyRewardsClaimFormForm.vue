@@ -25,18 +25,14 @@ const amountValue = ref(0)
 const error = ref('')
 
 const disabled = useDisabled()
-const BC = await getBC()
+let BC
 
 watch(amountValue, async (newValue) => {
   await validateValue(newValue)
 })
 
 const validateValue = async (value) => {
-
-  // console.warn(value)
-
-  // TODO: CHECK THIS MESS...
-
+  BC = getBC()
   const accounts = await BC.value.Web3MM.eth.getAccounts();
   if (!accounts || !BC.value.Wallet) {
     error.value = 'Please connect your wallet first'
