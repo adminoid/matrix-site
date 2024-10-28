@@ -31,9 +31,11 @@ export const EventMap = {
 
 // todo -- https://community.infura.io/t/is-there-way-to-filter-logs-events-by-an-event-arguments/8405
 
-const prepareTopicFilters = (filters) => filters.map(
-    filter => filter ? makeAddressWord(filter) : null
-)
+const prepareTopicFilters =
+    (filters) => (filters && filters.length > 0)
+        ? filters.map(
+            filter => (filter) ? makeAddressWord(filter) : null
+        ) : filters
 
 export const GetEvents = async (eventName, filterArray) => {
     const config = useRuntimeConfig()
