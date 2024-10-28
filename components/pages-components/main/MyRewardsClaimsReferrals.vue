@@ -28,7 +28,7 @@ const fillEvents = async () => {
   if (!isClient) return;
   BC = getBC()
   if (BC && BC.value) {
-    const eventsFound = await GetEvents('ReferralEarn', BC.value.Wallet)
+    const eventsFound = await GetEvents('ReferralEarn', [BC.value.Wallet])
     let amount = 0n
     if (eventsFound && eventsFound.length > 0) {
       for (const evt of eventsFound) {

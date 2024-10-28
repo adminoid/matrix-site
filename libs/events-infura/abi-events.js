@@ -31,15 +31,19 @@ export const EventMap = {
 
 // todo -- https://community.infura.io/t/is-there-way-to-filter-logs-events-by-an-event-arguments/8405
 
-export const GetEvents = async (eventName, filterAddress) => {
+const prepareTopicFilters = (filters) => filters.map(
+    filter => filter ? makeAddressWord(filter) : null
+)
+
+export const GetEvents = async (eventName, filterArray) => {
     const config = useRuntimeConfig()
     const url = getInfuraUrl(config.public.INFURA_KEY)
 
     const topics =
-        (filterAddress)
+        (filterArray && filterArray.length > 0)
             ? [
                 EventMap[eventName],
-                makeAddressWord(filterAddress),
+                ...prepareTopicFilters(filterArray),
             ]
             : [
                 EventMap[eventName],
@@ -49,6 +53,7 @@ export const GetEvents = async (eventName, filterAddress) => {
         config.public.CONTRACT_ADDRESS,
         topics,
     )
+
     try {
         const response = await axios.post(
             url,

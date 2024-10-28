@@ -57,7 +57,7 @@ const fillEvents = async () => {
   if (BC && BC.value) {
     wallet.value = BC.value.Wallet
 
-    const [eventsAccruedFound, eventsSpentFound] = await Promise.all([await GetEvents('GiftAppear', BC.value.Wallet), await GetEvents('GiftSpent', BC.value.Wallet)])
+    const [eventsAccruedFound, eventsSpentFound] = await Promise.all([await GetEvents('GiftAppear', [BC.value.Wallet]), await GetEvents('GiftSpent', BC.value.Wallet)])
     events.value = [
       {
         isAccrued: false,

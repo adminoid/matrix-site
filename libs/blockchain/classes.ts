@@ -9,8 +9,11 @@ import CoreJson from '~/artifacts/contracts/Core.json'
 import {useStorage} from "@vueuse/core";
 import {GetEvents} from "~/libs/events-infura/abi-events";
 
-// const FromBlock = 44087437
-const FromBlock = 0
+// TODO: remove later
+const FromBlock = 45079760
+// const FromBlock = 0
+const ToBlock = 45095044
+
 const walletStorage = useStorage('connected-wallet')
 
 class Config {
@@ -339,6 +342,16 @@ export class External extends Network implements IExternal {
     }
   }
 
+  async testEvents () {
+    return await this.CoreRPC.getPastEvents('WhoseRegistered', {
+      filter: {
+        whose: this.Wallet,
+      },
+      fromBlock: FromBlock,
+      toBlock: ToBlock,
+    })
+  }
+
   // async getReferralEarn () {
   //   return await this.CoreRPC.getPastEvents('ReferralEarn', {
   //     filter: {
@@ -359,28 +372,28 @@ export class External extends Network implements IExternal {
   //   })
   // }
 
-  async getBelowTwoAppear () {
-    return await this.CoreRPC.getPastEvents('BelowTwoAppear', {
-      filter: {
-        receiver: this.Wallet,
-      },
-      fromBlock: FromBlock,
-      toBlock: 'latest',
-    })
-  }
+  // async getBelowTwoAppear () {
+  //   return await this.CoreRPC.getPastEvents('BelowTwoAppear', {
+  //     filter: {
+  //       receiver: this.Wallet,
+  //     },
+  //     fromBlock: FromBlock,
+  //     toBlock: 'latest',
+  //   })
+  // }
 
-  async getDirectTransfers () {
-    return await this.CoreRPC.getPastEvents('DirectTransfer', {
-      fromBlock: FromBlock,
-      toBlock: 'latest',
-    })
-  }
+  // async getDirectTransfers () {
+  //   return await this.CoreRPC.getPastEvents('DirectTransfer', {
+  //     fromBlock: FromBlock,
+  //     toBlock: 'latest',
+  //   })
+  // }
 
   /**
    * @param wallet - wallet address of id0, id1 or another
    */
   async getIncomesForId (wallet: string) {
-    const belowTwoEvents = await GetEvents('BelowTwoAppear', wallet)
+    const belowTwoEvents = await GetEvents('BelowTwoAppear', [wallet])
 
     // todo: getting latest block number
     // const latestBlock = await this.Web3.eth.getBlockNumber()
@@ -392,7 +405,7 @@ export class External extends Network implements IExternal {
     //   fromBlock: FromBlock,
     //   toBlock: 'latest',
     // })
-    const claimsAppearEvents = await GetEvents('ClaimsAppear', wallet)
+    const claimsAppearEvents = await GetEvents('ClaimsAppear', [wallet])
 
     // const claimsReferralEvents = await this.CoreRPC.getPastEvents('ReferralEarn', {
     //   filter: {
@@ -401,7 +414,7 @@ export class External extends Network implements IExternal {
     //   fromBlock: FromBlock,
     //   toBlock: 'latest',
     // })
-    const claimsReferralEvents = await GetEvents('ReferralEarn', wallet)
+    const claimsReferralEvents = await GetEvents('ReferralEarn', [wallet])
 
     const initialValue = 0n
 
