@@ -26,7 +26,15 @@ const fillEvents = async () => {
   if (!isClient) return
   BC = getBC()
   if (BC && BC.value) {
-    const eventsFound = await GetEvents('WhoseRegistered', [BC.value.Wallet])
+    const eventsFound = await GetEvents('WhoseRegistered', [null, BC.value.Wallet])
+
+    // todo -- debugging 1
+    // console.info('eventsFound')
+    // console.log(eventsFound)
+    // const testEventsFound = await BC.value.testEvents()
+    // console.info('testEventsFound')
+    // console.log(testEventsFound)
+
     if (eventsFound && eventsFound.length > 0) {
       total.value = eventsFound.length
     }

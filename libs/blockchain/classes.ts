@@ -9,11 +9,6 @@ import CoreJson from '~/artifacts/contracts/Core.json'
 import {useStorage} from "@vueuse/core";
 import {GetEvents} from "~/libs/events-infura/abi-events";
 
-// TODO: remove later
-const FromBlock = 45079760
-// const FromBlock = 0
-const ToBlock = 45095044
-
 const walletStorage = useStorage('connected-wallet')
 
 class Config {
@@ -347,8 +342,8 @@ export class External extends Network implements IExternal {
       filter: {
         whose: this.Wallet,
       },
-      fromBlock: FromBlock,
-      toBlock: ToBlock,
+      fromBlock: 45094482,
+      toBlock: 45094529,
     })
   }
 

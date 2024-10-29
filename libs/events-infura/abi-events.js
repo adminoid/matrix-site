@@ -41,6 +41,11 @@ export const GetEvents = async (eventName, filterArray) => {
     const config = useRuntimeConfig()
     const url = getInfuraUrl(config.public.INFURA_KEY)
 
+    // todo -- debugging 1
+    // if (eventName === '') {
+    //     console.warn('debugging GetEvents')
+    // }
+
     const topics =
         (filterArray && filterArray.length > 0)
             ? [
