@@ -27,7 +27,7 @@ const getTotalAccounts = async () => {
   if (!isClient) return;
   BC = getBC()
   if (BC && BC.value) {
-    totalRegisteredAccounts.value = await BC.value.getAddressesGlobalTotal()
+    totalRegisteredAccounts.value = Number(await BC.value.getAddressesGlobalTotal()) + 1
   }
   isLoaded.value = true
 }
