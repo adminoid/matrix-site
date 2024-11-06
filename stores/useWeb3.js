@@ -65,6 +65,22 @@ export const initBC = async () => {
     return isClient ? BC : false
 }
 
+const countLevelChildren = (leftChild, rightChild, lastIndex) => {
+    let count = 0
+    if (leftChild <= lastIndex) {
+        // if lastIndex less than rightChild, but equal leftChild then count == 1
+        if (leftChild === lastIndex) {
+            count = 1
+        } else {
+            // if lastIndex is more or equal with rightChild then count == 2
+            // count = 2 and more
+            count = rightChild - leftChild + 1
+        }
+    }
+
+    return count
+}
+
 export const getDescendantsProxy = async () => {
     const matrixData = []
 
@@ -76,14 +92,18 @@ export const getDescendantsProxy = async () => {
             // response from getMatrixUser() contains user and total
             const matrixReceivedData = await BC.value.getMatrixUser(i)
             let matrixDataLevels
-            if (matrixReceivedData) {
-                const userIndex = Number(matrixReceivedData?.user.index) // 5
-                const lastIndex = Number(matrixReceivedData?.total) - 1 // 7
-                // todo: calc down * 2 children, repeat levelsDown times
+            if (!matrixReceivedData) {
+                return matrixData
+            } else {
+                const userIndex = Number(matrixReceivedData?.user.index)
+                const lastIndex = Number(matrixReceivedData?.total) - 1
+
+                // calc down * 2 children, repeat levelsDown times
                 // calculate child level left (first) item
                 // (X*2)+1=Y [(9*2)+1=19] (left/first)
-                let leftChild = (userIndex * 2) + 1 // 11
-                let rightChild = (userIndex * 2) + 2 // 12
+
+                let leftChild = (userIndex * 2) + 1
+                let rightChild = (userIndex * 2) + 2
 
                 matrixDataLevels = {
                     matrixIndex: i,
@@ -92,29 +112,39 @@ export const getDescendantsProxy = async () => {
                     levels: [],
                 }
 
-                while (leftChild <= lastIndex) {
-                    if (leftChild <= lastIndex) {
-                        let count = 0
-                        // if lastIndex less than rightChild, but equal leftChild then count == 1
-                        if (leftChild === lastIndex) {
-                            count = 1
-                        } else {
-                            // if lastIndex is more or equal with rightChild then count == 2
-                            count = 2
-                        }
+                const levelsChildCount = countLevelChildren(leftChild, rightChild, lastIndex)
+
+                if (levelsChildCount > 0) {
+                    matrixDataLevels.levels.push({
+                        left: leftChild,
+                        right: rightChild,
+                        count: levelsChildCount,
+                    })
+                }
+
+                while (rightChild <= lastIndex) {
+
+                    // check right is more or less lastIndex
+                    //  if less than lastIndex, use lastIndex as right border
+                    //  if more than lastIndex go to next iteration
+                    rightChild = (rightChild * 2) + 2
+                    if (rightChild > lastIndex) {
+                        rightChild = lastIndex
+                    }
+
+                    leftChild = (leftChild * 2) + 1
+
+                    const levelsChildCount = countLevelChildren(leftChild, rightChild, lastIndex)
+                    if (levelsChildCount > 0) {
                         matrixDataLevels.levels.push({
                             left: leftChild,
                             right: rightChild,
-                            count,
+                            count: levelsChildCount,
                         })
-                        leftChild = (leftChild * 2) + 1
-                        rightChild = (rightChild * 2) + 2
                     } else {
                         break
                     }
                 }
-            } else {
-                return matrixData
             }
 
             matrixData[i] = matrixDataLevels
