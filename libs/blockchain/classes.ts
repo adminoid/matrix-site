@@ -409,7 +409,7 @@ export class External extends Network implements IExternal {
     //   fromBlock: FromBlock,
     //   toBlock: 'latest',
     // })
-    const claimsReferralEvents = await GetEvents('ReferralEarn', [wallet])
+    const claimsReferralEvents = await GetEvents('ReferralEarn', [null, wallet])
 
     const initialValue = 0n
 
