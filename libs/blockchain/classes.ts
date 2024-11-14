@@ -491,15 +491,25 @@ whose: ${resp.user.whose}
     }
   }
 
+  async getPayUnit (){
+    this.EmitDisabled(`payUnit`, true)
+    if (!this.CoreMM) return false
+    try {
+      return await this.CoreRPC.methods
+          .payUnit()
+          .call({
+            from: this.Wallet,
+          });
+    } catch (e) {
+      this.ThrowAlert('danger', e.message)
+    } finally {
+      this.EmitDisabled(`payUnit`, false)
+    }
+  }
+
   async registerWhose (whose: string): Promise<void|boolean> {
     try {
       this.EmitDisabled(`registerWhose`, true)
-
-      // const value = await this.Core.methods
-      //   .payUnit()
-      //   .call({
-      //     from: this.Wallet,
-      //   });
 
       if (!this.CoreMM) return false
 
