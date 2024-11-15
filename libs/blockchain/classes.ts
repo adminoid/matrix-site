@@ -520,7 +520,9 @@ whose: ${resp.user.whose}
             from: this.Wallet,
             value: 10000000000000000,
           });
-      const estimatedGasWithReserve = BigInt(Math.round(Number(estimatedGas) * 1.1))
+      // const estimatedGasWithReserve = BigInt(Math.round(Number(estimatedGas) * 1.1))
+
+      const gasPrice = await this.Web3RPC.eth.getGasPrice()
 
       const resp = await this.CoreMM
           .methods
@@ -530,7 +532,8 @@ whose: ${resp.user.whose}
             value: 10000000000000000,
             // gasLimit: 5000000, // not required
             // gas: 300000, // 274633
-            gas: estimatedGasWithReserve,
+            gasLimit: estimatedGas,
+            gasPrice,
           })
 
       // display resp in web interface
@@ -559,13 +562,15 @@ TX: ${resp.transactionHash}
           .estimateGas({
             from: this.Wallet,
           });
-      const estimatedGasWithReserve = BigInt(Math.round(Number(estimatedGas) * 1.1))
+      // const estimatedGasWithReserve = BigInt(Math.round(Number(estimatedGas) * 1.1))
+      const gasPrice = await this.Web3RPC.eth.getGasPrice()
       const resp = await this.CoreMM.methods
         .withdrawClaim(weiAmount)
         .send({
           from: this.Wallet,
-          gas: estimatedGasWithReserve,
+          gasLimit: estimatedGas,
           // gasLimit: 310000, // not required
+          gasPrice,
         });
       // from - address for withdrawing
       // gasUsed - used gas
@@ -592,19 +597,23 @@ TX: ${resp.transactionHash}
         to: this.Config.CONTRACT_ADDRESS,
         value: this.Web3MM.utils.toWei(String(amount), "ether"),
       })
-      const estimatedGasWithReserve = BigInt(Math.round(Number(estimatedGas) * 1.1))
+
+      // const estimatedGasWithReserve = BigInt(Math.round(Number(estimatedGas) * 1.1))
+
+      const gasPrice = await this.Web3RPC.eth.getGasPrice()
+      // const gasPrice = this.Web3MM.utils.fromWei(resultPrice, 'ether')
+      // console.log(gasPrice)
 
       const resp = await this.Web3MM.eth.sendTransaction({
         from: this.Wallet,
         to: this.Config.CONTRACT_ADDRESS,
         value: this.Web3MM.utils.toWei(String(amount), "ether"),
+
+        gasPrice,
+        gasLimit: estimatedGas, // 57472n
+
         // gasLimit: 36857, // not enough
         // gasLimit: 36858, // is ok
-        // gasLimit: 450000,
-        // gas: 1000000,
-        // gasLimit: 3100, // not required
-        // gasLimit: this.Web3MM.utils.toHex('300000000000000000'),
-        gas: estimatedGasWithReserve,
       })
 
       const msg = `
@@ -626,11 +635,23 @@ TX: ${resp.transactionHash}
     this.EmitDisabled(`withdrawTen`, true)
     try {
       if (!this.CoreMM) return false
+      const estimatedGas = await this.CoreMM
+          .methods
+          .getTenPercentOnceYear()
+          .estimateGas({
+            from: this.Wallet,
+          });
+      // const estimatedGasWithReserve = BigInt(Math.round(Number(estimatedGas) * 1.1))
+
+      const gasPrice = await this.Web3RPC.eth.getGasPrice()
+
       await this.CoreMM.methods
         .getTenPercentOnceYear()
         .send({
           from: this.Wallet,
-          gasLimit: 310000, // not required
+          // gasLimit: 310000, // not required
+          gasLimit: estimatedGas,
+          gasPrice,
         })
       this.ThrowAlert('success', "check your balance")
 
