@@ -417,16 +417,15 @@ export class External extends Network implements IExternal {
         ? belowTwoEvents.reduce((accumulator: any, current: any) => BigInt(accumulator) + current.amount, initialValue) : 0n
 
     let sumClaimsAppearAmount = (claimsAppearEvents.length > 0)
-        ? claimsAppearEvents[claimsAppearEvents.length - 1].newValue
+        ? claimsAppearEvents[claimsAppearEvents.length - 1].levelPrice
         : 0n
 
     let sumClaimsReferralAmount = (claimsReferralEvents.length > 0)
-        ? claimsReferralEvents[claimsReferralEvents.length - 1].newValue
+        ? claimsReferralEvents[claimsReferralEvents.length - 1].levelPrice
         : 0n
 
-    // console.log("uu", Number(sumBelowTwoAmount) / 10**18)
-    // console.log("yy", Number(sumClaimsAppearAmount) / 10**18)
-    // console.log("zz", Number(sumClaimsReferralAmount) / 10**18)
+    if (!sumClaimsAppearAmount) (sumClaimsAppearAmount = 0n)
+    if (!sumClaimsReferralAmount) (sumClaimsReferralAmount = 0n)
 
     return Number(
         sumBelowTwoAmount

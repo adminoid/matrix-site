@@ -30,7 +30,7 @@ const fillEvents = async () => {
     let lastAmount
     if (eventsFound && eventsFound.length > 0) {
       for (const evt of eventsFound) {
-        lastAmount = evt.newValue
+        lastAmount = evt.levelPrice
       }
     }
     lastAmount = Number(lastAmount) / 10**18
