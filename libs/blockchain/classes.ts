@@ -389,43 +389,18 @@ export class External extends Network implements IExternal {
    */
   async getIncomesForId (wallet: string) {
     const belowTwoEvents = await GetEvents('BelowTwoAppear', [wallet])
-
-    // todo: getting latest block number
-    // const latestBlock = await this.Web3.eth.getBlockNumber()
-
-    // const claimsAppearEvents = await this.CoreRPC.getPastEvents('ClaimsAppear', {
-    //   filter: {
-    //     owner: wallet,
-    //   },
-    //   fromBlock: FromBlock,
-    //   toBlock: 'latest',
-    // })
-    const claimsAppearEvents = await GetEvents('ClaimsAppear', [wallet])
-
-    // const claimsReferralEvents = await this.CoreRPC.getPastEvents('ReferralEarn', {
-    //   filter: {
-    //     user: wallet,
-    //   },
-    //   fromBlock: FromBlock,
-    //   toBlock: 'latest',
-    // })
-    const claimsReferralEvents = await GetEvents('ReferralEarn', [null, wallet])
-
-    const initialValue = 0n
-
     let sumBelowTwoAmount = (belowTwoEvents.length > 0)
-        ? belowTwoEvents.reduce((accumulator: any, current: any) => BigInt(accumulator) + current.amount, initialValue) : 0n
+        ? belowTwoEvents.reduce((accumulator: any, current: any) => BigInt(accumulator) + current.amount, 0n) : 0n
 
+    const claimsAppearEvents = await GetEvents('ClaimsAppear', [wallet])
     let sumClaimsAppearAmount = (claimsAppearEvents.length > 0)
-        ? claimsAppearEvents[claimsAppearEvents.length - 1].levelPrice
-        : 0n
+        ? claimsAppearEvents.reduce((accumulator: any, current: any) => BigInt(accumulator) + current.levelPrice, 0n) : 0n
 
+
+    const claimsReferralEvents = await GetEvents('ReferralEarn', [null, wallet])
     let sumClaimsReferralAmount = (claimsReferralEvents.length > 0)
-        ? claimsReferralEvents[claimsReferralEvents.length - 1].levelPrice
+        ? claimsReferralEvents[claimsReferralEvents.length - 1].newValue
         : 0n
-
-    if (!sumClaimsAppearAmount) (sumClaimsAppearAmount = 0n)
-    if (!sumClaimsReferralAmount) (sumClaimsReferralAmount = 0n)
 
     return Number(
         sumBelowTwoAmount
