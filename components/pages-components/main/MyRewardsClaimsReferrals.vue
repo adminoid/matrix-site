@@ -28,14 +28,10 @@ const fillEvents = async () => {
   if (!isClient) return;
   BC = getBC()
   if (BC && BC.value) {
-    const eventsFound = await GetEvents('ReferralEarn', [null, BC.value.Wallet])
     let amount = 0n
+    const eventsFound = await GetEvents('ReferralEarn', [null, BC.value.Wallet])
     if (eventsFound && eventsFound.length > 0) {
-      console.warn(eventsFound)
-      for (const evt of eventsFound) {
-        // if evt whose == evt.user then skip
-        if (evt.user !== evt.whose) amount += evt?.newValue
-      }
+      amount = eventsFound[eventsFound.length - 1]?.newValue
     }
     totalBnb.value = Number(amount) / 10**18
   }
