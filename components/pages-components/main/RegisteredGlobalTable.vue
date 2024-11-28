@@ -42,7 +42,7 @@ const fillGlobalTable = async () => {
   if (BC && BC.value) {
     for (const index in [...Array(20).keys()]) {
       const total = await BC.value.getTotalFromMatrix(Number(index))
-      levels.value.push(Number(total))
+      levels.value.push(Number(total) - 5)
     }
   }
   isLoaded.value = true
