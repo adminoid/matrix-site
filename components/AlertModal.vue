@@ -1,5 +1,5 @@
 <template lang="pug">
-#modal-alert.modal.position-absolute.d-block.bg-body-secondary.p-4.py-md-5(
+#modal-alert.modal.position-fixed.d-block.bg-body-secondary.p-4.py-md-5(
   tabindex='-1'
   role='dialog'
   v-if="showModal"

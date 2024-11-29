@@ -101,13 +101,6 @@ onMounted(async () => {
   }
 })
 
-/// todo -- there BC can be undefined initially
-// watch(BC.value.isInstalled, (fr, to) => {
-//   console.info("watch(BC.value.isInstalled)")
-//   console.log(fr)
-//   console.log(to)
-// })
-
 useNuxtApp().$on('wallet-updated', async (wallet) => {
   console.info('wallet-updated.........')
   console.log(wallet)

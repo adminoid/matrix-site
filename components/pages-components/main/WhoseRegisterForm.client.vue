@@ -66,6 +66,11 @@ const validateValue = async (value) => {
   }
 }
 
+const { $on } = useNuxtApp()
+$on('alert', ({type, message}) => {
+  error.value = message
+})
+
 const registerWhose = async () => {
   await validateValue(whoseAddress.value)
   if (!isClient) return
