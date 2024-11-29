@@ -105,19 +105,45 @@ class Common implements ICommon {
     }
   }
 
+  getErrorMsg (error: string|object) : string|void {
+    let message = undefined
+    if (typeof error == 'string') {
+      if (
+          error.includes('reverted with reason string')
+      ) {
+        // @ts-ignore
+        message = error.match(/transaction:\s(.+?)"/)[1]
+      } else if (error.includes('while formatting outputs from RPC')) {
+        // "message":"Nonce too high. Expected nonce to be 0 but got 4. Note that transactions can't be queued when auto mining."
+        message = error.match(/"message":"([^"]+)"/)[1]
+      }
+      return message
+    } else if (typeof error == 'object') {
+      if (
+          error.data?.message?.includes('reverted with reason string')
+      ) {
+        // "Error: VM Exception while processing transaction: reverted with reason string 'user already registered'"
+        message = error.data.message.match(/with reason string '([^']+)'/i)[1]
+      } else if (error?.message?.includes('while formatting outputs from RPC')) {
+        // "message":"Nonce too high. Expected nonce to be 0 but got 4. Note that transactions can't be queued when auto mining."
+        message = error.message.match(/"message":"([^"]+)"/)[1]
+      }
+      return message
+
+    } else {
+      if (this.Emit) {
+        this.Emit('alert', {
+          type: 'unknown',
+          message: 'unknown error',
+        })
+      }
+    }
+  }
+
   ThrowAlert (type: string, error: any) {
-    let message: any = error
-    // only for error messages
-    if (
-      type === 'danger'
-      && typeof error === 'string'
-      && error.includes('reverted with reason string')
-    ) {
-      // @ts-ignore
-      message = error.match(/transaction:\s(.+?)"/)[1]
-    } else if (error.includes('while formatting outputs from RPC')) {
-      // "message":"Nonce too high. Expected nonce to be 0 but got 4. Note that transactions can't be queued when auto mining."
-      message = error.match(/"message":"([^"]+)"/)[1]
+    let message: any
+    if (type == 'danger') {
+      message = this.getErrorMsg(error)
     }
     if (this.Emit) {
       this.Emit('alert', {
@@ -125,7 +151,6 @@ class Common implements ICommon {
         message,
       })
     }
-
     return false
   }
 }
@@ -520,7 +545,7 @@ TX: ${resp.transactionHash}
 `
       this.ThrowAlert('success', msg)
     } catch (e: any) {
-      this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e)
     } finally {
       this.EmitDisabled(`registerWhose`, false)
     }

@@ -95,7 +95,10 @@ onMounted(async () => {
     connectedWallet.value = BC.value.Wallet
   }
 
-  isInstalled.value = checkInstalled() || BC.value.isInstalled
+  isInstalled.value = false
+  if (checkInstalled() || (BC && BC.value.isInstalled)) {
+    isInstalled.value = true
+  }
 })
 
 /// todo -- there BC can be undefined initially
