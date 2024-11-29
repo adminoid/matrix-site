@@ -116,6 +116,8 @@ class Common implements ICommon {
       } else if (error.includes('while formatting outputs from RPC')) {
         // "message":"Nonce too high. Expected nonce to be 0 but got 4. Note that transactions can't be queued when auto mining."
         message = error.match(/"message":"([^"]+)"/)[1]
+      } else {
+        message = error
       }
       return message
     } else if (typeof error == 'object') {
@@ -142,8 +144,10 @@ class Common implements ICommon {
 
   ThrowAlert (type: string, error: any) {
     let message: any
-    if (type == 'danger') {
+    if (type === 'danger') {
       message = this.getErrorMsg(error)
+    } else {
+      message = error
     }
     if (this.Emit) {
       this.Emit('alert', {
@@ -624,7 +628,7 @@ TX: ${resp.transactionHash}
 `
       this.ThrowAlert('success', msg)
     } catch (e: any) {
-      this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.data.message)
     } finally {
       this.EmitDisabled(`sendAmount`, false)
     }
