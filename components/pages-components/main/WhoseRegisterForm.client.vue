@@ -67,8 +67,8 @@ const validateValue = async (value) => {
 }
 
 const { $on } = useNuxtApp()
-$on('alert', ({type, message}) => {
-  if (type === 'danger') error.value = message
+$on('alert', ({type, message, clarification}) => {
+  if (clarification === 'registerWhose' && type === 'danger') error.value = message
 })
 
 const registerWhose = async () => {

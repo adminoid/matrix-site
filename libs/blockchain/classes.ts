@@ -71,7 +71,7 @@ class Common implements ICommon {
 
   async init(globalThis: any) {
     if (!globalThis['ethereum']) {
-      this.ThrowAlert('danger', 'Please install Metamask and reload the page 1')
+      this.ThrowAlert('danger', 'Please install Metamask and reload the page 1', 'init')
     } else {
       this.Ethereum = globalThis['ethereum']
       this.Ethereum.on('accountsChanged', (accounts: any[]) => {
@@ -142,7 +142,7 @@ class Common implements ICommon {
     }
   }
 
-  ThrowAlert (type: string, error: any) {
+  ThrowAlert (type: string, error: any, clarification: string = '') {
     let message: any
     if (type === 'danger') {
       message = this.getErrorMsg(error)
@@ -153,6 +153,7 @@ class Common implements ICommon {
       this.Emit('alert', {
         type,
         message,
+        clarification,
       })
     }
     return false
@@ -174,7 +175,7 @@ class Network extends Common implements INetwork {
       this.Emit('wallet-updated', this.Wallet)
       walletStorage.value = this.Wallet
 
-      return this.ThrowAlert('danger', 'Metamask is not installed!')
+      return this.ThrowAlert('danger', 'Metamask is not installed!', 'setNetwork')
     } else {
       try {
         // check if the chain that for connect to is installed
@@ -188,7 +189,7 @@ class Network extends Common implements INetwork {
         if (e.code === 4902) {
           await this.addNetwork()
         } else {
-          this.ThrowAlert('danger', e.message)
+          this.ThrowAlert('danger', e.message, 'setNetwork')
         }
       }
     }
@@ -207,7 +208,7 @@ class Network extends Common implements INetwork {
         ],
       })
     } catch (e: any) {
-      this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message, 'addNetwork')
     }
   }
 }
@@ -256,7 +257,7 @@ export class External extends Network implements IExternal {
         }
       }
     } catch (e: any) {
-      this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message, 'connect')
     } finally {
       this.EmitDisabled('connect', false)
     }
@@ -264,7 +265,7 @@ export class External extends Network implements IExternal {
 
   async getUserFromCore (): Promise<void | boolean> {
     if (!this.Wallet) {
-      this.ThrowAlert('danger', 'Please connect Metamask')
+      this.ThrowAlert('danger', 'Please connect Metamask', 'getUserFromCore')
     } else {
       try {
         const coreName = 'CoreRPC'
@@ -293,7 +294,7 @@ export class External extends Network implements IExternal {
           return resp
         }
       } catch (e: any) {
-        this.ThrowAlert('danger', e.message)
+        this.ThrowAlert('danger', e.message, 'getUserFromCore')
       } finally {
         this.EmitDisabled(`getUserFromCore`, false)
       }
@@ -302,7 +303,7 @@ export class External extends Network implements IExternal {
 
   async getWalletByIndexFromMatrix(level: number, index: number) {
     if (!this.Wallet) {
-      this.ThrowAlert('danger', 'Please connect Metamask')
+      this.ThrowAlert('danger', 'Please connect Metamask', 'getWalletByIndexFromMatrix')
     } else {
       try {
         this.EmitDisabled(`getWalletsByIndexFromMatrix`, true)
@@ -315,7 +316,7 @@ export class External extends Network implements IExternal {
               from: this.Wallet,
             })
       } catch (e: any) {
-        this.ThrowAlert('danger', e.message)
+        this.ThrowAlert('danger', e.message, 'getWalletByIndexFromMatrix')
       } finally {
         this.EmitDisabled(`getWalletsByIndexFromMatrix`, false)
       }
@@ -348,7 +349,7 @@ export class External extends Network implements IExternal {
         return resp
       }
     } catch (e: any) {
-      this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message, 'getMatrixUser')
     } finally {
       this.EmitDisabled(`getMatrixUser`, false)
     }
@@ -360,7 +361,7 @@ export class External extends Network implements IExternal {
       if (!this.CoreRPC) return false
       return this.CoreRPC.methods.AddressesGlobalTotal.call().call();
     } catch (e: any) {
-      this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message, 'getAddressesGlobalTotal')
     } finally {
       this.EmitDisabled(`getAddressesGlobalTotal`, false)
     }
@@ -486,9 +487,9 @@ level: ${resp.user.level}
 whose: ${resp.user.whose}
 `
       }
-      this.ThrowAlert('primary', msg)
+      this.ThrowAlert('primary', msg, 'GetCoreUserByMatrixPosition')
     } catch (e: any) {
-      this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message, 'GetCoreUserByMatrixPosition')
     } finally {
       this.EmitDisabled(`GetCoreUserByMatrixPosition`, false)
     }
@@ -504,7 +505,7 @@ whose: ${resp.user.whose}
             from: this.Wallet,
           });
     } catch (e) {
-      this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message, 'getPayUnit')
     } finally {
       this.EmitDisabled(`payUnit`, false)
     }
@@ -547,9 +548,9 @@ TO: ${resp.to}
 GAS: ${resp.gasUsed}
 TX: ${resp.transactionHash}
 `
-      this.ThrowAlert('success', msg)
+      this.ThrowAlert('success', msg, 'registerWhose')
     } catch (e: any) {
-      this.ThrowAlert('danger', e)
+      this.ThrowAlert('danger', e, 'registerWhose')
     } finally {
       this.EmitDisabled(`registerWhose`, false)
     }
@@ -584,9 +585,9 @@ AMOUNT: ${amount}
 GAS: ${resp.gasUsed}
 TX: ${resp.transactionHash}
 `
-      this.ThrowAlert('success', msg)
+      this.ThrowAlert('success', msg, 'withdrawClaim')
     } catch (e: any) {
-      this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message, 'withdrawClaim')
     } finally {
       this.EmitDisabled(`withdrawClaim`, false)
     }
@@ -626,9 +627,9 @@ TO: ${resp.to}
 GAS: ${resp.gasUsed}
 TX: ${resp.transactionHash}
 `
-      this.ThrowAlert('success', msg)
+      this.ThrowAlert('success', msg, 'sendAmount')
     } catch (e: any) {
-      this.ThrowAlert('danger', e.data.message)
+      this.ThrowAlert('danger', e.data.message, 'sendAmount')
     } finally {
       this.EmitDisabled(`sendAmount`, false)
     }
@@ -656,10 +657,10 @@ TX: ${resp.transactionHash}
           gasLimit: estimatedGas,
           gasPrice,
         })
-      this.ThrowAlert('success', "check your balance")
+      this.ThrowAlert('success', "check your balance", 'withdrawTen')
 
     } catch (e: any) {
-      this.ThrowAlert('danger', e.message)
+      this.ThrowAlert('danger', e.message, 'withdrawTen')
     } finally {
       this.EmitDisabled(`withdrawTen`, false)
     }
