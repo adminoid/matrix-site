@@ -8,6 +8,7 @@
       my-rewards-claims
       my-rewards-claims-referrals
       my-rewards-withdrawals
+      my-rewards-write-off-auto
   .col
     my-rewards-claim-form
 </template>
@@ -19,6 +20,7 @@ import MyRewardsBelowTwo from "~/components/pages-components/main/MyRewardsBelow
 import MyRewardsClaimsReferrals from "~/components/pages-components/main/MyRewardsClaimsReferrals.vue";
 import MyRewardsClaimForm from "~/components/pages-components/main/MyRewardsClaimForm.vue";
 import MyRewardsWithdrawals from "~/components/pages-components/main/MyRewardsWithdrawals.vue";
+import MyRewardsWriteOffAuto from "~/components/pages-components/main/MyRewardsWriteOffAuto.vue";
 </script>
 
 <style lang="sass">

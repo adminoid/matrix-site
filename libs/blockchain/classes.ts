@@ -343,7 +343,7 @@ export class External extends Network implements IExternal {
       let msg
       if (!resp.user.isValue) {
         msg = `user ${this.Wallet} is not registered`
-        // this.ThrowAlert('primary', msg)
+        // this.ThrowAlert('danger', msg)
         console.error(msg)
       } else {
         return resp
@@ -439,15 +439,15 @@ export class External extends Network implements IExternal {
     ) / 10**18
   }
 
-  async getClaimSpent () {
-    return await this.CoreRPC.getPastEvents('ClaimsSpent', {
-      filter: {
-        owner: this.Wallet,
-      },
-      fromBlock: FromBlock,
-      toBlock: 'latest',
-    })
-  }
+  // async getClaimSpent () {
+  //   return await this.CoreRPC.getPastEvents('ClaimsSpent', {
+  //     filter: {
+  //       owner: this.Wallet,
+  //     },
+  //     fromBlock: FromBlock,
+  //     toBlock: 'latest',
+  //   })
+  // }
 
   // async getWithdrawals () {
   //   return await this.CoreRPC.getPastEvents('ClaimsWithdraw', {
@@ -629,7 +629,11 @@ TX: ${resp.transactionHash}
 `
       this.ThrowAlert('success', msg, 'sendAmount')
     } catch (e: any) {
-      this.ThrowAlert('danger', e.data.message, 'sendAmount')
+      if (e['data']) {
+        this.ThrowAlert('danger', e.data.message, 'sendAmount')
+      } else {
+        this.ThrowAlert('danger', e, 'sendAmount')
+      }
     } finally {
       this.EmitDisabled(`sendAmount`, false)
     }

@@ -23,7 +23,7 @@ const claimsBalanceDecimal = ref(0)
 const getData = () => {
   if (!isClient) return
   BC = getBC()
-  if (BC && BC.value) {
+  if (BC && BC.value && BC.value.CoreUser) {
     const claimsBalance = BC.value.CoreUser.claims
     if (claimsBalance) {
       claimsBalanceDecimal.value = Number(claimsBalance) / 10**18
