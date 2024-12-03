@@ -42,7 +42,7 @@ const getTotalAccounts = async () => {
     let registersAmount = 0
     if (whoseRegisteredEvents.length > 0) {
       const payUnit = await BC.value.getPayUnit()
-      registersAmount = Number(payUnit) * whoseRegisteredEvents.length
+      registersAmount = Number(payUnit) * (whoseRegisteredEvents.length - 5)
     }
     const directTransferEvents = await GetEvents('DirectTransfer')
     if (directTransferEvents && directTransferEvents.length > 0) {
