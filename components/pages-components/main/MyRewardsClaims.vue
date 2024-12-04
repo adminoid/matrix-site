@@ -27,14 +27,14 @@ const fillEvents = async () => {
   BC = getBC()
   if (BC && BC.value) {
     const eventsFound = await GetEvents('ClaimsAppear', [BC.value.Wallet])
-    let lastAmount
+    let amount = 0n
     if (eventsFound && eventsFound.length > 0) {
       for (const evt of eventsFound) {
-        lastAmount = evt.levelPrice
+        amount += evt.levelPrice
       }
     }
-    lastAmount = Number(lastAmount) / 10**18
-    totalBnb.value = lastAmount || 0
+    amount = Number(amount) / 10**18
+    totalBnb.value = amount || 0
   }
   isLoaded.value = true
 }
