@@ -31,7 +31,7 @@ const fillEvents = async () => {
     if (eventsFound && eventsFound.length > 0) {
       let lastAmount = 0n
       for (const evt of eventsFound) {
-        lastAmount += evt.amount
+        lastAmount += evt.value
       }
       totalBnb.value = Number(lastAmount) / 10**18
     }

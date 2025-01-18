@@ -367,13 +367,13 @@ export class External extends Network implements IExternal {
     }
   }
 
-  // async testEvents () {
-  //   return await this.CoreRPC.getPastEvents('WhoseRegistered', {
+  // async testEvents (owner: string) {
+  //   return await this.CoreRPC.getPastEvents('ClaimsSpent', {
   //     filter: {
-  //       whose: '0xCEe63383AeF505A1D3e1B240F02252D3559f39eC',
+  //       owner,
   //     },
-  //     fromBlock: 45079760,
-  //     toBlock: 45079772,
+  //     fromBlock: 0,
+  //     toBlock: 'latest'
   //   })
   // }
 
