@@ -17,6 +17,7 @@ const createBody = (address, topics) => ({
     "id": "1",
 })
 
+// decoding example: keccak-256(`ClaimsSpent(address,uint256,uint256)`)
 export const EventMap = {
     WhoseRegistered: '0x6ab541b1c1f8ccbaff8d2e99776a9031b131e4282e138c33dc645fcff8b2c813',
     ReferralEarn: '0x43031c57404141a57f71e1d0b685cd228ca9283f176e2c2fd60037ed7b1adf18',

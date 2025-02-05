@@ -8,7 +8,9 @@
     thead.table-spec__thead
       tr
         th(scope="col") Matrix
-        th(v-for="i in 20" :key="i" scope="col") {{ i }}
+        th(v-for="i in 20" :key="i" scope="col")
+          .table-spec__div.table-spec__div_selected(v-if="i <= maxLevel") {{ i }}
+          .table-spec__div(v-else) {{ i }}
     tbody.table-spec__tbody.table-spec__tbody_strip
       tr(v-for="j in 5" :key="j")
         td lvl {{ j }}
@@ -29,16 +31,18 @@ import {isClient} from "@vueuse/core";
 
 let BC
 const isLoaded = ref(false)
+const tableData = ref([])
+const maxLevel = ref(0)
 const fillUserTable = async () => {
   if (!isClient) return
   BC = getBC()
   if (BC && BC.value) {
-    tableData.value = await getDescendantsProxy()
+    const res = await getDescendantsProxy()
+    maxLevel.value = res.length
+    tableData.value = res
   }
   isLoaded.value = true
 }
-
-const tableData = ref([])
 
 // TODO: disable fillUserTable() for debugging
 useNuxtApp().$on('initialized', async () => {
@@ -62,4 +66,18 @@ useNuxtApp().$on('wallet-updated', async () => {
     font-weight: 500
     line-height: 24px
     margin-bottom: 1rem
+
+.table-spec
+  &__div
+    margin-left: -5px
+    width: 25px
+    height: 25px
+    border: 1px solid transparent
+    border-radius: 50%
+    text-align: center
+    display: flex
+    align-items: center
+    justify-content: center
+    &_selected
+      border-color: #713DFF
 </style>
