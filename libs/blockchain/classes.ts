@@ -429,7 +429,7 @@ export class External extends Network implements IExternal {
 
     const claimsReferralEvents = await GetEvents('ReferralEarn', [null, wallet])
     let sumClaimsReferralAmount = (claimsReferralEvents.length > 0)
-        ? claimsReferralEvents[claimsReferralEvents.length - 1].newValue
+        ? claimsReferralEvents[claimsReferralEvents.length - 1].value
         : 0n
 
     return Number(

@@ -23,17 +23,17 @@ useNuxtApp().$on('wallet-updated', async () => {
 const totalBnb = ref(0)
 const isLoaded = ref(false)
 const fillEvents = async () => {
-  // todo => restore mark
-  // const eventsFound = await BC.value.getReferralEarn()
   if (!isClient) return;
   BC = getBC()
   if (BC && BC.value) {
-    let amount = 0n
     const eventsFound = await GetEvents('ReferralEarn', [null, BC.value.Wallet])
     if (eventsFound && eventsFound.length > 0) {
-      amount = eventsFound[eventsFound.length - 1]?.newValue
+      let amount = 0n
+      for (const evt of eventsFound) {
+        amount += evt.value
+      }
+      totalBnb.value = Number(amount) / 10**18
     }
-    totalBnb.value = Number(amount) / 10**18
   }
   isLoaded.value = true
 }
