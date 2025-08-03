@@ -19,42 +19,45 @@ import MainBanner from '~/components/pages-components/main/MainBanner.vue'
 import {getBC} from '~/stores/useWeb3.js'
 import {GetEvents} from "~/libs/events-infura/abi-events.js";
 import {isClient} from "@vueuse/core";
+import axios from "axios";
 
 let BC
 
 useNuxtApp().$on('initialized', async () => {
-  await getTotalAccounts()
+  setTimeout(await getBscStatistics())
 })
 
 useNuxtApp().$on('wallet-updated', async () => {
-  await getTotalAccounts()
+  setTimeout(await getBscStatistics())
 })
 
 const totalAmountBnb = ref(0)
 const totalAmountBtc = ref(0)
 const isLoaded = ref(false)
-const getTotalAccounts = async () => {
-  if (!isClient) return;
-  BC = getBC()
-  if (BC && BC.value) {
-    // also get all WhoseRegistered with payUnit
-    const whoseRegisteredEvents = await GetEvents('WhoseRegistered')
-    let registersAmount = 0
-    if (whoseRegisteredEvents.length > 0) {
-      const payUnit = await BC.value.getPayUnit()
-      registersAmount = Number(payUnit) * (whoseRegisteredEvents.length - 5)
-    }
-    const directTransferEvents = await GetEvents('DirectTransfer')
-    if (directTransferEvents && directTransferEvents.length > 0) {
-      const amount = directTransferEvents.reduce(
-          (accumulator, currentValue) => accumulator + Number(currentValue.amount),
-          0,
-      )
-      totalAmountBnb.value = Number(amount + registersAmount) / 10**18
-      const rate = await getBtcRate()
-      totalAmountBtc.value = (totalAmountBnb.value / rate).toFixed(8)
+
+const getBscStatistics = async () => {
+
+  isLoaded.value = false
+
+  const config = useRuntimeConfig()
+
+  console.warn('CONTRACT_ADDRESS:', config.public.CONTRACT_ADDRESS)
+  console.log(isClient, config.public.CHAIN_ID_DECIMAL, config.public.CONTRACT_ADDRESS, config.public.BSCSCAN_API_KEY)
+
+  if (!isClient || !config.public.CHAIN_ID_DECIMAL || !config.public.CONTRACT_ADDRESS || !config.public.BSCSCAN_API_KEY) return;
+
+  const txList = await axios.get(`https://api.etherscan.io/v2/api?chainid=${config.public.CHAIN_ID_DECIMAL}&apikey=${config.public.BSCSCAN_API_KEY}&module=account&action=txlist&address=${config.public.CONTRACT_ADDRESS}&startblock=0&endblock=99999999`)
+
+  const txData = txList.data.result
+  let amountBnbStatic = 0;
+  for (const txListIdx in txData) {
+    if (txData[txListIdx].value && Number(txData[txListIdx].value) > 0) {
+      amountBnbStatic += Number(txData[txListIdx].value)
     }
   }
+  totalAmountBnb.value = amountBnbStatic / 10**18
+  console.log(totalAmountBnb.value)
+
   isLoaded.value = true
 }
 
