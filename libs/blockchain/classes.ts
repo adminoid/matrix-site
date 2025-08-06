@@ -105,32 +105,34 @@ class Common implements ICommon {
     }
   }
 
-  getErrorMsg (error: string|object) : string|void {
+  getErrorMsg (error: string|object) : string {
     let message = undefined
     if (typeof error == 'string') {
       if (
           error.includes('reverted with reason string')
       ) {
         // @ts-ignore
-        message = error.match(/transaction:\s(.+?)"/)[1]
+        message = error.match(/transaction:\s(.+?)"/)?.[1]
       } else if (error.includes('while formatting outputs from RPC')) {
         // "message":"Nonce too high. Expected nonce to be 0 but got 4. Note that transactions can't be queued when auto mining."
-        message = error.match(/"message":"([^"]+)"/)[1]
+        message = error.match(/"message":"([^"]+)"/)?.[1]
       } else {
         message = error
       }
-      return message
-    } else if (typeof error == 'object') {
+      return message || 'Unknown string error'
+    } else if (typeof error == 'object' && error !== null) {
       if (
           error.data?.message?.includes('reverted with reason string')
       ) {
         // "Error: VM Exception while processing transaction: reverted with reason string 'user already registered'"
-        message = error.data.message.match(/with reason string '([^']+)'/i)[1]
+        message = error.data.message.match(/with reason string '([^']+)'/i)?.[1]
       } else if (error?.message?.includes('while formatting outputs from RPC')) {
         // "message":"Nonce too high. Expected nonce to be 0 but got 4. Note that transactions can't be queued when auto mining."
-        message = error.message.match(/"message":"([^"]+)"/)[1]
+        message = error.message.match(/"message":"([^"]+)"/)?.[1]
+      } else if (error.message) {
+        message = error.message
       }
-      return message
+      return message || 'Unknown object error'
 
     } else {
       if (this.Emit) {
@@ -139,6 +141,7 @@ class Common implements ICommon {
           message: 'unknown error',
         })
       }
+      return 'Unknown error type'
     }
   }
 
