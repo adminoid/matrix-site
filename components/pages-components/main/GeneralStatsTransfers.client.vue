@@ -25,24 +25,23 @@ let BC
 
 useNuxtApp().$on('initialized', async () => {
   setTimeout(await getBscStatistics())
+  setTimeout(await getBtcStatistics())
 })
 
 useNuxtApp().$on('wallet-updated', async () => {
   setTimeout(await getBscStatistics())
+  setTimeout(await getBtcStatistics())
 })
 
 const totalAmountBnb = ref(0)
 const totalAmountBtc = ref(0)
 const isLoaded = ref(false)
 
+const config = useRuntimeConfig()
+
 const getBscStatistics = async () => {
 
   isLoaded.value = false
-
-  const config = useRuntimeConfig()
-
-  console.warn('CONTRACT_ADDRESS:', config.public.CONTRACT_ADDRESS)
-  console.log(isClient, config.public.CHAIN_ID_DECIMAL, config.public.CONTRACT_ADDRESS, config.public.BSCSCAN_API_KEY)
 
   if (!isClient || !config.public.CHAIN_ID_DECIMAL || !config.public.CONTRACT_ADDRESS || !config.public.BSCSCAN_API_KEY) return;
 
@@ -56,57 +55,27 @@ const getBscStatistics = async () => {
     }
   }
   totalAmountBnb.value = amountBnbStatic / 10**18
-  console.log(totalAmountBnb.value)
-
   isLoaded.value = true
 }
 
+const getBtcStatistics = async () => {
+  totalAmountBtc.value = totalAmountBnb.value / (await getBtcRate())
+}
+
 const getBtcRate = async () => {
-  // btc $58961
-  // bnb $521
-  return new Promise(resolve => {
-    resolve(113)
-  })
 
-  // todo -- https://www.okx.com/docs-v5/trick_en/#order-management-pagination
-  // try {
-  //   const response = await axios.get('https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=USD', {
-  //     headers: {
-  //       'X-CMC_PRO_API_KEY': '8f350504-8864-4aaa-8666-778c3bc28dbf',
-  //     },
-  //   })
-  //   console.info('response')
-  //   console.log(response)
-  //
-  // } catch(e) {
-  //
-  //   // TODO: fix cors error
-  //
-  //   console.warn('E')
-  //   console.warn(e)
-  // }
+  if (!isClient || !config.public.CHAIN_ID_DECIMAL || !config.public.CONTRACT_ADDRESS || !config.public.BSCSCAN_API_KEY || !config.public.COINGECKO_API_KEY) return;
 
-  // const axios = require('axios');
-  // let data = JSON.stringify({
-  //   "symbols": "ETH/USD,BTC/USD"
-  // });
-  // let config = {
-  //   method: 'post',
-  //   maxBodyLength: Infinity,
-  //   url: 'https://oracle.binance.com/api/gw/symbol-price',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'Accept': 'application/json'
-  //   },
-  //   data : data
-  // };
-  // axios(config)
-  //     .then((response) => {
-  //       console.log(JSON.stringify(response.data));
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
+  const instance = axios.create({
+    baseURL: 'https://api.coingecko.com/api/v3/exchange_rates'
+  });
+
+  instance.defaults.headers.common['x-cg-demo-api-key'] = config.public.COINGECKO_API_KEY;
+  instance.defaults.headers.common['accept'] = 'application/json';
+
+  const data = await instance.get()
+
+  return data.data?.rates?.bnb?.value || new Error('something wrong with coingecko api');
 }
 
 </script>

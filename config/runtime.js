@@ -15,6 +15,10 @@ export default () => ({
             (process.env.CHAIN_ID)
                 ? process.env.CHAIN_ID
                 : '',
+        CHAIN_ID_DECIMAL:
+            (process.env.CHAIN_ID_DECIMAL)
+                ? process.env.CHAIN_ID_DECIMAL
+                : '',
         RPC_URL:
             (process.env.RPC_URL)
                 ? process.env.RPC_URL
@@ -44,12 +48,20 @@ export default () => ({
                 ? process.env.CURRENCY_SYMBOL
                 : '',
         CURRENCY_DECIMALS:
-            (process.env.CHAIN_ID)
-                ? process.env.CHAIN_ID
+            (process.env.CURRENCY_DECIMALS)
+                ? process.env.CURRENCY_DECIMALS
                 : '18',
         INFURA_KEY:
-            (process.env.CHAIN_ID)
+            (process.env.INFURA_KEY)
                 ? process.env.INFURA_KEY
+                : '',
+        BSCSCAN_API_KEY:
+            (process.env.BSCSCAN_API_KEY)
+                ? process.env.BSCSCAN_API_KEY
+                : '',
+        COINGECKO_API_KEY:
+            (process.env.COINGECKO_API_KEY)
+                ? process.env.COINGECKO_API_KEY
                 : '',
     }
 })
