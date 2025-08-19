@@ -5,12 +5,8 @@ export default <RouterConfig> {
     {
       name: 'main',
       path: '/',
+      component: () => import('~/pages/main.vue'),
       children: [
-        {
-          name: 'main',
-          path: '',
-          component: () => import('~/pages/main.vue'),
-        },
         {
           name: 'main_w',
           path: ':w',
