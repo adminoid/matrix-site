@@ -78,7 +78,7 @@ class Common implements ICommon {
         if (this.Wallet !== accounts[0]) {
           this.Wallet = accounts[0]
           // todo --- specific wallet
-          // this.Wallet = '0x2F9e33197Df28AAe0fB29Bec7EcFE08e8f03Bee3'
+          // this.Wallet = '0xF557377caB4cF1A19a93fc838461cd5ecb8A24c9'
           this.Emit('wallet-updated', this.Wallet)
           walletStorage.value = this.Wallet
         }
@@ -250,7 +250,7 @@ export class External extends Network implements IExternal {
         const accounts = await this.Ethereum.request({ method: 'eth_requestAccounts' })
         this.Wallet = accounts[0]
         // todo --- specific wallet
-        // this.Wallet = '0x2F9e33197Df28AAe0fB29Bec7EcFE08e8f03Bee3'
+        // this.Wallet = '0x08135Da0A343E492FA2d4282F2AE34c6c5CC1BbE'
         if (this.Wallet) {
           this.isConnected = true
         }
