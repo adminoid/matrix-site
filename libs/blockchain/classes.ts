@@ -529,7 +529,7 @@ whose: ${resp.user.whose}
           .register(whose)
           .estimateGas({
             from: this.Wallet,
-            value: 10000000000000000,
+            value: 1000000000000000,
           });
       // const estimatedGasWithReserve = BigInt(Math.round(Number(estimatedGas) * 1.1))
 
@@ -540,7 +540,7 @@ whose: ${resp.user.whose}
           .register(whose)
           .send({
             from: this.Wallet,
-            value: 10000000000000000,
+            value: 1000000000000000,
             // gasLimit: 5000000, // not required
             // gas: 300000, // 274633
             gasLimit: estimatedGas,
