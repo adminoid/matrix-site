@@ -9,6 +9,12 @@
     },
     {
       "indexed": false,
+      "internalType": "address",
+      "name": "sender",
+      "type": "address"
+    },
+    {
+      "indexed": false,
       "internalType": "uint256",
       "name": "amount",
       "type": "uint256"

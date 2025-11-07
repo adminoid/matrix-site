@@ -18,6 +18,11 @@ const createBody = (address, topics) => ({
 })
 
 // decoding example: keccak-256(`ClaimsSpent(address,uint256,uint256)`)
+// 0x7e400c520d3c15affc1a9456dc5c2cc9120b1dbf41de20aa72f72c7a28afbdb7
+// decoding example: keccak-256(`BelowTwoAppear(address,address,uint256,uint256)`) <-- all arguments, not only indexed is the right way
+// 0xf111de53a19322493a4db2b42d87bd2afa26ca288b9899fa590a3d59e3642811
+// working example for WhoseRegistered
+// keccak-256(`WhoseRegistered(address,address,uint256)`) == 0x6ab541b1c1f8ccbaff8d2e99776a9031b131e4282e138c33dc645fcff8b2c813
 export const EventMap = {
     WhoseRegistered: '0x6ab541b1c1f8ccbaff8d2e99776a9031b131e4282e138c33dc645fcff8b2c813',
     ReferralEarn: '0x43031c57404141a57f71e1d0b685cd228ca9283f176e2c2fd60037ed7b1adf18',
@@ -25,7 +30,7 @@ export const EventMap = {
     GiftSpent: '0xf18fbda08e8278ab48846622fc8383c17a3883e113fee336afcf563624a7a01c',
     ClaimsAppear: '0x88c484291ad002b95046f48056cff465fa231fe6e8a77174f0a72eb357ff6d98',
     ClaimsSpent: '0x7e400c520d3c15affc1a9456dc5c2cc9120b1dbf41de20aa72f72c7a28afbdb7',
-    BelowTwoAppear: '0xdf09d32c9fb6ed1cd2c0baf4779a62ca391bb67477ae59dde70805f1819303ed',
+    BelowTwoAppear: '0xf111de53a19322493a4db2b42d87bd2afa26ca288b9899fa590a3d59e3642811',
     ClaimsWithdraw: '0x45d7c638dacbe920c33c14609961ca0ff27e1ff551e1203e285b5bb236dffc7c',
     DirectTransfer: '0x455589ce42ffef071437b1cd8549f4989ab4ada16aa8132e13a4fdf75df577cf',
 }
