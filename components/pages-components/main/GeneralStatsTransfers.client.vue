@@ -21,17 +21,22 @@ import {GetEvents} from "~/libs/events-infura/abi-events.js";
 import {isClient} from "@vueuse/core";
 import axios from "axios";
 
-let BC
-
 useNuxtApp().$on('initialized', async () => {
-  setTimeout(await getBscStatistics())
-  setTimeout(await getBtcStatistics())
+  setTimeout(complexFn)
 })
 
 useNuxtApp().$on('wallet-updated', async () => {
-  setTimeout(await getBscStatistics())
-  setTimeout(await getBtcStatistics())
+  setTimeout(complexFn)
 })
+
+const complexFn = async () => {
+  isLoaded.value = false
+  totalAmountBnb.value = await getBscStatistics() || 0
+  if (totalAmountBnb.value > 0) {
+    totalAmountBtc.value = await getBtcStatistics() || 0
+  }
+  isLoaded.value = true
+}
 
 const totalAmountBnb = ref(0)
 const totalAmountBtc = ref(0)
@@ -40,31 +45,42 @@ const isLoaded = ref(false)
 const config = useRuntimeConfig()
 
 const getBscStatistics = async () => {
+  if (!isClient || !config.public.CONTRACT_ADDRESS || !config.public.ALCHEMY_API_KEY) return;
 
-  isLoaded.value = false
+  try {
+    const response = await axios.post(
+      `https://bnb-${config.public.ALCHEMY_NET}.g.alchemy.com/v2/${config.public.ALCHEMY_API_KEY}`,
+      {
+        jsonrpc: "2.0",
+        method: "eth_getBalance",
+        params: [config.public.CONTRACT_ADDRESS, "latest"],
+        id: 1
+      },
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    );
 
-  if (!isClient || !config.public.CHAIN_ID_DECIMAL || !config.public.CONTRACT_ADDRESS || !config.public.BSCSCAN_API_KEY) return;
+    const balanceHex = response.data.result;
+    const balanceWei = parseInt(balanceHex, 16);
+    const balanceBnb = balanceWei / 1e18;
 
-  const txList = await axios.get(`https://api.etherscan.io/v2/api?chainid=${config.public.CHAIN_ID_DECIMAL}&apikey=${config.public.BSCSCAN_API_KEY}&module=account&action=txlist&address=${config.public.CONTRACT_ADDRESS}&startblock=0&endblock=99999999`)
-
-  const txData = txList.data.result
-  let amountBnbStatic = 0;
-  for (const txListIdx in txData) {
-    if (txData[txListIdx].value && Number(txData[txListIdx].value) > 0) {
-      amountBnbStatic += Number(txData[txListIdx].value)
-    }
+    return balanceBnb;
+  } catch (error) {
+    console.error('Error fetching BSC statistics from Alchemy:', error);
+    return 0;
   }
-  totalAmountBnb.value = amountBnbStatic / 10**18
-  isLoaded.value = true
 }
 
 const getBtcStatistics = async () => {
-  totalAmountBtc.value = totalAmountBnb.value / (await getBtcRate())
+  return totalAmountBnb.value / (await getBtcRate())
 }
 
 const getBtcRate = async () => {
 
-  if (!isClient || !config.public.CHAIN_ID_DECIMAL || !config.public.CONTRACT_ADDRESS || !config.public.BSCSCAN_API_KEY || !config.public.COINGECKO_API_KEY) return;
+  if (!isClient || !config.public.COINGECKO_API_KEY) return;
 
   const instance = axios.create({
     baseURL: 'https://api.coingecko.com/api/v3/exchange_rates'

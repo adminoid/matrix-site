@@ -63,5 +63,13 @@ export default () => ({
             (process.env.COINGECKO_API_KEY)
                 ? process.env.COINGECKO_API_KEY
                 : '',
+        ALCHEMY_API_KEY:
+            (process.env.ALCHEMY_API_KEY)
+                ? process.env.ALCHEMY_API_KEY
+                : '',
+        ALCHEMY_NET:
+            (process.env.ALCHEMY_NET)
+                ? process.env.ALCHEMY_NET
+                : '',
     }
 })
